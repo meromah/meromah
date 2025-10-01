@@ -1,1 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 @import "tailwindcss";
+
+:root {
+  --main-bg: #92a6af;
+  --dark-bg: #22272a;
+  --accent-bg: #66e7fa;
+  --accent-dark: #394247;
+  --dark-text: #22282a;
+  --light-text: #d5e1e7;
+}
+
+@theme {
+  --color-main-bg: var(--main-bg);
+  --color-dark-bg: var(--dark-bg);
+  --color-accent-bg: var(--accent-bg);
+  --color-accent-dark: var(--accent-dark);
+  --color-dark-text: var(--dark-text);
+  --color-light-text: var(--light-text);
+  --font-inter: "Inter Tight", sans-serif;
+  --font-mono: "Roboto Mono", monospace;
+}
+.btn-cta {
+  @apply px-4 py-2 rounded-lg outline uppercase cursor-pointer hover:scale-105 transition-all duration-200;
+}
+.nav-list-item {
+  @apply text-light-text hover:text-accent-bg cursor-pointer;
+}
+body {
+  @apply font-inter text-sm;
+  background-color: var(--color-dark-bg);
+}
