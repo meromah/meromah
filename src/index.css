@@ -1,13 +1,27 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 @import "tailwindcss";
 
 :root {
+  --primary-blue: #1901ad;
+  --primary-yellow: #ffd44a;
+  --primary-bg: #faf8f6;
+  --primary-dark:#22272a;
+  --primary-light:#ebebeb;
+  --neutral-900: #111827;
+  --neutral-700: #374151;
+  --neutral-200: rgb(230, 231, 235);
+}
+
+/* :root {
   --main-bg: #92a6af;
   --dark-bg: #22272a;
   --accent-bg: #66e7fa;
   --accent-dark: #394247;
   --dark-text: #22282a;
-  --light-text: #d5e1e7;
+  --light-text: #e1eaef;
+  --story-lighter: #b1c5ce;
+  --story-darker: #9eb2bb;
 }
 
 @theme {
@@ -17,16 +31,60 @@
   --color-accent-dark: var(--accent-dark);
   --color-dark-text: var(--dark-text);
   --color-light-text: var(--light-text);
-  --font-inter: "Inter Tight", sans-serif;
+  --color-story-darker: var(--story-darker);
+  --color-story-lighter: var(--story-lighter); */
+
+@theme {
+  --color-primary-blue: var(--primary-blue);
+  --color-primary-yellow: var(--primary-yellow);
+  --color-primary-bg: var(--primary-bg);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-200: var(--neutral-200);
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
   --font-mono: "Roboto Mono", monospace;
+
+  /* custom animation shorthand */
+  --animate-inset-grow: insetGrow 8s linear infinite;
+
+  @keyframes insetGrow {
+    0% {
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0; /* actually collapsed horizontally */
+    }
+    100% {
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0; /* OR width: calc(100% - 2px) */
+      width: 100%; /* fully expanded */
+    }
+  }
 }
+
+body {
+  @apply font-jakarta text-sm bg-primary-bg text-neutral-900;
+}
+
 .btn-cta {
-  @apply px-4 py-2 rounded-lg outline uppercase cursor-pointer hover:scale-105 transition-all duration-200;
+  @apply px-4 py-2 rounded-lg  outline-primary-blue outline-1 uppercase cursor-pointer hover:scale-105 transition-all duration-200 hover:bg-primary-blue/10;
 }
 .nav-list-item {
-  @apply text-light-text hover:text-accent-bg cursor-pointer;
+  @apply text-neutral-700 hover:text-primary-blue cursor-pointer;
 }
-body {
-  @apply font-inter text-sm;
-  background-color: var(--color-dark-bg);
+.accent-text{
+  @apply font-mono text-xs opacity-60 mb-4;
+}
+.story-title{
+  @apply flex items-center gap-1 uppercase w-1/2 bg-neutral-200 p-0.5 rounded-xl text-sm;
+}
+.story-title-active{
+  @apply flex items-center gap-1 uppercase w-full bg-neutral-200 p-0.5 rounded-xl text-sm;
+}
+.story-icon{
+  @apply bg-primary-yellow p-3 rounded-lg text-xl m-0.5 z-10 text-neutral-900;
 }
