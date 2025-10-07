@@ -1,23 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState('Products');
+  const location = useLocation();
 
+  // Navigation links configuration
   const navLinks = [
-    { name: 'Products', href: '#products' },
-    { name: 'Solutions', href: '#solutions' },
-    { name: 'Resources', href: '#resources' },
-    { name: 'Services', href: '#services' }
+    { name: 'Explore', path: '/explore' },
+    { name: 'Contact', path: '/contact' },
+    { name: 'About Us', path: '/about' },
   ];
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleLinkClick = (linkName) => {
-    setActiveLink(linkName);
+  const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
 
@@ -28,13 +53,13 @@ const Navbar = () => {
     >
       {/* Logo Section */}
       <div className="flex justify-between items-center gap-2 z-20">
-        <a href="/" aria-label="Home">
+        <Link to="/" aria-label="Home">
           <img
             src="https://cdn.prod.website-files.com/66e53bf67b6fc1646ce0777e/6787a3ad95199bfabb23a602_Logo-dark.svg"
             alt="Company Logo"
-            className="cursor-pointer h-8 md:h-10"
+            className="cursor-pointer h-8 md:h-10 transition-transform duration-200 hover:scale-105"
           />
-        </a>
+        </Link>
       </div>
 
       {/* Desktop Navigation */}
@@ -42,36 +67,34 @@ const Navbar = () => {
         <ul className="flex gap-6 font-mono">
           {navLinks.map((link) => (
             <li key={link.name} className="nav-list-item">
-              <a 
-                href={link.href}
-                onClick={() => handleLinkClick(link.name)}
-                className={`transition-colors duration-200 ${
-                  activeLink === link.name 
-                    ? 'text-primary-blue font-semibold' 
-                    : 'text-neutral-700'
-                }`}
-                aria-current={activeLink === link.name ? 'page' : undefined}
+              <NavLink
+                to={link.path}
+                className={({ isActive }) =>
+                  `transition-colors duration-200 ${
+                    isActive
+                      ? 'text-primary-blue font-semibold'
+                      : 'text-neutral-700 hover:text-primary-blue'
+                  }`
+                }
               >
                 {link.name}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>
         <div className="flex gap-4 font-mono">
-          <a 
-            href="#contact" 
+          <Link 
+            to="/register" 
             className="btn-cta"
-            role="button"
           >
-            Get In Touch
-          </a>
-          <a 
-            href="#booking" 
+            Register
+          </Link>
+          <Link 
+            to="/login" 
             className="btn-cta bg-primary-yellow text-neutral-900 font-semibold hover:bg-primary-yellow/90"
-            role="button"
           >
-            Book a Meeting
-          </a>
+            Login
+          </Link>
         </div>
       </div>
 
@@ -93,8 +116,8 @@ const Navbar = () => {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-neutral-900/50 z-10 lg:hidden"
-          onClick={toggleMobileMenu}
+          className="fixed inset-0 bg-neutral-900/50 z-10 lg:hidden animate-fade-in"
+          onClick={closeMobileMenu}
           aria-hidden="true"
         />
       )}
@@ -108,43 +131,42 @@ const Navbar = () => {
       >
         <div className="flex flex-col h-full pt-20 px-6">
           {/* Mobile Navigation Links */}
-          <ul className="flex flex-col gap-4 font-mono mb-8">
+          <ul className="flex flex-col gap-4 font-mono mb-8" role="menu">
             {navLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  onClick={() => handleLinkClick(link.name)}
-                  className={`block py-3 px-4 rounded-lg transition-all duration-200 ${
-                    activeLink === link.name
-                      ? 'bg-primary-blue/10 text-primary-blue font-semibold'
-                      : 'text-neutral-700 hover:bg-primary-blue/5 hover:text-primary-blue'
-                  }`}
-                  aria-current={activeLink === link.name ? 'page' : undefined}
+              <li key={link.name} role="none">
+                <NavLink
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `block py-3 px-4 rounded-lg transition-all duration-200 ${
+                      isActive
+                        ? 'bg-primary-blue/10 text-primary-blue font-semibold'
+                        : 'text-neutral-700 hover:bg-primary-blue/5 hover:text-primary-blue'
+                    }`
+                  }
+                  role="menuitem"
                 >
                   {link.name}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
 
           {/* Mobile CTA Buttons */}
           <div className="flex flex-col gap-4 font-mono mt-auto mb-8">
-            <a
-              href="#contact"
+            <Link
+              to="/register"
               className="btn-cta text-center"
-              role="button"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
             >
-              Get In Touch
-            </a>
-            <a
-              href="#booking"
+              Register
+            </Link>
+            <Link
+              to="/login"
               className="btn-cta bg-primary-yellow text-neutral-900 font-semibold hover:bg-primary-yellow/90 text-center"
-              role="button"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
             >
-              Book a Meeting
-            </a>
+              Login
+            </Link>
           </div>
         </div>
       </div>

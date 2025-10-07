@@ -5,44 +5,44 @@ import { IoLayersOutline } from "react-icons/io5";
 import { TbAtom } from "react-icons/tb";
 
 // Move constants outside component - no re-render overhead
-const STORY_TITLES = ["Billing", "Charging", "Catalog", "Events"];
+const STORY_TITLES = ["Quizzes", "Libraries", "Boards", "Community"];
 
 const STORY_DATA = {
-  Billing: {
-    color:"bg-red-400",
-    icon: PiCoinsLight,
-    header: "Real-Time Convergent Billing",
+  Quizzes: {
+    color: "bg-green-400",
+    icon: IoLayersOutline, // quiz icon
+    header: "MCQs & Custom Quizzes",
     description:
-      "Instantaneous, accurate billing across all services and payment methods.",
+      "Take pre-made multiple-choice quizzes or create your own. Track progress and challenge your peers.",
     image:
-      "https://cdn.prod.website-files.com/66e53bf67b6fc1646ce0777e/6787a3ad95199bfabb23a602_Logo-dark.svg",
+      "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
   },
-  Charging: {
-    color:"bg-blue-400",
-    icon: LiaTachometerAltSolid,
-    header: "Dynamic Charging Engine",
+  Libraries: {
+    color: "bg-blue-400",
+    icon: LiaTachometerAltSolid, // file/library icon
+    header: "Shared Libraries & Resources",
     description:
-      "Flexible, real-time charging for complex pricing models and promotions.",
+      "Browse or create public file collections: notes, videos, scripts, or guides. Share knowledge freely with the community.",
     image:
-      "https://cdn.prod.website-files.com/66e53bf67b6fc1646ce0777e/6787a3ad95199bfabb23a602_Logo-dark.svg",
+      "https://cdn-icons-png.flaticon.com/512/3293/3293023.png",
   },
-  Catalog: {
-    color:"bg-green-400",
-    icon: IoLayersOutline,
-    header: "Unified Product Catalog",
+  Boards: {
+    color: "bg-red-400",
+    icon: PiCoinsLight, // post/social icon
+    header: "Community Boards & Posts",
     description:
-      "Centralized management of all products, services, and pricing structures.",
+      "Post, comment, and interact with fellow UniMe students. Discuss courses, share memes, or create your own discussion boards.",
     image:
-      "https://cdn.prod.website-files.com/66e53bf67b6fc1646ce0777e/6787a3ad95199bfabb23a602_Logo-dark.svg",
+      "https://cdn-icons-png.flaticon.com/512/1250/1250615.png",
   },
-  Events: {
-    color:"bg-cyan-400",
-    icon: TbAtom,
-    header: "Event Processing System",
+  Community: {
+    color: "bg-purple-400",
+    icon: TbAtom, // group/community icon
+    header: "Collaborate & Connect",
     description:
-      "High-throughput processing of usage events and network activity in real-time.",
+      "Form study groups, follow peers, and build your own identity on the platform. Stay anonymous or create a profile that stands out.",
     image:
-      "https://cdn.prod.website-files.com/66e53bf67b6fc1646ce0777e/6787a3ad95199bfabb23a602_Logo-dark.svg",
+      "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
   },
 };
 

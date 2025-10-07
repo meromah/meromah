@@ -1,17 +1,21 @@
-import React from 'react'
+import React from "react";
 import { FiArrowRight } from "react-icons/fi";
-import StoryBar from '../components/StoryBar';
+import StoryBar from "../components/StoryBar";
 const HomePage = () => {
   return (
     <>
-    <header className="flex flex-col items-center justify-center text-center min-h-screen px-4 py-20">
+      <header className="flex flex-col items-center justify-center text-center min-h-screen px-4 py-20">
         <p className="accent-text text-neutral-700">
-          (RECOGNIZED AS THE BEST MVNE GLOBALLY)
+          Built by UniMe students. For UniMe students.
         </p>
 
         <h1 className="text-3xl font-black leading-tight text-neutral-900 max-w-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-8">
-          Streamline Operations, Skyrocket Revenue, and Delight Customers
+          Ace your exams, flex your code, drop a meme.
         </h1>
+
+        <p className="max-w-2xl text-neutral-700 mb-8">
+          Practice real UniMe exam-style questions, try interactive coding problems, take MCQs, and share notes — all in one student-run space.
+        </p>
 
         <div className="flex gap-4">
           <div className="group flex justify-between items-center bg-primary-yellow p-0.5 rounded-lg cursor-pointer overflow-hidden w-1/2">
@@ -20,7 +24,7 @@ const HomePage = () => {
             </button>
             <div className="relative flex items-center overflow-hidden rounded-md">
               <button className="relative font-semibold font-mono uppercase px-4 text-neutral-900 z-10 group-hover:text-white transition-colors duration-300">
-                Services
+                Posts
               </button>
               <div className="bg-primary-bg flex justify-center items-center rounded-md cursor-pointer overflow-hidden opacity-100 w-10 px-2 py-3 transition-all duration-500 group-hover:opacity-0 group-hover:w-0 group-hover:px-0 z-10">
                 <FiArrowRight className="text-primary-blue" />
@@ -34,7 +38,7 @@ const HomePage = () => {
             </button>
             <div className="relative flex items-center overflow-hidden rounded-md">
               <button className="relative font-semibold text-white font-mono uppercase px-4 z-10 group-hover:text-neutral-900 transition-colors duration-300">
-                Services
+                Tests
               </button>
               <div className="bg-primary-bg flex justify-center items-center rounded-md cursor-pointer overflow-hidden opacity-100 w-10 px-2 py-3 transition-all duration-500 group-hover:opacity-0 group-hover:w-0 group-hover:px-0">
                 <FiArrowRight className="text-primary-dark" />
@@ -46,17 +50,22 @@ const HomePage = () => {
       </header>
       <section className="flex flex-col gap-8 px-4 py-20 bg-white rounded-2xl">
         <p className="accent-text text-center text-neutral-700 font-semibold">
-          (Efficiency, Scalability, and Agility)
+          Practice smarter. Post freely. Learn socially.
         </p>
         <h2 className="text-5xl font-bold text-center leading-tight">
-          <span className="block text-primary-blue">Unparalleled</span> BSS/OSS
-          Capabilities
+          <span className="block text-primary-blue">Explore</span> Quizzes, Libraries, and Boards
         </h2>
         <StoryBar />
+        <div className="text-center max-w-3xl mx-auto">
+          <p className="text-neutral-700 mb-4">
+            Whether you’re grinding for your next Data Structures exam or just dropping memes between lectures, this is your space. Stay anonymous, or make a name for yourself — your identity, your choice.
+          </p>
+          <a href="#" className="btn-cta inline-block">
+            Join the community →
+          </a>
+        </div>
       </section>
-      <section
-        className="flex justify-center items-start p-6 min-h-screen bg-primary-light"
-      >
+      <section className="flex justify-center items-start p-6 min-h-screen bg-primary-light">
         <div className="w-full md:w-2/3 rounded-xl overflow-hidden border border-secondary-light bg-white/10 backdrop-blur-lg shadow-lg">
           {/* macOS top bar */}
           <div className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm border-b border-secondary-light">
@@ -146,7 +155,7 @@ const HomePage = () => {
         </div>
       </section>
     </>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
