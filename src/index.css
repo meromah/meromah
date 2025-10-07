@@ -10,7 +10,7 @@
   --primary-light:#ebebeb;
   --neutral-900: #111827;
   --neutral-700: #374151;
-  --neutral-200: rgb(230, 231, 235);
+  --secondary-light: #e6e7eb40;
 }
 
 /* :root {
@@ -42,26 +42,34 @@
   --color-primary-light: var(--primary-light);
   --color-neutral-900: var(--neutral-900);
   --color-neutral-700: var(--neutral-700);
-  --color-neutral-200: var(--neutral-200);
+  --color-secondary-light: var(--secondary-light);
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
   --font-mono: "Roboto Mono", monospace;
 
-  /* custom animation shorthand */
-  --animate-inset-grow: insetGrow 8s linear infinite;
-
+  --animate-inset-grow: insetGrow 9.5s linear forwards;
+  --animate-fade-in: fadeIn 0.5s ease-in forwards;
+  
   @keyframes insetGrow {
     0% {
       left: 0;
       top: 0;
       bottom: 0;
-      width: 0; /* actually collapsed horizontally */
+      width: 0;
     }
     100% {
       left: 0;
       top: 0;
       bottom: 0;
-      right: 0; /* OR width: calc(100% - 2px) */
-      width: 100%; /* fully expanded */
+      right: 0;
+      width: 100%;
+    }
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
     }
   }
 }
@@ -80,11 +88,11 @@ body {
   @apply font-mono text-xs opacity-60 mb-4;
 }
 .story-title{
-  @apply flex items-center gap-1 uppercase w-1/2 bg-neutral-200 p-0.5 rounded-xl text-sm;
+  @apply flex items-center gap-1 uppercase w-1/2 bg-secondary-light p-0.5 rounded-xl text-sm;
 }
 .story-title-active{
-  @apply flex items-center gap-1 uppercase w-full bg-neutral-200 p-0.5 rounded-xl text-sm;
+  @apply flex items-center gap-1 uppercase w-full bg-secondary-light p-0.5 rounded-xl text-sm;
 }
 .story-icon{
-  @apply bg-primary-yellow p-3 rounded-lg text-xl m-0.5 z-10 text-neutral-900;
+  @apply p-3 rounded-lg text-xl m-0.5 z-10 text-white;
 }
