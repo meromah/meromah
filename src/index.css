@@ -77,7 +77,13 @@
 body {
   @apply font-jakarta text-sm bg-primary-bg text-neutral-900;
 }
-
+/* Hide scrollbar but keep scrollable */
+body::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 .btn-cta {
   @apply px-4 py-2 rounded-lg  outline-primary-blue outline-1 uppercase cursor-pointer hover:scale-105 transition-all duration-200 hover:bg-primary-blue/10;
 }

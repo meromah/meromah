@@ -100,7 +100,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Button */}
       <button
-        className="lg:hidden z-20 p-2 rounded-lg hover:bg-primary-blue/10 transition-colors duration-200"
+        className="lg:hidden z-50 p-2 rounded-lg hover:bg-primary-blue/10 transition-colors duration-200"
         onClick={toggleMobileMenu}
         aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isMobileMenuOpen}
@@ -116,7 +116,7 @@ const Navbar = () => {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-neutral-900/50 z-10 lg:hidden animate-fade-in"
+          className="fixed inset-0 bg-neutral-900/50 z-40 lg:hidden animate-fade-in"
           onClick={closeMobileMenu}
           aria-hidden="true"
         />
@@ -125,7 +125,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <div
         id="mobile-menu"
-        className={`fixed top-0 right-0 h-full w-72 bg-primary-bg shadow-2xl z-10 transform transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed top-0 right-0 h-full w-72 bg-primary-bg shadow-2xl z-40 transform transition-transform duration-300 ease-in-out lg:hidden ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

@@ -6,11 +6,11 @@ import AdminPage from "./pages/admin/AdminPage";
 
 const App = () => {
   return (
-    <div>
-      <LandingPage />
-      <UserPage />
-      <AdminPage /> 
-    </div>
+    <Routes>
+      <Route path="/*" element={<LandingPage />} />
+      <Route path="/user/*" element={<UserPage />} />
+      <Route path="/admin/*" element={<AdminPage />} />
+    </Routes>
   );
 };
 
