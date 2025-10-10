@@ -1,6 +1,6 @@
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
-import StoryBar from "../components/StoryBar";
+import StoryBar from "../../components/StoryBar";
 const HomePage = () => {
   return (
     <>
