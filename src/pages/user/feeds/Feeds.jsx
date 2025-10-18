@@ -2,57 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import { FaInbox, FaClock, FaFire, FaLayerGroup } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-
-const mockPosts = [
-  {
-    id: "p1",
-    type: "post",
-    author: {
-      name: "Alice Johnson",
-      username: "alice",
-      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
-    },
-    text: "Loved the lecture on greedy algorithms today! Any good resources?",
-    board: "Algorithms 101",
-    comments: 3,
-    likes: 12,
-    shares: 1,
-    date: "2h",
-  },
-  {
-    id: "p2",
-    type: "quiz",
-    author: {
-      name: "Quiz Bot",
-      username: "quizbot",
-      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=quiz",
-    },
-    text: "Dynamic Programming Basics",
-    description: "10 MCQs to test your fundamentals",
-    board: "Algorithms 101",
-    comments: 0,
-    likes: 5,
-    shares: 0,
-    date: "5h",
-  },
-  {
-    id: "p3",
-    type: "library",
-    author: {
-      name: "Bob Lee",
-      username: "bob",
-      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=bob",
-    },
-    text: "Graph Notes",
-    description: "Concise notes on graphs with examples",
-    file: { name: "graphs-notes.pdf" },
-    board: "Discrete Math",
-    comments: 2,
-    likes: 8,
-    shares: 2,
-    date: "1d",
-  },
-];
+import { mockPosts } from "../../../utils";
 
 const Feeds = ({ userBoards = ["Algorithms 101", "Discrete Math"] }) => {
   const [filter, setFilter] = useState(() => {
