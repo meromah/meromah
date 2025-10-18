@@ -61,15 +61,15 @@ const PostCard = ({ post }) => {
             {post.type === "post"? "b": post.type === "quiz"? "t":"l"}/{post.board}
           </p>
           <p className="text-xs md:text-sm flex items-center gap-1">
-            <span
+            <Link
+            onClick={(e) => e.stopPropagation()}
+                to={`/user/profile/${post.author.username}`}
               className="cursor-pointer hover:underline"
-              onClick={handleAuthorClick}
-              role="button"
+              role="link"
               tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && handleAuthorClick()}
             >
               u/{post.author.username}
-            </span>
+            </Link>
             <span className="text-neutral-500 font-normal">{post.date}</span>
           </p>
         </div>
@@ -82,7 +82,7 @@ const PostCard = ({ post }) => {
             <p className="mb-1 font-medium">{post.text}</p>
             <p className="text-sm text-neutral-600">{post.description}</p>
           </div>
-          <button className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer" onClick={(e)=>e.preventDefault()}>
+          <button className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer" onClick={(e)=>e.stopPropagation()}>
             Start
           </button>
         </div>

@@ -170,7 +170,10 @@ const UserSidebar = () => {
         } md:translate-x-0`}
       >
         {/* Logo Header */}
-        <Link to="/user" className="flex-shrink-0 px-4 py-4 border-b border-neutral-200">
+        <Link
+          to="/user"
+          className="flex-shrink-0 px-4 py-4 border-b border-neutral-200"
+        >
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">S</span>
@@ -298,7 +301,13 @@ const UserSidebar = () => {
               <p className="text-sm font-medium text-neutral-900 truncate">
                 John Doe
               </p>
-              <p className="text-xs text-neutral-500 truncate">Free plan</p>
+              <Link
+                onClick={(e) => e.stopPropagation()}
+                to={"/user/profile/user-name"}
+                className="text-xs text-neutral-500 truncate cursor-pointer hover:underline"
+              >
+                u/user-name
+              </Link>
             </div>
             <ChevronDown
               className={`w-4 h-4 text-neutral-400 flex-shrink-0 transition-transform duration-200 ${
