@@ -6,6 +6,7 @@ import {
   FaRegShareSquare,
   FaArrowDown,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const PostCard = ({ post }) => {
   const [liked, setLiked] = useState(false);
@@ -30,7 +31,7 @@ const PostCard = ({ post }) => {
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-4 hover:shadow-lg transition-shadow duration-200">
+    <Link to={`/user/post/${post.id}`} className="block bg-white shadow rounded-lg p-4 hover:shadow-lg transition-shadow duration-200">
       {/* Author */}
       <div className="flex items-center gap-3 mb-3">
         {imageError ? (
@@ -128,7 +129,7 @@ const PostCard = ({ post }) => {
           <FaRegShareSquare /> {post.shares}
         </button>
       </div>
-    </div>
+    </Link>
   );
 };
 

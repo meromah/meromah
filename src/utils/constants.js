@@ -65,3 +65,67 @@ export const mockPosts = [
     date: "1d",
   },
 ];
+
+// Mock comment data
+export const mockComments = {
+  p1: [
+    {
+      id: "c1",
+      author: {
+        name: "Charlie Chen",
+        username: "charlie",
+        avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=charlie",
+      },
+      text: "Check out the MIT lectures on YouTube! They have great examples.",
+      date: "1h",
+      likes: 3,
+    },
+    {
+      id: "c2",
+      author: {
+        name: "Diana Park",
+        username: "diana",
+        avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=diana",
+      },
+      text: "I found this book really helpful: 'Introduction to Algorithms' by Cormen.",
+      date: "45m",
+      likes: 1,
+    },
+    {
+      id: "c3",
+      author: {
+        name: "Eve Wilson",
+        username: "eve",
+        avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=eve",
+      },
+      text: "The GeeksforGeeks articles are also pretty good for quick reference!",
+      date: "30m",
+      likes: 2,
+    },
+  ],
+  p2: [],
+  p3: [
+    {
+      id: "c4",
+      author: {
+        name: "Frank Miller",
+        username: "frank",
+        avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=frank",
+      },
+      text: "Thanks for sharing! These notes are really well organized.",
+      date: "2h",
+      likes: 1,
+    },
+    {
+      id: "c5",
+      author: {
+        name: "Grace Liu",
+        username: "grace",
+        avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=grace",
+      },
+      text: "The examples in section 3.2 helped me understand DFS better. Great work!",
+      date: "1h",
+      likes: 4,
+    },
+  ],
+};

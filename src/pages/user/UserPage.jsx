@@ -4,6 +4,7 @@ import Feeds from "./feeds/Feeds";
 import CreateAction from "./feeds/CreateAction";
 import ExploreItem from "./feeds/ExploreItem";
 import UserSidebar from "../../components/UserSidebar";
+import Post from "./Post";
 
 const UserPage = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const UserPage = () => {
         <Routes>
           <Route index element={<Navigate to="feeds" replace />} />
           <Route path="feeds" element={<Feeds />} />
+          <Route path="post/:postId" element={<Post />} />
           <Route path="create/:action" element={<CreateAction />} />
           <Route path="explore/:item" element={<ExploreItem />} />
           <Route path="*" element={<Navigate to="feeds" replace />} />
