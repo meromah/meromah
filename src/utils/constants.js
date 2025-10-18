@@ -129,3 +129,191 @@ export const mockComments = {
     },
   ],
 };
+
+// Mock user profile data
+export const mockUserProfile = {
+  id: "u1",
+  username: "alice",
+  name: "Alice Johnson",
+  userImage: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+  bio: "Computer Science student passionate about algorithms and data structures. Love sharing knowledge and learning from the community!",
+  education: "Computer Science, MIT",
+  joinDate: "2023-09-15",
+  stats: {
+    posts: 12,
+    quizzes: 5,
+    libraryItems: 8
+  }
+};
+
+// Mock user posts data
+export const mockUserPosts = [
+  {
+    id: "up1",
+    type: "post",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Just finished implementing a new sorting algorithm! The merge sort visualization really helped me understand the divide and conquer approach.",
+    board: "algorithms-101",
+    comments: 5,
+    likes: 15,
+    shares: 2,
+    date: "2h",
+  },
+  {
+    id: "up2",
+    type: "post",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Working on dynamic programming problems. The key insight is recognizing overlapping subproblems!",
+    board: "algorithms-101",
+    comments: 3,
+    likes: 8,
+    shares: 1,
+    date: "1d",
+  },
+  {
+    id: "up3",
+    type: "post",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Graph theory is fascinating! Just learned about Dijkstra's algorithm and its applications.",
+    board: "discrete-math",
+    comments: 7,
+    likes: 12,
+    shares: 3,
+    date: "3d",
+  },
+];
+
+// Mock user quizzes data
+export const mockUserQuizzes = [
+  {
+    id: "uq1",
+    type: "quiz",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Sorting Algorithms Quiz",
+    description: "Test your knowledge of sorting algorithms with 15 questions",
+    board: "algorithms-101",
+    questions: 15,
+    category: "Algorithms",
+    comments: 2,
+    likes: 8,
+    shares: 1,
+    date: "1w",
+  },
+  {
+    id: "uq2",
+    type: "quiz",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Dynamic Programming Basics",
+    description: "10 MCQs covering DP fundamentals and patterns",
+    board: "algorithms-101",
+    questions: 10,
+    category: "Algorithms",
+    comments: 1,
+    likes: 5,
+    shares: 0,
+    date: "2w",
+  },
+  {
+    id: "uq3",
+    type: "quiz",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Graph Theory Fundamentals",
+    description: "Understanding graphs, trees, and traversal algorithms",
+    board: "discrete-math",
+    questions: 12,
+    category: "Discrete Math",
+    comments: 4,
+    likes: 10,
+    shares: 2,
+    date: "3w",
+  },
+];
+
+// Mock user library data
+export const mockUserLibrary = [
+  {
+    id: "ul1",
+    type: "library",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Algorithm Cheat Sheet",
+    description: "Quick reference for common algorithms and their complexities",
+    file: { name: "algorithm-cheatsheet.pdf", type: "PDF", size: "2.1MB" },
+    board: "algorithms-101",
+    comments: 3,
+    likes: 12,
+    shares: 4,
+    date: "5d",
+  },
+  {
+    id: "ul2",
+    type: "library",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Data Structures Notes",
+    description: "Comprehensive notes on arrays, linked lists, stacks, and queues",
+    file: { name: "data-structures-notes.pdf", type: "PDF", size: "3.8MB" },
+    board: "algorithms-101",
+    comments: 1,
+    likes: 7,
+    shares: 2,
+    date: "1w",
+  },
+  {
+    id: "ul3",
+    type: "library",
+    author: {
+      name: "Alice Johnson",
+      username: "alice",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=alice",
+    },
+    text: "Graph Algorithms Examples",
+    description: "Python implementations of BFS, DFS, and shortest path algorithms",
+    file: { name: "graph-algorithms.py", type: "Python", size: "1.2MB" },
+    board: "discrete-math",
+    comments: 2,
+    likes: 9,
+    shares: 3,
+    date: "2w",
+  },
+];
+
+// Default placeholders
+export const DEFAULT_PLACEHOLDERS = {
+  bio: "No bio available",
+  education: "Education not specified",
+  joinDate: "Unknown",
+  noPosts: "No posts yet",
+  noQuizzes: "No quizzes created yet",
+  noLibrary: "No library items yet"
+};
