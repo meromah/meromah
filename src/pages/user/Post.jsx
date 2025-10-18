@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { mockPosts, mockComments } from "../../utils/constants";
 import {
   FiHeart,
-  FiMessageCircle,
   FiShare2,
   FiArrowLeft,
   FiSend,
@@ -117,7 +116,7 @@ const Post = () => {
                 <FiHeart className="text-base" />
                 <span className="text-sm font-medium">{post.likes}</span>
               </button>
-              <button className="flex items-center gap-2 text-slate-600 hover:text-green-500 transition-colors">
+              <button className="flex items-center gap-2 text-slate-600 hover:text-green-500 transition-colors duration-200 cursor pointer">
                 <FiShare2 className="text-base cursor-pointer" />
                 <span className="text-sm font-medium">{post.shares}</span>
               </button>

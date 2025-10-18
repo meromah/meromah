@@ -3,9 +3,9 @@ import {
   FaRegComment,
   FaRegHeart,
   FaHeart,
-  FaRegShareSquare,
   FaArrowDown,
 } from "react-icons/fa";
+import { FiShare2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const PostCard = ({ post }) => {
@@ -13,25 +13,29 @@ const PostCard = ({ post }) => {
   const [imageError, setImageError] = useState(false);
   const likeCount = post.likes + (liked ? 1 : 0);
 
-  const handleAuthorClick = () => {
-    console.log('Navigate to author profile');
+  const handleAuthorClick = (e) => {
+    e.preventDefault();
+    console.log("Navigate to author profile");
   };
 
   const handleBoardClick = () => {
-    console.log('Navigate to board');
+    console.log("Navigate to board");
   };
 
   const getInitials = (name) => {
     return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
       .toUpperCase()
       .slice(0, 2);
   };
 
   return (
-    <Link to={`/user/post/${post.id}`} className="block bg-white shadow rounded-lg p-4 hover:shadow-lg transition-shadow duration-200">
+    <Link
+      to={`/user/post/${post.id}`}
+      className="block bg-white shadow rounded-lg p-4 hover:shadow-lg transition-shadow duration-200"
+    >
       {/* Author */}
       <div className="flex items-center gap-3 mb-3">
         {imageError ? (
@@ -47,28 +51,26 @@ const PostCard = ({ post }) => {
           />
         )}
         <div>
-          <p 
-            className="font-semibold text-primary-blue text-base cursor-pointer hover:underline"
+          <p
+            className="text-primary-blue text-base cursor-pointer hover:underline"
             onClick={handleBoardClick}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleBoardClick()}
+            onKeyDown={(e) => e.key === "Enter" && handleBoardClick()}
           >
-            {post.board}
+            {post.type === "post"? "b": post.type === "quiz"? "t":"l"}/{post.board}
           </p>
-          <p className="text-xs md:text-sm">
-            <span 
+          <p className="text-xs md:text-sm flex items-center gap-1">
+            <span
               className="cursor-pointer hover:underline"
               onClick={handleAuthorClick}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && handleAuthorClick()}
+              onKeyDown={(e) => e.key === "Enter" && handleAuthorClick()}
             >
-              {post.author.name}
-            </span>{" "}
-            <span className="text-neutral-500 font-normal">
-              @{post.author.username} · {post.date}
+              u/{post.author.username}
             </span>
+            <span className="text-neutral-500 font-normal">{post.date}</span>
           </p>
         </div>
       </div>
@@ -80,7 +82,7 @@ const PostCard = ({ post }) => {
             <p className="mb-1 font-medium">{post.text}</p>
             <p className="text-sm text-neutral-600">{post.description}</p>
           </div>
-          <button className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          <button className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer" onClick={(e)=>e.preventDefault()}>
             Start
           </button>
         </div>
@@ -92,8 +94,10 @@ const PostCard = ({ post }) => {
               <FaArrowDown />
             </div>
             <div className="flex flex-col text-xs gap-0.5 text-neutral-500">
-              <p className="text-neutral-900 text-sm font-medium">{post.file?.name}</p>
-              <p>{post.file?.size || '3.5mb'}</p>
+              <p className="text-neutral-900 text-sm font-medium">
+                {post.file?.name}
+              </p>
+              <p>{post.file?.size || "3.5mb"}</p>
             </div>
           </div>
         </div>
@@ -115,18 +119,20 @@ const PostCard = ({ post }) => {
         <button
           className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
           title={liked ? "Unlike" : "Like"}
-          aria-label={`${likeCount} likes. ${liked ? 'Unlike' : 'Like'} this post`}
+          aria-label={`${likeCount} likes. ${
+            liked ? "Unlike" : "Like"
+          } this post`}
           onClick={() => setLiked((v) => !v)}
         >
           {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}{" "}
           {likeCount}
         </button>
         <button
-          className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
+          className="flex items-center gap-2 text-slate-600 hover:text-green-500 transition-colors duration-200 cursor pointer"
           title="Share"
           aria-label={`${post.shares} shares`}
         >
-          <FaRegShareSquare /> {post.shares}
+          <FiShare2 /> {post.shares}
         </button>
       </div>
     </Link>
