@@ -51,7 +51,7 @@ const UserProfile = () => {
 
   const renderOverview = () => (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg p-6 shadow-sm">
+      <div className="rounded-lg py-6">
         <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2">
           <FaUser className="text-primary-blue" />
           About
@@ -80,32 +80,6 @@ const UserProfile = () => {
             <p className="text-neutral-900 mt-1">
               {formatJoinDate(mockUserProfile.joinDate)}
             </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-lg p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-neutral-900 mb-4">
-          Activity Summary
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <div className="text-2xl font-bold text-primary-blue">
-              {mockUserProfile.stats.posts}
-            </div>
-            <div className="text-sm text-neutral-600">Posts</div>
-          </div>
-          <div className="text-center p-4 bg-green-50 rounded-lg">
-            <div className="text-2xl font-bold text-green-600">
-              {mockUserProfile.stats.quizzes}
-            </div>
-            <div className="text-sm text-neutral-600">Quizzes</div>
-          </div>
-          <div className="text-center p-4 bg-purple-50 rounded-lg">
-            <div className="text-2xl font-bold text-purple-600">
-              {mockUserProfile.stats.libraryItems}
-            </div>
-            <div className="text-sm text-neutral-600">Library Items</div>
           </div>
         </div>
       </div>
@@ -171,26 +145,26 @@ const UserProfile = () => {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* User Info Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="flex flex-col md:flex-row items-end gap-6">
             <div className="flex-shrink-0">
               {imageError ? (
-                <div className="w-20 h-20 rounded-full bg-primary-blue text-white flex items-center justify-center text-2xl font-semibold shadow-lg">
+                <div className="w-20 h-20 rounded-xl bg-primary-blue text-white flex items-center justify-center text-2xl font-semibold border border-gray-300">
                   {getInitials(mockUserProfile.name)}
                 </div>
               ) : (
                 <img
                   src={mockUserProfile.userImage}
                   alt={mockUserProfile.username}
-                  className="w-20 h-20 rounded-full shadow-lg object-cover"
+                  className="w-20 h-20 rounded-xl border border-gray-300 object-cover"
                   onError={() => setImageError(true)}
                 />
               )}
             </div>
             <div className="flex-1">
-              <h1 className="text-lg font-bold text-neutral-900 mb-1">
+              <h1 className="text-lg font-bold text-neutral-900">
                 {mockUserProfile.name}
               </h1>
-              <p className="text-base text-primary-blue mb-2">
+              <p className="text-base text-primary-blue">
                 u/{mockUserProfile.username}
               </p>
             </div>
