@@ -87,9 +87,9 @@ const UserProfile = () => {
   );
 
   const renderPosts = () => (
-    <div className="space-y-4">
+    <div>
       {mockUserPosts.length > 0 ? (
-        mockUserPosts.map((post) => <PostCard key={post.id} post={post} />)
+        mockUserPosts.map((post, i) => <PostCard key={post.id} post={post} isFirst={i === 0} isLast={i === mockUserPosts.length - 1}/>)
       ) : (
         <div className="bg-white rounded-lg p-8 text-center shadow-sm">
           <FaEdit className="mx-auto text-4xl text-neutral-400 mb-4" />
@@ -100,9 +100,9 @@ const UserProfile = () => {
   );
 
   const renderQuizzes = () => (
-    <div className="space-y-4">
+    <div>
       {mockUserQuizzes.length > 0 ? (
-        mockUserQuizzes.map((quiz) => <PostCard key={quiz.id} post={quiz} />)
+        mockUserQuizzes.map((quiz, i) => <PostCard key={quiz.id} post={quiz} isFirst={i === 0} isLast={i === mockUserQuizzes.length - 1}/>)
       ) : (
         <div className="bg-white rounded-lg p-8 text-center shadow-sm">
           <FaQuestionCircle className="mx-auto text-4xl text-neutral-400 mb-4" />
@@ -113,9 +113,9 @@ const UserProfile = () => {
   );
 
   const renderLibrary = () => (
-    <div className="space-y-4">
+    <div>
       {mockUserLibrary.length > 0 ? (
-        mockUserLibrary.map((item) => <PostCard key={item.id} post={item} />)
+        mockUserLibrary.map((item, i) => <PostCard key={item.id} post={item} isFirst={i === 0} isLast={i === mockUserLibrary.length - 1}/>)
       ) : (
         <div className="bg-white rounded-lg p-8 text-center shadow-sm">
           <FaBook className="mx-auto text-4xl text-neutral-400 mb-4" />
@@ -197,7 +197,7 @@ const UserProfile = () => {
           </div>
           {/* Tab Content */}
           <div className="rounded-lg">
-            <div className="p-6">{renderTabContent()}</div>
+            <div className="py-6">{renderTabContent()}</div>
           </div>
         </div>
       </div>

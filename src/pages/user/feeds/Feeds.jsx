@@ -123,10 +123,13 @@ const Feeds = ({ userBoards = ["Algorithms 101", "Discrete Math"] }) => {
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {filtered.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
+          <div className="">
+            {filtered.map((post, i) => {
+              const isFirst = i === 0;
+              const isLast = i === filtered.length - 1;
+              return (
+              <PostCard key={post.id} post={post} isFirst={isFirst} isLast={isLast} />
+            )})}
           </div>
         )}
       </div>

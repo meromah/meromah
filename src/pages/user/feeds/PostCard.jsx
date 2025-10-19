@@ -1,25 +1,29 @@
 import React, { useState } from "react";
-import {
-  FaRegComment,
-  FaRegHeart,
-  FaHeart,
-  FaArrowDown,
-} from "react-icons/fa";
+import { FaRegComment, FaRegHeart, FaHeart, FaArrowDown } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-const PostCard = ({ post }) => {
+const preventNavigation = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+};
+const getType = {
+  post: "b",
+  quiz: "t",
+  library: "l",
+};
+const PostCard = ({ post, isFirst, isLast }) => {
   const [liked, setLiked] = useState(false);
   const [imageError, setImageError] = useState(false);
   const likeCount = post.likes + (liked ? 1 : 0);
-
-  const handleAuthorClick = (e) => {
-    e.preventDefault();
-    console.log("Navigate to author profile");
+  const handleAuthorClick = (e, path) => {
+    preventNavigation(e);
+    console.log("Navigate to author profile: ", path);
   };
 
-  const handleBoardClick = () => {
-    console.log("Navigate to board");
+  const handleBoardClick = (e, path) => {
+    preventNavigation(e);
+    console.log("Navigate to: ", path);
   };
 
   const getInitials = (name) => {
@@ -34,12 +38,19 @@ const PostCard = ({ post }) => {
   return (
     <Link
       to={`/user/post/${post.id}`}
-      className="block bg-white shadow rounded-lg p-4 hover:shadow-lg transition-shadow duration-200"
+      className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
+        isFirst && "rounded-t-lg border-t"
+      } ${isLast && "rounded-b-lg"}`}
     >
       {/* Author */}
       <div className="flex items-center gap-3 mb-3">
         {imageError ? (
-          <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-semibold shadow shadow-neutral-200">
+          <div
+            className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-semibold shadow shadow-neutral-200"
+            onClick={(e) =>
+              handleAuthorClick(e, `/user/profile/${post.author.username}`)
+            }
+          >
             {getInitials(post.author.name)}
           </div>
         ) : (
@@ -48,28 +59,34 @@ const PostCard = ({ post }) => {
             alt={post.author.username}
             className="w-8 h-8 rounded-full shadow shadow-neutral-200"
             onError={() => setImageError(true)}
+            onClick={(e) =>
+              handleAuthorClick(e, `/user/profile/${post.author.username}`)
+            }
           />
         )}
         <div>
           <p
             className="text-primary-blue text-base cursor-pointer hover:underline"
-            onClick={handleBoardClick}
+            onClick={(e) =>
+              handleBoardClick(e, `/user/${getType[post.type]}/${post.board}`)
+            }
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && handleBoardClick()}
           >
-            {post.type === "post"? "b": post.type === "quiz"? "t":"l"}/{post.board}
+            {getType[post.type]}/{post.board}
           </p>
           <p className="text-xs md:text-sm flex items-center gap-1">
-            <Link
-            onClick={(e) => e.stopPropagation()}
-                to={`/user/profile/${post.author.username}`}
+            <span
+              onClick={(e) =>
+                handleAuthorClick(e, `/user/profile/${post.author.username}`)
+              }
               className="cursor-pointer hover:underline"
               role="link"
               tabIndex={0}
             >
               u/{post.author.username}
-            </Link>
+            </span>
             <span className="text-neutral-500 font-normal">{post.date}</span>
           </p>
         </div>
@@ -82,7 +99,10 @@ const PostCard = ({ post }) => {
             <p className="mb-1 font-medium">{post.text}</p>
             <p className="text-sm text-neutral-600">{post.description}</p>
           </div>
-          <button className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer" onClick={(e)=>e.stopPropagation()}>
+          <button
+            className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+            onClick={(e) => e.stopPropagation()}
+          >
             Start
           </button>
         </div>
@@ -117,22 +137,39 @@ const PostCard = ({ post }) => {
           <FaRegComment /> {post.comments}
         </button>
         <button
-          className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
+          className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
           title={liked ? "Unlike" : "Like"}
           aria-label={`${likeCount} likes. ${
             liked ? "Unlike" : "Like"
           } this post`}
-          onClick={() => setLiked((v) => !v)}
+          onClick={preventNavigation}
         >
-          {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}{" "}
+          {liked ? (
+            <FaHeart
+              className="text-red-500"
+              onClick={(e) => {
+                setLiked((v) => !v);
+                preventNavigation(e);
+              }}
+            />
+          ) : (
+            <FaRegHeart
+              onClick={(e) => {
+                setLiked((v) => !v);
+                preventNavigation(e);
+              }}
+            />
+          )}
           {likeCount}
         </button>
         <button
-          className="flex items-center gap-2 text-slate-600 hover:text-green-500 transition-colors duration-200 cursor pointer"
+          className="flex items-center gap-2 text-slate-600"
           title="Share"
           aria-label={`${post.shares} shares`}
+          onClick={preventNavigation}
         >
-          <FiShare2 /> {post.shares}
+          <FiShare2 className="hover:text-green-500 transition-colors duration-200 cursor-pointer" />{" "}
+          {post.shares}
         </button>
       </div>
     </Link>
