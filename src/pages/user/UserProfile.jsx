@@ -145,7 +145,7 @@ const UserProfile = () => {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* User Info Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex flex-col md:flex-row items-end gap-6">
+          <div className="flex flex-col md:flex-row md:items-end gap-6">
             <div className="flex-shrink-0">
               {imageError ? (
                 <div className="w-20 h-20 rounded-xl bg-primary-blue text-white flex items-center justify-center text-2xl font-semibold border border-gray-300">
@@ -177,7 +177,7 @@ const UserProfile = () => {
             <div className="border-b border-neutral-200">
               <nav className="flex">
                 {tabs.map((tab) => {
-                  const Icon = tab.icon;
+                  // const Icon = tab.icon;
                   return (
                     <button
                       key={tab.id}
@@ -188,7 +188,8 @@ const UserProfile = () => {
                           : "text-neutral-600 hover:text-primary-blue hover:bg-neutral-50"
                       }`}
                     >
-                      <span className="hidden sm:inline">{tab.label}</span>
+                      {/* We can add Icon here if we want */}
+                      <span>{tab.label}</span>
                     </button>
                   );
                 })}
