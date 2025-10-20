@@ -2,12 +2,12 @@ import React, { lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
 
 // Lazy load each action
-const CreateBoard = lazy(() => import("./CreateBoard"));
+const CreateCommunity = lazy(() => import("./CreateCommunity"));
 const CreateLibrary = lazy(() => import("./CreateLibrary"));
 // const CreateQuiz = lazy(() => import("./CreateQuiz"));
 
 const actions = {
-  board: CreateBoard,
+  board: CreateCommunity,
   library: CreateLibrary,
   // quiz: CreateQuiz,
 };
