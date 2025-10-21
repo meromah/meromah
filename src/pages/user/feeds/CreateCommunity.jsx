@@ -29,7 +29,7 @@ const CreateCommunity = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="relative min-h-screen bg-primary/50">
       {hasSpecialChar && (
         <div
           role="alert"
@@ -65,85 +65,85 @@ const CreateCommunity = () => {
           </p>
         </div>
 
-        <div className="flex gap-4 p-4 border-b border-slate-100">
-          <label
-            htmlFor="board"
-            className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50"
-          >
-            <input
-              id="board"
-              name="board-type"
-              type="radio"
-              value="board"
-              checked={communityType === "board"}
-              onChange={() => setCommunityType("board")}
-              className="h-4 w-4 text-blue-600 accent-blue-600"
-            />
-            <div className="flex flex-col">
-              <span className="font-medium text-neutral-800">Board</span>
-              <span className="text-xs text-slate-500">
-                Create a new board to collect posts
-              </span>
-            </div>
-          </label>
-
-          <label
-            htmlFor="desc"
-            className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50"
-          >
-            <input
-              id="desc"
-              name="board-type"
-              type="radio"
-              value="desc"
-              checked={communityType === "desc"}
-              onChange={() => setCommunityType("desc")}
-              className="h-4 w-4 text-blue-600 accent-blue-600"
-            />
-            <div className="flex flex-col">
-              <span className="font-medium text-neutral-800">Desc</span>
-              <span className="text-xs text-slate-500">
-                Create a new desc to collect tests
-              </span>
-            </div>
-          </label>
-        </div>
-        <div className="p-6 border-b border-slate-100">
-          <div className="grid gap-5">
-            <div className="">
-              <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">
-                  {communityTypes[communityType].name} name
+        <div className="bg-white rounded-lg border border-slate-200">
+          <div className="flex gap-4 p-4 border-b border-slate-100">
+            <label
+              htmlFor="board"
+              className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50"
+            >
+              <input
+                id="board"
+                name="board-type"
+                type="radio"
+                value="board"
+                checked={communityType === "board"}
+                onChange={() => setCommunityType("board")}
+                className="h-4 w-4 text-blue-600 accent-blue-600"
+              />
+              <div className="flex flex-col">
+                <span className="font-medium text-neutral-800">Board</span>
+                <span className="text-xs text-slate-500">
+                  Create a new board to collect posts
                 </span>
-                <input
-                  type="text"
-                  value={communityName}
-                  onChange={handleCommunityNameChange}
-                  placeholder="e.g., Study-Resources, Design-Inspirations"
-                  className="input w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400"
+              </div>
+            </label>
+            <label
+              htmlFor="desc"
+              className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-md hover:bg-slate-50"
+            >
+              <input
+                id="desc"
+                name="board-type"
+                type="radio"
+                value="desc"
+                checked={communityType === "desc"}
+                onChange={() => setCommunityType("desc")}
+                className="h-4 w-4 text-blue-600 accent-blue-600"
+              />
+              <div className="flex flex-col">
+                <span className="font-medium text-neutral-800">Desc</span>
+                <span className="text-xs text-slate-500">
+                  Create a new desc to collect tests
+                </span>
+              </div>
+            </label>
+          </div>
+          <div className="p-6 border-b border-slate-100">
+            <div className="grid gap-5">
+              <div className="">
+                <label className="flex flex-col gap-2">
+                  <span className="font-medium text-neutral-800">
+                    {communityTypes[communityType].name} name
+                  </span>
+                  <input
+                    type="text"
+                    value={communityName}
+                    onChange={handleCommunityNameChange}
+                    placeholder="e.g., Study-Resources, Design-Inspirations"
+                    className="input w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400"
+                  />
+                </label>
+                <p
+                  className={`text-xs text-slate-500 transition-all duration-300 ease-out
+                 ${
+                   communityName
+                     ? "mt-1 max-h-10 opacity-100"
+                     : "mt-0 max-h-0 opacity-0 overflow-hidden"
+                 }`}
+                >
+                  {communityTypes[communityType].path}/{communityName}
+                </p>
+              </div>
+              <label className="flex flex-col gap-2">
+                <span className="font-medium text-neutral-800">Description</span>
+                <textarea
+                  value={communityDescription}
+                  onChange={(e) => setCommunityDescription(e.target.value)}
+                  placeholder={`What is this ${communityTypes[communityType].names} about? Who is it for?`}
+                  className="w-full min-h-[120px] px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 resize-y"
                 />
               </label>
-              <p
-                className={`text-xs text-slate-500 transition-all duration-300 ease-out
-               ${
-                 communityName
-                   ? "mt-1 max-h-10 opacity-100"
-                   : "mt-0 max-h-0 opacity-0 overflow-hidden"
-               }`}
-              >
-                {communityTypes[communityType].path}/{communityName}
-              </p>
             </div>
-
-            <label className="flex flex-col gap-2">
-              <span className="font-medium text-neutral-800">Description</span>
-              <textarea
-                value={communityDescription}
-                onChange={(e) => setCommunityDescription(e.target.value)}
-                placeholder={`What is this ${communityTypes[communityType].names} about? Who is it for?`}
-                className="w-full min-h-[120px] px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 resize-y"
-              />
-            </label>
           </div>
         </div>
 
