@@ -55,8 +55,8 @@ const CreateCommunity = () => {
         </div>
       )}
 
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <div className="mb-8 text-center">
+      <div className="max-w-2xl w-full mx-auto px-4 py-8">
+        <div className="text-center p-2 md:p-6">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
             Create a new community
           </h1>
@@ -64,6 +64,7 @@ const CreateCommunity = () => {
             Organize posts and ideas or tests under a shared theme
           </p>
         </div>
+        
 
         <div className="bg-white rounded-lg border border-slate-200">
           <div className="flex gap-4 p-4 border-b border-slate-100">
@@ -147,7 +148,7 @@ const CreateCommunity = () => {
           </div>
         </div>
 
-        <div className="px-6 py-5 bg-slate-50 flex items-center justify-between">
+        <div className="px-6 py-5 bg-primary-bg flex items-center justify-between">
           <button className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:text-slate-900 font-medium transition-colors">
             <FiArrowLeft className="text-base" />
             Cancel

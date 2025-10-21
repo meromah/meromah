@@ -47,9 +47,8 @@ const exploreItems = [
 ];
 
 const createActionArr = [
-  { label: "Post", path: "/user/create/post", icon: FileText },
   { label: "Community", path: "/user/create/board", icon: Grid },
-  { label: "Library", path: "/user/create/library", icon: Book },
+  { label: "Post", path: "/user/create/post", icon: FileText },
   { label: "Quiz", path: "/user/create/quiz", icon: Layers },
 ];
 
