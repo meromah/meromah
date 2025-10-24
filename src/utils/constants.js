@@ -64,6 +64,52 @@ export const mockPosts = [
     shares: 2,
     date: "1d",
   },
+  {
+    id: "p4",
+    type: "post",
+    author: {
+      name: "Charlie Chen",
+      username: "charlie",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=charlie",
+    },
+    text: "Anyone working on the final project for CS101? Looking for study partners!",
+    board: "general",
+    comments: 5,
+    likes: 8,
+    shares: 1,
+    date: "3h",
+  },
+  {
+    id: "p5",
+    type: "quiz",
+    author: {
+      name: "Tech Bot",
+      username: "techbot",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=tech",
+    },
+    text: "React vs Vue.js",
+    description: "Compare these popular frontend frameworks",
+    board: "tech",
+    comments: 0,
+    likes: 3,
+    shares: 0,
+    date: "6h",
+  },
+  {
+    id: "p6",
+    type: "post",
+    author: {
+      name: "Diana Park",
+      username: "diana",
+      avatar: "https://api.dicebear.com/8.x/identicon/svg?seed=diana",
+    },
+    text: "Check out this amazing UI design I created for my portfolio!",
+    board: "design",
+    comments: 12,
+    likes: 25,
+    shares: 4,
+    date: "1d",
+  },
 ];
 
 // Mock comment data
@@ -306,6 +352,50 @@ export const mockUserLibrary = [
     shares: 3,
     date: "2w",
   },
+];
+
+// Mock board data
+export const boardsData = [
+  {
+    id: "algorithms-101",
+    name: "Algorithms 101",
+    description: "Practice and discussion for UniMe's Algorithms course. Share notes, solutions, and ask questions.",
+    coverImage: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=300&fit=crop",
+    memberCount: 124,
+    postCount: 42
+  },
+  {
+    id: "discrete-math",
+    name: "Discrete Math",
+    description: "Mathematical foundations for computer science. Logic, proofs, combinatorics, and graph theory.",
+    coverImage: "https://images.unsplash.com/photo-1635070041408-e43c894d7a3b?w=800&h=300&fit=crop",
+    memberCount: 89,
+    postCount: 28
+  },
+  {
+    id: "general",
+    name: "General Discussion",
+    description: "General chat, announcements, and community discussions for all UniMe students.",
+    coverImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=300&fit=crop",
+    memberCount: 256,
+    postCount: 156
+  },
+  {
+    id: "tech",
+    name: "Technology",
+    description: "Latest tech trends, programming languages, frameworks, and development tools discussion.",
+    coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=300&fit=crop",
+    memberCount: 178,
+    postCount: 73
+  },
+  {
+    id: "design",
+    name: "Design",
+    description: "UI/UX design, graphic design, and creative projects. Share your designs and get feedback.",
+    coverImage: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&h=300&fit=crop",
+    memberCount: 67,
+    postCount: 34
+  }
 ];
 
 // Default placeholders

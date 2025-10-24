@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { FaRegComment, FaRegHeart, FaHeart, FaArrowDown } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const preventNavigation = (e) => {
   e.preventDefault();
   e.stopPropagation();
 };
 const getType = {
-  post: "b",
-  quiz: "t",
-  library: "l",
+  post: ["b", "board"],
+  quiz: ["d", "desc"],
+  library: ["b", "board"],
 };
 const PostCard = ({ post, isFirst, isLast }) => {
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
   const [imageError, setImageError] = useState(false);
   const likeCount = post.likes + (liked ? 1 : 0);
@@ -23,7 +24,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
 
   const handleBoardClick = (e, path) => {
     preventNavigation(e);
-    console.log("Navigate to: ", path);
+    navigate(path);
   };
 
   const getInitials = (name) => {
@@ -68,13 +69,13 @@ const PostCard = ({ post, isFirst, isLast }) => {
           <p
             className="text-primary-blue text-base cursor-pointer hover:underline"
             onClick={(e) =>
-              handleBoardClick(e, `/user/${getType[post.type]}/${post.board}`)
+              handleBoardClick(e, `/user/${getType[post.type][1]}/${post.board}`)
             }
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && handleBoardClick()}
           >
-            {getType[post.type]}/{post.board}
+            {getType[post.type][0]}/{post.board}
           </p>
           <p className="text-xs md:text-sm flex items-center gap-1">
             <span
