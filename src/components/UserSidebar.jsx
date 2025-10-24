@@ -325,10 +325,10 @@ const UserSidebar = () => {
                   onClick={() => handleNavigate("/user/settings")}
                   className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
                 >
-                  <span className="flex items-center gap-2">
+                  <Link to="/user/profile/edit" className="flex items-center gap-2">
                     <Settings className="w-4 h-4" />
                     Edit profile
-                  </span>
+                  </Link>
                 </button>
                 <button className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all">
                   <span>Language</span>

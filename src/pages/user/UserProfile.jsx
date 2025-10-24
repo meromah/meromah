@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   FaUser,
   FaEdit,
@@ -167,6 +168,14 @@ const UserProfile = () => {
               <p className="text-base text-primary-blue">
                 u/{mockUserProfile.username}
               </p>
+            </div>
+            <div className="flex-shrink-0">
+              <Link
+                to="/user/profile/edit"
+                className="border border-neutral-300 rounded-lg px-3 py-1 text-sm text-neutral-700 hover:bg-neutral-50 hover:border-neutral-400 transition-colors duration-200"
+              >
+                Edit Profile
+              </Link>
             </div>
           </div>
         </div>
