@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, Outlet } from "react-router-dom";
 import Feeds from "./feeds/Feeds";
 import CreateAction from "./feeds/CreateAction";
 import ExploreItem from "./feeds/ExploreItem";
@@ -21,17 +21,7 @@ const UserPage = () => {
 
       {/* Main Section */}
       <main className="col-span-12 md:col-span-8 lg:col-span-9">
-        <Routes>
-          <Route index element={<Navigate to="feeds" replace />} />
-          <Route path="profile/:userName" element={<UserProfile />} />
-          <Route path="profile/edit" element={<EditProfile />} />
-          <Route path="feeds" element={<Feeds />} />
-          <Route path="post/:postId" element={<Post />} />
-          <Route path="create/:action" element={<CreateAction />} />
-          <Route path="explore/:item" element={<ExploreItem />} />
-          <Route path="board/:boardId" element={<BoardPage />} />
-          <Route path="*" element={<Navigate to="feeds" replace />} />
-        </Routes>
+        <Outlet />
       </main>
     </div>
   );

@@ -38,7 +38,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
 
   return (
     <Link
-      to={`/user/post/${post.id}`}
+      to={`/post/${post.id}`}
       className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
         isFirst && "rounded-t-lg border-t"
       } ${isLast && "rounded-b-lg"}`}
@@ -49,7 +49,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
           <div
             className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-semibold shadow shadow-neutral-200"
             onClick={(e) =>
-              handleAuthorClick(e, `/user/profile/${post.author.username}`)
+              handleAuthorClick(e, `profile/${post.author.username}`)
             }
           >
             {getInitials(post.author.name)}
@@ -61,7 +61,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
             className="w-8 h-8 rounded-full shadow shadow-neutral-200"
             onError={() => setImageError(true)}
             onClick={(e) =>
-              handleAuthorClick(e, `/user/profile/${post.author.username}`)
+              handleAuthorClick(e, `profile/${post.author.username}`)
             }
           />
         )}
@@ -69,7 +69,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
           <p
             className="text-primary-blue text-base cursor-pointer hover:underline"
             onClick={(e) =>
-              handleBoardClick(e, `/user/${getType[post.type][1]}/${post.board}`)
+              handleBoardClick(e, `/${getType[post.type][1]}/${post.board}`)
             }
             role="button"
             tabIndex={0}
@@ -80,7 +80,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
           <p className="text-xs md:text-sm flex items-center gap-1">
             <span
               onClick={(e) =>
-                handleAuthorClick(e, `/user/profile/${post.author.username}`)
+                handleAuthorClick(e, `profile/${post.author.username}`)
               }
               className="cursor-pointer hover:underline"
               role="link"

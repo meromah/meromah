@@ -3,12 +3,47 @@ import { Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/main/LandingPage";
 import UserPage from "./pages/user/UserPage";
 import AdminPage from "./pages/admin/AdminPage";
+import HomePage from "./pages/main/HomePage";
+import AboutUs from "./pages/main/AboutUs";
+import Explore from "./pages/main/Explore";
+import Libraries from "./pages/main/Libraries";
+import Quizzes from "./pages/main/Quizzes";
+import Boards from "./pages/main/Boards";
+import Contact from "./pages/main/Contact";
+import Login from "./pages/main/Login";
+import Register from "./pages/main/Register";
+import UserProfile from "./pages/user/UserProfile";
+import EditProfile from "./pages/user/EditProfile";
+import Feeds from "./pages/user/feeds/Feeds";
+import Post from "./pages/user/Post";
+import CreateAction from "./pages/user/feeds/CreateAction";
+import ExploreItem from "./pages/user/feeds/ExploreItem";
+import BoardPage from "./pages/user/BoardPage";
 
 const App = () => {
   return (
     <Routes>
-      {/* <Route path="/*" element={<LandingPage />} /> */}
-      <Route path="/user/*" element={<UserPage />} />
+      <Route element={<LandingPage />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/explore/libraries" element={<Libraries />} />
+        <Route path="/explore/quizzes" element={<Quizzes />} />
+        <Route path="/explore/boards" element={<Boards />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
+
+      <Route element={<UserPage />}>
+        <Route path="profile/:userName" element={<UserProfile />} />
+        <Route path="profile/edit" element={<EditProfile />} />
+        <Route path="home" element={<Feeds />} />
+        <Route path="post/:postId" element={<Post />} />
+        <Route path="create/:action" element={<CreateAction />} />
+        <Route path="explore/:item" element={<ExploreItem />} />
+        <Route path="board/:boardId" element={<BoardPage />} />
+      </Route>
       <Route path="/admin/*" element={<AdminPage />} />
     </Routes>
   );

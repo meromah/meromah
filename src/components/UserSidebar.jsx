@@ -17,7 +17,7 @@ const exploreItems = [
   {
     id: "boards",
     title: "Boards",
-    path: "/user/explore/boards",
+    path: "explore/boards",
     icon: Grid,
     items: [
       { id: "b1", title: "Algorithms 101" },
@@ -27,7 +27,7 @@ const exploreItems = [
   {
     id: "libraries",
     title: "Libraries",
-    path: "/user/explore/libraries",
+    path: "explore/libraries",
     icon: Book,
     items: [
       { id: "l1", title: "Sorting Cheat Sheet.pdf" },
@@ -37,7 +37,7 @@ const exploreItems = [
   {
     id: "quizzes",
     title: "Quizzes",
-    path: "/user/explore/quizzes",
+    path: "explore/quizzes",
     icon: Layers,
     items: [
       { id: "q1", title: "DP Basics" },
@@ -47,9 +47,9 @@ const exploreItems = [
 ];
 
 const createActionArr = [
-  { label: "Community", path: "/user/create/board", icon: Grid },
-  { label: "Post", path: "/user/create/post", icon: FileText },
-  { label: "Quiz", path: "/user/create/quiz", icon: Layers },
+  { label: "Community", path: "/create/board", icon: Grid },
+  { label: "Post", path: "/create/post", icon: FileText },
+  { label: "Quiz", path: "/create/quiz", icon: Layers },
 ];
 
 const UserSidebar = () => {
@@ -129,7 +129,7 @@ const UserSidebar = () => {
     <div className="md:flex md:justify-between md:items-center">
       <div className="md:hidden flex sticky top-0 justify-between items-center border-b border-neutral-200 bg-white">
         {/* Logo Header - For Mobile devices */}
-        <Link to="/user" className="flex-shrink-0 px-4 py-4">
+        <Link to="/home" className="flex-shrink-0 px-4 py-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">S</span>
@@ -170,7 +170,7 @@ const UserSidebar = () => {
       >
         {/* Logo Header */}
         <Link
-          to="/user"
+          to="/home"
           className="flex-shrink-0 px-4 py-4 border-b border-neutral-200"
         >
           <div className="flex items-center gap-2">
@@ -225,7 +225,7 @@ const UserSidebar = () => {
             <div className="h-px bg-neutral-200 my-2" />
             {/* Posts Link */}
             <Link
-              to="/user/explore/posts"
+              to="/explore/posts"
               onClick={closeMobileMenu}
               className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all group"
             >
@@ -302,7 +302,7 @@ const UserSidebar = () => {
               </p>
               <Link
                 onClick={(e) => e.stopPropagation()}
-                to={"/user/profile/user-name"}
+                to={"profile/user-name"}
                 className="text-xs text-neutral-500 truncate cursor-pointer hover:underline"
               >
                 u/user-name
@@ -322,10 +322,9 @@ const UserSidebar = () => {
               </div>
               <div className="p-1.5">
                 <button
-                  onClick={() => handleNavigate("/user/settings")}
                   className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
                 >
-                  <Link to="/user/profile/edit" className="flex items-center gap-2">
+                  <Link to="profile/edit" className="flex items-center gap-2">
                     <Settings className="w-4 h-4" />
                     Edit profile
                   </Link>

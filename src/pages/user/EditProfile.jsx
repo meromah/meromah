@@ -28,11 +28,11 @@ const EditProfile = () => {
     console.log("Form data:", formData);
     // Here you would typically save the data to your backend
     alert("Profile updated successfully!");
-    navigate("/user/profile/alice"); // Navigate back to profile
+    navigate("profile/alice"); // Navigate back to profile
   };
 
   const handleCancel = () => {
-    navigate("/user/profile/alice");
+    navigate("profile/alice");
   };
 
   return (
