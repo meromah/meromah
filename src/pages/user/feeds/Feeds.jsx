@@ -3,8 +3,11 @@ import PostCard from "./PostCard";
 import { FaInbox, FaClock, FaFire, FaLayerGroup } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { mockPosts } from "../../../utils";
+import { useCheckApiQuery } from "../../../services/api";
 
 const Feeds = ({ userBoards = ["Algorithms 101", "Discrete Math"] }) => {
+  const { data, error, isLoading } = useCheckApiQuery();
+  console.log("API Status:", { data, error, isLoading });
   const [filter, setFilter] = useState(() => {
     return localStorage.getItem("feedFilter") || "Latest";
   });
