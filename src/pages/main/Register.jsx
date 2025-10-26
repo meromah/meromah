@@ -83,7 +83,6 @@ const Register = () => {
 
     try {
       const res = await emailVerification(email).unwrap();
-      console.log("OTP sent:", res);
       setStep(2);
     } catch (err) {
       const errorMessage =
@@ -106,7 +105,6 @@ const Register = () => {
 
     try {
       const res = await otpVerification({ otp, email }).unwrap();
-      console.log("OTP verified:", res);
       setStep(3);
     } catch (err) {
       const errorMessage =
@@ -143,12 +141,7 @@ const Register = () => {
 
     try {
       const userData = { ...form, email };
-      console.log({
-        userData,
-        password_matches: userData.password === userData.password_confirmation,
-      });
       const res = await registerUser(userData).unwrap();
-      console.log("User registered:", res);
       setShowSuccessModal(true);
     } catch (err) {
       const errorMessage =

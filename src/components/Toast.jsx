@@ -30,7 +30,6 @@ const Toast = ({ message, type = "success", onClose }) => {
   };
 
   const style = types[type] || types.success;
-  console.log(message, type);
   return (
     <>
       <div className="fixed top-4 right-4 z-50 animate-slide-in">
