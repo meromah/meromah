@@ -6,8 +6,8 @@
   --primary-blue: #1901ad;
   --primary-yellow: #ffd44a;
   --primary-bg: #faf8f6;
-  --primary-dark:#22272a;
-  --primary-light:#ebebeb;
+  --primary-dark: #22272a;
+  --primary-light: #ebebeb;
   --neutral-900: #111827;
   --neutral-700: #374151;
   --secondary-light: #e6e7eb40;
@@ -48,7 +48,8 @@
 
   --animate-inset-grow: insetGrow 9.5s linear forwards;
   --animate-fade-in: fadeIn 0.5s ease-in forwards;
-  
+  --animate-slide-in: slide-in 0.3s ease-out forwards;
+  --animate-scale-in: scale-in 0.3s ease-out forwards;
   @keyframes insetGrow {
     0% {
       left: 0;
@@ -72,6 +73,16 @@
       opacity: 1;
     }
   }
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 }
 
 body {
@@ -90,15 +101,15 @@ body::-webkit-scrollbar {
 .nav-list-item {
   @apply text-neutral-700 hover:text-primary-blue cursor-pointer;
 }
-.accent-text{
+.accent-text {
   @apply font-mono text-xs opacity-60 mb-4;
 }
-.story-title{
+.story-title {
   @apply flex items-center gap-1 uppercase w-1/2 bg-secondary-light p-0.5 rounded-xl text-sm;
 }
-.story-title-active{
+.story-title-active {
   @apply flex items-center gap-1 uppercase w-full bg-secondary-light p-0.5 rounded-xl text-sm;
 }
-.story-icon{
+.story-icon {
   @apply p-3 rounded-lg text-xl m-0.5 z-10 text-white;
 }
