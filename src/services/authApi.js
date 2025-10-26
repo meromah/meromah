@@ -29,6 +29,15 @@ export const authApi = api.injectEndpoints({
         body: userData,
       }),
     }),
+
+    // Login
+    login: builder.mutation({
+      query: ({email, password}) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: { email, password },
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -37,4 +46,5 @@ export const {
   useEmailVerificationMutation,
   useOtpVerificationMutation,
   useRegisterUserMutation,
+  useLoginMutation,
 } = authApi;

@@ -199,7 +199,7 @@ const Register = () => {
 
       {/* Success Modal */}
       {showSuccessModal && (
-        <SuccessModal onClose={() => setShowSuccessModal(false)} />
+        <SuccessModal onClose={() => setShowSuccessModal(false)} header={"Welcome to UniHub!"} message={"Your account has been created successfully. Redirecting you to home..."} />
       )}
 
       <main className="px-4 py-16 max-w-md mx-auto">

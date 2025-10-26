@@ -1,24 +1,73 @@
-import React from "react";
+import React, { useState } from "react";
+import { useLoginMutation } from "../../services/authApi";
+import SuccessModal from "./components/SuccessModal";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const Login = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [login, {isLoading}] = useLoginMutation();
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const {token} = await login({email, password}).unwrap();
+      localStorage.setItem("accessToken", token);
+      setShowSuccessModal(true);
+      setEmail("");
+      setPassword("");
+      console.log(token);
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
+  }
   return (
     <main className="px-4 py-16 max-w-md mx-auto">
+      {showSuccessModal && <SuccessModal onClose={() => setShowSuccessModal(false)} header={"Welcome to UniHub!"} message={"Your logged in to your account successfully. Redirecting you to home..."} />}
       <header className="text-center mb-8">
         <h1 className="text-4xl font-black text-neutral-900 mb-2">Welcome back</h1>
         <p className="text-neutral-700">Sign in to post, not to spy — your info stays private.</p>
       </header>
 
-      <form className="bg-white rounded-2xl p-6 sm:p-8 shadow">
+      <form
+      onSubmit={(e)=> handleSubmit(e)}
+       className="bg-white rounded-2xl p-6 sm:p-8 shadow">
         <div className="grid gap-4">
           <label className="flex flex-col gap-2">
-            <span className="font-medium text-neutral-800">Email or Username</span>
-            <input type="text" className="input" placeholder="you@example.com" />
-          </label>
+                <span className="font-medium text-neutral-800">Email</span>
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 focus:outline-primary-yellow"
+                  required
+                />
+                
+              </label>
           <label className="flex flex-col gap-2">
-            <span className="font-medium text-neutral-800">Password</span>
-            <input type="password" className="input" placeholder="••••••••" />
-          </label>
-          <button type="button" className="btn-cta bg-primary-blue text-white font-semibold hover:bg-primary-blue/90 w-full">Login</button>
+                <span className="font-medium text-neutral-800">Password</span>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword( e.target.value )}
+                  className={`px-2 pt-1 pb-1.5 focus:outline-1 text-primary-blue rounded-md border border-gray-200 focus:outline-primary-yellow`}
+                  required
+                />
+              </label>
+              <button
+                              type="submit"
+                              disabled={isLoading}
+                              className="flex items-center gap-2 justify-center bg-primary-blue py-2 rounded-lg uppercase cursor-pointer hover:scale-105 transition-all duration-200 text-white font-semibold hover:bg-primary-blue/90 w-full"
+                            >
+                              <span>{isLoading ? "Logging in..." : "Log In"}</span>
+                              {isLoading && (
+                                <AiOutlineLoading3Quarters className="animate-spin text-white text-lg" />
+                              )}
+                            </button>
         </div>
       </form>
 
