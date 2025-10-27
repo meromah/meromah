@@ -1,0 +1,74 @@
+import { privateApi } from "./private/privateApi";
+import { publicApi } from "./public/publicApi";
+
+/*
+This api is not complete yet. It will contain all post related endpoints,
+both private and public.
+*/
+
+
+const toQueryString = (params) => {
+  if (!params || Object.keys(params).length === 0) return "";
+  return `?${new URLSearchParams(params).toString()}`;
+};
+
+const PrivatePostApi = privateApi.injectEndpoints({
+  endpoints: (builder) => ({
+    updatePost: builder.mutation({
+      query: ({ board, post, postData }) => ({
+        url: `/boards/${board}/posts/${post}`,
+        method: "PUT",
+        body: postData,
+      }),
+    }),
+    createPost: builder.mutation({
+      query: ({ board, postData }) => ({
+        url: `/boards/${board}/posts`,
+        method: "POST",
+        body: postData,
+      }),
+    }),
+    deletePost: builder.mutation({
+      query: ({ board, post }) => ({
+        url: `/boards/${board}/posts/${post}`,
+        method: "DELETE",
+      }),
+    }),
+    togglePostLike: builder.mutation({
+      query: ({ board, post }) => ({
+        url: `/boards/${board}/posts/${post}/likes`,
+        method: "POST",
+      }),
+    }),
+  }),
+  overrideExisting: true,
+});
+
+const PublicPostApi = publicApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getPostsForBoard: builder.query({
+      query: ({ board, queryParams }) =>
+        `/boards/${board}/posts${toQueryString(queryParams)}`,
+    }),
+    getPostFromBoardByPostId: builder.query({
+      query: ({ board, post }) => `/boards/${board}/posts/${post}`,
+    }),
+    globalPostSearch: builder.query({
+      query: ({ queryParams }) => `/posts${toQueryString(queryParams)}`,
+    }),
+  }),
+  overrideExisting: true,
+});
+
+export const {
+  useUpdatePostMutation,
+  useCreatePostMutation,
+  useDeletePostMutation,
+  useTogglePostLikeMutation,
+} = PrivatePostApi;
+
+export const {
+  useGetPostsForBoardQuery,
+  useGetPostFromBoardByPostIdQuery,
+  useGlobalPostSearchQuery,
+} = PublicPostApi;

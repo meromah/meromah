@@ -5,7 +5,7 @@ import {
   useEmailVerificationMutation,
   useOtpVerificationMutation,
   useRegisterUserMutation,
-} from "../../services/authApi";
+} from "../../services/public/authApi";
 import Toast from "../../components/Toast";
 import SuccessModal from "./components/SuccessModal";
 
@@ -83,6 +83,8 @@ const Register = () => {
 
     try {
       const res = await emailVerification(email).unwrap();
+      // This console log is to get OTP verification code and can be removed in production
+      console.log(res);
       setStep(2);
     } catch (err) {
       const errorMessage =
@@ -141,8 +143,11 @@ const Register = () => {
 
     try {
       const userData = { ...form, email };
-      const res = await registerUser(userData).unwrap();
-      setShowSuccessModal(true);
+      const {refresh_token, access_token} = await registerUser(userData).unwrap();
+      console.log(`Registration successful:`, {refresh_token, access_token});
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+      // setShowSuccessModal(true);
     } catch (err) {
       const errorMessage =
         err?.data?.message ||

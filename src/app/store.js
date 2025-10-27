@@ -1,10 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { api } from "../services/api";
+import { publicApi } from "../services/public/publicApi";
+import authReducer from "./authSlice";
+import { privateApi } from "../services/private/privateApi";
 
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,
+    [publicApi.reducerPath]: publicApi.reducer,
+    [privateApi.reducerPath]: privateApi.reducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
-})
+    getDefaultMiddleware()
+      .concat(publicApi.middleware)
+      .concat(privateApi.middleware),
+});
