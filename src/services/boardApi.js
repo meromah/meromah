@@ -13,13 +13,6 @@ const toQueryString = (params) => {
 
 const PrivateBoardApi = privateApi.injectEndpoints({
   endpoints: (builder) => ({
-    // get all boards
-    getBoards: builder.query({
-      query: (queryParams) => `/boards${toQueryString(queryParams)}`,
-    }),
-    getBoard: builder.query({
-      query: (board) => `/boards/${board}`,
-    }),
     createBoard: builder.mutation({
       query: (boardData) => ({
         url: "/boards",
@@ -32,6 +25,12 @@ const PrivateBoardApi = privateApi.injectEndpoints({
         url: `/boards/${board}`,
         method: "PUT",
         body: boardData,
+      }),
+    }),
+    deleteBoard: builder.mutation({
+      query: ({ board }) => ({
+        url: `/boards/${board}`,
+        method: "DELETE",
       }),
     }),
   }),
@@ -45,19 +44,17 @@ const PublicBoardApi = publicApi.injectEndpoints({
     getBoard: builder.query({
       query: (board) => `/boards/${board}`,
     }),
-    createBoard: builder.mutation({
-      query: (boardData) => ({
-        url: "/boards",
-        method: "POST",
-        body: boardData,
-      }),
-    }),
-    updateBoard: builder.mutation({
-      query: ({ board, boardData }) => ({
-        url: `/boards/${board}`,
-        method: "PUT",
-        body: boardData,
-      }),
-    }),
   }),
 });
+
+
+export const {
+  useUpdateBoardMutation,
+  useCreateBoardMutation,
+  useDeleteBoardMutation
+} = PrivateBoardApi;
+
+export const {
+  useGetBoardsQuery,
+  useGetBoardQuery
+} = PrivateBoardApi;

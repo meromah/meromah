@@ -6,11 +6,11 @@ This api is not complete yet. It will contain all post related endpoints,
 both private and public.
 */
 
-
 const toQueryString = (params) => {
   if (!params || Object.keys(params).length === 0) return "";
   return `?${new URLSearchParams(params).toString()}`;
 };
+
 
 const PrivatePostApi = privateApi.injectEndpoints({
   endpoints: (builder) => ({
