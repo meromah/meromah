@@ -33,6 +33,14 @@ const PrivateBoardApi = privateApi.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    // check if a name available for a new board
+    checkBoardNameAvailable: builder.mutation({
+      query: ({ boardData }) => ({
+        url: '/boards/name',
+        method: "POST",
+        body: boardData,
+      }),
+    }),
   }),
 });
 const PublicBoardApi = publicApi.injectEndpoints({
@@ -51,10 +59,11 @@ const PublicBoardApi = publicApi.injectEndpoints({
 export const {
   useUpdateBoardMutation,
   useCreateBoardMutation,
-  useDeleteBoardMutation
+  useDeleteBoardMutation,
+  useCheckBoardNameAvailableMutation,
 } = PrivateBoardApi;
 
 export const {
   useGetBoardsQuery,
   useGetBoardQuery
-} = PrivateBoardApi;
+} = PublicBoardApi;
