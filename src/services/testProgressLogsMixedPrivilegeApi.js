@@ -15,14 +15,14 @@ const privateTestProgressLogsApi = privateApi.injectEndpoints({
     getMyTestProgressLogsApi: builder.query({
       query: ({ params }) => `/test-progress-log/me${toQueryString(params)}`,
     }),
-    getAllTestProgressLogsAsAdminApi: builder.query({
+    getAllTestProgressLogsPrivilegedApi: builder.query({
       query: ({ params }) => `/test-progress-logs${toQueryString(params)}`,
     }),
-
   }),
 });
 
+
 export const {
   useGetMyTestProgressLogsApiQuery,
-  useGetAllTestProgressLogsAsAdminApiQuery,
+  useGetAllTestProgressLogsPrivilegedApiQuery,
 } = privateTestProgressLogsApi;
