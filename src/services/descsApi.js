@@ -6,48 +6,39 @@ const toQueryString = (params) => {
   return `?${new URLSearchParams(params).toString()}`;
 };
 
+// Auth-required endpoints
 const PrivateDescsApi = privateApi.injectEndpoints({
   endpoints: (builder) => ({
-    // GET /test-categories (Auth Required)
-    getDescs: builder.query({
-      query: ({ queryParams } = {}) => `/test-categories${toQueryString(queryParams)}`,
-    }),
-
-    // GET /test-categories/{testCategory} (Auth Required)
-    getDescById: builder.query({
-      query: ({ testCategory }) => `/test-categories/${testCategory}`,
-    }),
-
-    // POST /test-categories (Auth Required)
+    // POST /descs
     createDesc: builder.mutation({
-      query: ({ bodyData }) => ({
-        url: "/test-categories",
+      query: (bodyData) => ({
+        url: "/descs",
         method: "POST",
         body: bodyData,
       }),
     }),
 
-    // PUT /test-categories/{testCategory} (Auth Required)
+    // PUT /descs/{desc}
     updateDesc: builder.mutation({
-      query: ({ testCategory, bodyData }) => ({
-        url: `/test-categories/${testCategory}`,
+      query: ({ desc, bodyData }) => ({
+        url: `/descs/${desc}`,
         method: "PUT",
         body: bodyData,
       }),
     }),
 
-    // DELETE /test-categories/{testCategory} (Auth Required)
+    // DELETE /descs/{desc}
     deleteDesc: builder.mutation({
-      query: ({ testCategory }) => ({
-        url: `/test-categories/${testCategory}`,
+      query: ({ desc }) => ({
+        url: `/descs/${desc}`,
         method: "DELETE",
       }),
     }),
 
-    // POST /test-categories/{testCategory}/likes (Auth Required) - Toggle like
+    // POST /descs/{desc}/likes (toggle like)
     toggleDescLike: builder.mutation({
-      query: ({ testCategory }) => ({
-        url: `/test-categories/${testCategory}/likes`,
+      query: ({ desc }) => ({
+        url: `/descs/${desc}/likes`,
         method: "POST",
       }),
     }),
@@ -55,19 +46,28 @@ const PrivateDescsApi = privateApi.injectEndpoints({
   overrideExisting: true,
 });
 
+// Public endpoints (no auth)
 const PublicDescsApi = publicApi.injectEndpoints({
   endpoints: (builder) => ({
-    // GET /test-categories/{testCategory}/likes - Like count (Public)
+    // GET /descs (paginated)
+    getDescs: builder.query({
+      query: (queryParams) => `/descs${toQueryString(queryParams)}`,
+    }),
+
+    // GET /descs/{desc}
+    getDesc: builder.query({
+      query: (desc) => `/descs/${desc}`,
+    }),
+
+    // GET /descs/{desc}/likes (like count)
     getDescLikes: builder.query({
-      query: ({ testCategory }) => `/test-categories/${testCategory}/likes`,
+      query: (desc) => `/descs/${desc}/likes`,
     }),
   }),
   overrideExisting: true,
 });
 
 export const {
-  useGetDescsQuery,
-  useGetDescByIdQuery,
   useCreateDescMutation,
   useUpdateDescMutation,
   useDeleteDescMutation,
@@ -75,5 +75,9 @@ export const {
 } = PrivateDescsApi;
 
 export const {
+  useGetDescsQuery,
+  useGetDescQuery,
   useGetDescLikesQuery,
 } = PublicDescsApi;
+
+
