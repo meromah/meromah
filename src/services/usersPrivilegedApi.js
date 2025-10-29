@@ -6,33 +6,33 @@ const toQueryString = (params) => {
 };
 
 
-const PrivateUserApiForAdmin = privateApi.injectEndpoints({
+const PrivateUserApiPrivileged = privateApi.injectEndpoints({
     endpoints: (builder) => ({
-      getAllUsersAsAdmin: builder.query({
+      getAllUsersPrivileged: builder.query({
         query: ({ queryParams }) => ({
           url: `/users${toQueryString(queryParams)}`,
         }),
       }),
-      getUserAsAdmin: builder.query({
+      getUserPrivileged: builder.query({
         query: ({ user }) => ({
           url: `/users/${user}`,
         }),
       }),
-      createUserAsAdmin: builder.mutation({
+      createUserPrivileged: builder.mutation({
         query: ({ bodyData }) => ({
           url: '/users',
           method: "POST",
           body: bodyData,
         }),
       }),
-      updateUserAsAdmin: builder.mutation({
+      updateUserPrivileged: builder.mutation({
         query: ({ user, bodyData }) => ({
           url: `/users/${user}`,
           method: 'PUT',
           body: bodyData,
         }),
       }),
-      deleteUserAsAdmin: builder.mutation({
+      deleteUserPrivileged: builder.mutation({
         query: ({ user }) => ({
           url: `/users/${user}`,
           method: 'DELETE',
@@ -43,9 +43,9 @@ const PrivateUserApiForAdmin = privateApi.injectEndpoints({
 
 
 export const {
-  useCreateUserAsAdminMutation,
-  useUpdateUserAsAdminMutation,
-  useDeleteUserAsAdminMutation,
-  useGetUsersAsAdminQuery,
-  useGetUserAsAdminQuery,
-} = PrivateUserApiForAdmin;
+  useCreateUserPrivilegedMutation,
+  useUpdateUserPrivilegedMutation,
+  useDeleteUserPrivilegedMutation,
+  useGetUsersPrivilegedQuery,
+  useGetUserPrivilegedQuery,
+} = PrivateUserApiPrivileged;
