@@ -1,27 +1,27 @@
-import { privateApi } from './private/privateApi';
+import { privateApi } from "./private/privateApi";
 
-const PrivateUserSelfApi = privateApi.injectEndpoints({
+export const PrivateUserSelfApi = privateApi.injectEndpoints({
   endpoints: (builder) => ({
     // main details related e.g. name, email, username
     getMe: builder.query({
-      url: '/me',
+      query: () => "/me",
     }),
     updateMe: builder.mutation({
       query: ({ bodyData }) => ({
-        url: '/me',
+        url: "/me",
         method: "PUT",
-        body: bodyData
+        body: bodyData,
       }),
     }),
 
     //profile related e.g. bio, birthday, socials
     getMyProfile: builder.query({
-      query: () => '/me/profile',
+      query: () => "/me/profile",
     }),
     // updateMyProfile will create a new profile if it doesn't exist yet
     updateMyProfile: builder.mutation({
       query: ({ bodyData }) => ({
-        url: '/me/profile/updateSelf',
+        url: "/me/profile/updateSelf",
         method: "POST",
         body: bodyData,
       }),
@@ -32,7 +32,9 @@ const PrivateUserSelfApi = privateApi.injectEndpoints({
 export const {
   useGetMeQuery,
   useUpdateMeMutation,
-  
+
   useGetMyProfileQuery,
-  useUpdateMyProfileMutation
+  useUpdateMyProfileMutation,
 } = PrivateUserSelfApi;
+
+// export const userApi = PrivateUserSelfApi;
