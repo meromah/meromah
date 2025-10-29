@@ -18,10 +18,29 @@ import {
   DEFAULT_PLACEHOLDERS,
 } from "../../utils/constants";
 import PostCard from "./feeds/PostCard";
+import {
+  // fetch details about me, and my profile
+  useGetMeQuery,
+  useGetMyProfileQuery,
+} from '../../services/userApi.js';
+
+import {
+  // fetch all posts that belong to me
+  useGetAllMyPostsQuery,
+} from '../../services/postsApi.js';
+import { useGetAllMyTestsQuery } from '../../services/testsApi.js';
+
+
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [imageError, setImageError] = useState(false);
+
+  const { user, userError, userIsLoading } = useGetMeQuery();
+  const { profile, profileError, profileIsLoading } = useGetMyProfileQuery();
+
+  const { myPosts, myPostsError, myPostsIsLoading } = useGetAllMyPostsQuery();
+  const { myTests, myTestsError, myTestsIsLoading } = useGetAllMyTestsQuery();
 
   const getInitials = (name) => {
     return name
@@ -61,7 +80,7 @@ const UserProfile = () => {
           <div>
             <label className="text-sm font-medium text-neutral-600">Bio</label>
             <p className="text-neutral-900 mt-1">
-              {mockUserProfile.bio || DEFAULT_PLACEHOLDERS.bio}
+              {profile.biography || DEFAULT_PLACEHOLDERS.bio}
             </p>
           </div>
           <div>
@@ -79,7 +98,7 @@ const UserProfile = () => {
               Member Since
             </label>
             <p className="text-neutral-900 mt-1">
-              {formatJoinDate(mockUserProfile.joinDate)}
+              {formatJoinDate(user.created_at)}
             </p>
           </div>
         </div>
@@ -89,38 +108,26 @@ const UserProfile = () => {
 
   const renderPosts = () => (
     <div>
-      {mockUserPosts.length > 0 ? (
-        mockUserPosts.map((post, i) => <PostCard key={post.id} post={post} isFirst={i === 0} isLast={i === mockUserPosts.length - 1}/>)
+      {myPosts && myPosts.length > 0 ? (
+        myPosts.map((post, i) => <PostCard key={post.id} post={post} isFirst={i === 0} isLast={i === myPosts.length - 1}/>)
       ) : (
         <div className="bg-white rounded-lg p-8 text-center shadow-sm">
           <FaEdit className="mx-auto text-4xl text-neutral-400 mb-4" />
           <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noPosts}</p>
+          <p className="text-neutral-600"{}</p>
         </div>
       )}
     </div>
   );
 
-  const renderQuizzes = () => (
+  const renderTests = () => (
     <div>
-      {mockUserQuizzes.length > 0 ? (
-        mockUserQuizzes.map((quiz, i) => <PostCard key={quiz.id} post={quiz} isFirst={i === 0} isLast={i === mockUserQuizzes.length - 1}/>)
+      {myTests.length > 0 ? (
+        myTests.map((quiz, i) => <PostCard key={quiz.id} post={quiz} isFirst={i === 0} isLast={i === myTests.length - 1}/>)
       ) : (
         <div className="bg-white rounded-lg p-8 text-center shadow-sm">
           <FaQuestionCircle className="mx-auto text-4xl text-neutral-400 mb-4" />
           <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noQuizzes}</p>
-        </div>
-      )}
-    </div>
-  );
-
-  const renderLibrary = () => (
-    <div>
-      {mockUserLibrary.length > 0 ? (
-        mockUserLibrary.map((item, i) => <PostCard key={item.id} post={item} isFirst={i === 0} isLast={i === mockUserLibrary.length - 1}/>)
-      ) : (
-        <div className="bg-white rounded-lg p-8 text-center shadow-sm">
-          <FaBook className="mx-auto text-4xl text-neutral-400 mb-4" />
-          <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noLibrary}</p>
         </div>
       )}
     </div>

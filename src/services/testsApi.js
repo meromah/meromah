@@ -14,7 +14,12 @@ const PrivateTestsApi = privateApi.injectEndpoints({
       query: ({ desc, queryParams }) =>
         `/descs/${desc}/tests${toQueryString(queryParams)}`,
     }),
-
+    // GET /tests/my
+    getAllMyTests: builder.query({
+      query: ( queryParams ) => ({
+        url: `/tests/my${toQueryString(queryParams)}`,
+      }),
+    }),
     // GET /descs/{desc}/tests/{test}
     getTestFromDescById: builder.query({
       query: ({ desc, test }) => `/descs/${desc}/tests/${test}`,
@@ -70,6 +75,7 @@ const PublicTestsApi = publicApi.injectEndpoints({
 
 export const {
   useGetTestsForDescQuery,
+  useGetAllMyTestsQuery,
   useGetTestFromDescByIdQuery,
   useCreateTestMutation,
   useUpdateTestMutation,
@@ -80,5 +86,3 @@ export const {
 export const {
   useGetTestLikesQuery,
 } = PublicTestsApi;
-
-
