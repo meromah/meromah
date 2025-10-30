@@ -19,7 +19,9 @@ const PostCard = ({ post, isFirst, isLast }) => {
   const likeCount = post.likes + (liked ? 1 : 0);
   const handleAuthorClick = (e, path) => {
     preventNavigation(e);
-    console.log("Navigate to author profile: ", path);
+    //later i will implement the logic to determine if the path is for UserProfile or MyProfile.
+    //for now, i will just navigate to the UserProfile page.
+    navigate(path);
   };
 
   const handleBoardClick = (e, path) => {
@@ -49,7 +51,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
           <div
             className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-semibold shadow shadow-neutral-200"
             onClick={(e) =>
-              handleAuthorClick(e, `profile/${post.author.username}`)
+              handleAuthorClick(e, `/user/${post.author.username}`)
             }
           >
             {getInitials(post.author.name)}
@@ -61,7 +63,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
             className="w-8 h-8 rounded-full shadow shadow-neutral-200"
             onError={() => setImageError(true)}
             onClick={(e) =>
-              handleAuthorClick(e, `profile/${post.author.username}`)
+              handleAuthorClick(e, `/user/${post.author.username}`)
             }
           />
         )}
@@ -80,7 +82,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
           <p className="text-xs md:text-sm flex items-center gap-1">
             <span
               onClick={(e) =>
-                handleAuthorClick(e, `profile/${post.author.username}`)
+                handleAuthorClick(e, `/user/${post.author.username}`)
               }
               className="cursor-pointer hover:underline"
               role="link"
