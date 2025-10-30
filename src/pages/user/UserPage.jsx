@@ -3,25 +3,28 @@ import { useNavigate, Outlet } from "react-router-dom";
 import UserSidebar from "../../components/UserSidebar";
 import { useGetMeQuery } from "../../services/userApi";
 import { useDispatch } from "react-redux";
-import { setProfileData, setProfileError, setProfileLoading } from "../../app/myProfileSlice";
+import {
+  setProfileData,
+  setProfileError,
+  setProfileLoading,
+} from "../../app/myProfileSlice";
 
 const UserPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data, error, isLoading, isSuccess } = useGetMeQuery();
+  const { data, error, isLoading } = useGetMeQuery();
 
   // When query state changes, update Redux slice
   useEffect(() => {
     dispatch(setProfileLoading(isLoading));
-
-    if (isSuccess && data) {
+    if (data) {
       dispatch(setProfileData(data.data));
     }
 
     if (error) {
       dispatch(setProfileError(error));
     }
-  }, [isLoading, isSuccess, data, error, dispatch]);
+  }, [isLoading, data, error, dispatch]);
   return (
     <div className="relative min-h-screen grid grid-cols-12">
       {/* Left Sidebar */}
