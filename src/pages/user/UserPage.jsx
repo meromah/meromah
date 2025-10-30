@@ -8,10 +8,14 @@ import Post from "./Post";
 import UserProfile from "./UserProfile";
 import BoardPage from "./BoardPage";
 import EditProfile from "./EditProfile";
-
+import { useGetMeQuery } from "../../services/userApi";
 const UserPage = () => {
   const navigate = useNavigate();
-
+  const {data, isLoading: isGetMeLoading} = useGetMeQuery();
+  if(isGetMeLoading){
+    return <div>Loading...</div>;
+  }
+  console.log(data.data);
   return (
     <div className="relative min-h-screen grid grid-cols-12">
       {/* Left Sidebar */}

@@ -7,6 +7,7 @@ const privateBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.access_token; // <-- dynamic getState
+    console.log(`Attaching access token to headers:`, token);
     if (token) headers.set('Authorization', `Bearer ${token}`);
     return headers;
   },
@@ -17,6 +18,7 @@ const privateBaseQueryWithReauth = async (args, api, extraOptions) => {
 
   if (result?.error?.status === 401) {
     const refresh_token = localStorage.getItem('refresh_token');
+    console.log(`Refresh token retrieved from localStorage:`, refresh_token);
     if (!refresh_token) {
       api.dispatch(clearCredentials());
       return result;
@@ -39,7 +41,7 @@ const privateBaseQueryWithReauth = async (args, api, extraOptions) => {
       api.dispatch(clearCredentials());
     }
   }
-
+  console.log("Private API Result:", result);
   return result;
 };
 

@@ -37,4 +37,4 @@ export const {
   useUpdateMyProfileMutation,
 } = PrivateUserSelfApi;
 
-// export const userApi = PrivateUserSelfApi;
+export const userApi = PrivateUserSelfApi;

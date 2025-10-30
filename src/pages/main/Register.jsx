@@ -8,6 +8,8 @@ import {
 } from "../../services/public/authApi";
 import Toast from "../../components/Toast";
 import SuccessModal from "./components/SuccessModal";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../app/authSlice";
 
 // Default form values
 const DEFAULT_FORM_VAL = {
@@ -27,7 +29,8 @@ const Register = () => {
   const [isPasswordMatch, setIsPasswordMatch] = useState(true);
   const [toast, setToast] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
+  // Redux dispatch
+  const dispatch = useDispatch();
   const [emailVerification, { isLoading: isVerifyingEmail }] =
     useEmailVerificationMutation();
   const [otpVerification, { isLoading: isVerifyingOtp }] =
@@ -57,7 +60,7 @@ const Register = () => {
   const showToast = (message, type = "success") => {
     setToast({ message, type });
   };
- // Validation functions
+  // Validation functions
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
@@ -143,11 +146,11 @@ const Register = () => {
 
     try {
       const userData = { ...form, email };
-      const {refresh_token, access_token} = await registerUser(userData).unwrap();
-      console.log(`Registration successful:`, {refresh_token, access_token});
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
-      // setShowSuccessModal(true);
+      const { refresh_token, access_token } = await registerUser(
+        userData
+      ).unwrap();
+      dispatch(setCredentials({ access_token, refresh_token }));
+      setShowSuccessModal(true);
     } catch (err) {
       const errorMessage =
         err?.data?.message ||
@@ -204,7 +207,13 @@ const Register = () => {
 
       {/* Success Modal */}
       {showSuccessModal && (
-        <SuccessModal onClose={() => setShowSuccessModal(false)} header={"Welcome to UniHub!"} message={"Your account has been created successfully. Redirecting you to home..."} />
+        <SuccessModal
+          onClose={() => setShowSuccessModal(false)}
+          header={"Welcome to UniHub!"}
+          message={
+            "Your account has been created successfully. Redirecting you to home..."
+          }
+        />
       )}
 
       <main className="px-4 py-16 max-w-md mx-auto">
@@ -414,7 +423,6 @@ const Register = () => {
             className="bg-white rounded-2xl p-6 sm:p-8 shadow"
           >
             <div className="grid gap-6">
-
               <label className="flex flex-col gap-2">
                 <span className="font-medium text-neutral-800">Name</span>
                 <input

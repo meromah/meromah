@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { useLoginMutation } from "../../services/public/authApi";
 import SuccessModal from "./components/SuccessModal";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../app/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
-
+  const dispatch = useDispatch();
   /*
   I have to implement error handling for login failures, such as incorrect credentials or server issues.
  */
@@ -20,9 +22,7 @@ const Login = () => {
         email,
         password,
       }).unwrap();
-      console.log({access_token, refresh_token});
-      localStorage.setItem("access_token", access_token);
-      localStorage.setItem("refresh_token", refresh_token);
+      dispatch(setCredentials({ access_token, refresh_token }));
       setShowSuccessModal(true);
       setEmail("");
       setPassword("");
