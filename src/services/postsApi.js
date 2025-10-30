@@ -14,6 +14,11 @@ const toQueryString = (params) => {
 
 const PrivatePostApi = privateApi.injectEndpoints({
   endpoints: (builder) => ({
+    getAllMyPosts: builder.query({
+      query: ( queryParams ) => ({
+        url: `/posts/my${toQueryString(queryParams)}`,
+      }),
+    }),
     updatePost: builder.mutation({
       query: ({ board, post, postData }) => ({
         url: `/boards/${board}/posts/${post}`,
@@ -65,6 +70,7 @@ export const {
   useCreatePostMutation,
   useDeletePostMutation,
   useTogglePostLikeMutation,
+  useGetAllMyPostsQuery,
 } = PrivatePostApi;
 
 export const {

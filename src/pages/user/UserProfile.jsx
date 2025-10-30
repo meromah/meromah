@@ -3,27 +3,45 @@ import { Link } from "react-router-dom";
 import {
   FaUser,
   FaEdit,
-  FaGraduationCap,
   FaCalendarAlt,
-  FaFileAlt,
+  FaComment,
   FaQuestionCircle,
-  FaBook,
-  FaImage,
 } from "react-icons/fa";
-import {
-  mockUserProfile,
-  mockUserPosts,
-  mockUserQuizzes,
-  mockUserLibrary,
-  DEFAULT_PLACEHOLDERS,
-} from "../../utils/constants";
+import { DEFAULT_PLACEHOLDERS } from "../../utils/constants";
 import PostCard from "./feeds/PostCard";
+import {
+  // fetch details about me, and my profile
+  useGetMeQuery,
+  useGetMyProfileQuery,
+} from '../../services/userApi.js';
+
+import {
+  // fetch all posts that belong to me
+  useGetAllMyPostsQuery,
+} from '../../services/postsApi.js';
+
+import { 
+  // fetch all my tests
+  useGetAllMyTestsQuery
+} from '../../services/testsApi.js';
+import {
+  useGetAllMyCommentsQuery
+} from '../../services/commentsApi.js';
+
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [imageError, setImageError] = useState(false);
 
+  const { data: user, error: userError, isLoading: userIsLoading } = useGetMeQuery();
+  const { data: profile, error: profileError, isLoading: profileIsLoading } = useGetMyProfileQuery();
+
+  const { data: myPosts, error: myPostsError, isLoading: myPostsIsLoading } = useGetAllMyPostsQuery();
+  const { data: myTests, error: myTestsError, isLoading: myTestsIsLoading } = useGetAllMyTestsQuery();
+  const { data: myComments, error: myCommentsError, isLoading: myCommentsIsLoading } = useGetAllMyCommentsQuery();
+
   const getInitials = (name) => {
+    if (!name || typeof name !== "string") return "U";
     return name
       .split(" ")
       .map((word) => word[0])
@@ -36,6 +54,7 @@ const UserProfile = () => {
     if (!dateString || dateString === "Unknown")
       return DEFAULT_PLACEHOLDERS.joinDate;
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return DEFAULT_PLACEHOLDERS.joinDate;
     return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
@@ -47,7 +66,7 @@ const UserProfile = () => {
     { id: "overview", label: "Overview", icon: FaUser },
     { id: "posts", label: "Posts", icon: FaEdit },
     { id: "quizzes", label: "Quizzes", icon: FaQuestionCircle },
-    { id: "library", label: "Library", icon: FaBook },
+    { id: "comments", label: "Comments", icon: FaComment },
   ];
 
   const renderOverview = () => (
@@ -61,16 +80,7 @@ const UserProfile = () => {
           <div>
             <label className="text-sm font-medium text-neutral-600">Bio</label>
             <p className="text-neutral-900 mt-1">
-              {mockUserProfile.bio || DEFAULT_PLACEHOLDERS.bio}
-            </p>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-neutral-600 flex items-center gap-2">
-              <FaGraduationCap className="text-primary-blue" />
-              Education
-            </label>
-            <p className="text-neutral-900 mt-1">
-              {mockUserProfile.education || DEFAULT_PLACEHOLDERS.education}
+              {profile?.biography || profile?.bio || DEFAULT_PLACEHOLDERS.bio}
             </p>
           </div>
           <div>
@@ -79,52 +89,92 @@ const UserProfile = () => {
               Member Since
             </label>
             <p className="text-neutral-900 mt-1">
-              {formatJoinDate(mockUserProfile.joinDate)}
+              {formatJoinDate(user?.created_at || user?.createdAt || DEFAULT_PLACEHOLDERS.joinDate)}
             </p>
           </div>
         </div>
       </div>
     </div>
   );
+  const renderPosts = () => {
+    if (myPostsIsLoading) {
+      return (
+          <div className="bg-white rounded-lg p-8 text-center shadow-sm">
+            <FaEdit className="mx-auto text-4xl text-neutral-400 mb-4" />
+            <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noPosts}</p>
+          </div>
+      );
+    }
+    if (Array.isArray(myPosts) && myPosts.length > 0) {
+      return (
+        <>
+          {
+            myPosts.map((post, index) => (
+              <PostCard key={post.id} post={post} isFirst={index === 0} isLast={index === myPosts.length - 1} />
+            ))
+          }
+        </>
+      );
+    }
+    return (
+      <div className="bg-white rounded-lg p-8 text-center shadow-sm">
+        <FaEdit className="mx-auto text-4xl text-neutral-400 mb-4" />
+        <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noPosts}</p>
+      </div>
+    );
+  }; 
 
-  const renderPosts = () => (
-    <div>
-      {mockUserPosts.length > 0 ? (
-        mockUserPosts.map((post, i) => <PostCard key={post.id} post={post} isFirst={i === 0} isLast={i === mockUserPosts.length - 1}/>)
-      ) : (
+  const renderComments = () => {
+    if (myCommentsIsLoading) {
+      return (
         <div className="bg-white rounded-lg p-8 text-center shadow-sm">
-          <FaEdit className="mx-auto text-4xl text-neutral-400 mb-4" />
-          <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noPosts}</p>
+          <FaComment className="mx-auto text-4xl text-neutral-400 mb-4" />
+          <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noComments}</p>
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+    if (Array.isArray(myComments) && myComments.length > 0) {
+      return (
+        <div>
+          {myComments.map((comment, i) => (
+            <CommentCard key={comment.id} comment={comment} isFirst={i === 0} isLast={i === myComments.length - 1} />
+          ))}
+        </div>
+      );
+    }
+    return (
+      <div className="bg-white rounded-lg p-8 text-center shadow-sm">
+        <FaComment className="mx-auto text-4xl text-neutral-400 mb-4" />
+        <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noComments}</p>
+      </div>
+    );
+  };
 
-  const renderQuizzes = () => (
-    <div>
-      {mockUserQuizzes.length > 0 ? (
-        mockUserQuizzes.map((quiz, i) => <PostCard key={quiz.id} post={quiz} isFirst={i === 0} isLast={i === mockUserQuizzes.length - 1}/>)
-      ) : (
+  const renderQuizzes = () => {
+    if (myTestsIsLoading) {
+      return (
         <div className="bg-white rounded-lg p-8 text-center shadow-sm">
           <FaQuestionCircle className="mx-auto text-4xl text-neutral-400 mb-4" />
           <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noQuizzes}</p>
         </div>
-      )}
-    </div>
-  );
-
-  const renderLibrary = () => (
-    <div>
-      {mockUserLibrary.length > 0 ? (
-        mockUserLibrary.map((item, i) => <PostCard key={item.id} post={item} isFirst={i === 0} isLast={i === mockUserLibrary.length - 1}/>)
-      ) : (
-        <div className="bg-white rounded-lg p-8 text-center shadow-sm">
-          <FaBook className="mx-auto text-4xl text-neutral-400 mb-4" />
-          <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noLibrary}</p>
+      );
+    }
+    if (Array.isArray(myTests) && myTests.length > 0) {
+      return (
+        <div>
+          {myTests.map((quiz, i) => (
+            <PostCard key={quiz.id} post={quiz} isFirst={i === 0} isLast={i === myTests.length - 1} />
+          ))}
         </div>
-      )}
-    </div>
-  );
+      );
+    }
+    return (
+      <div className="bg-white rounded-lg p-8 text-center shadow-sm">
+        <FaQuestionCircle className="mx-auto text-4xl text-neutral-400 mb-4" />
+        <p className="text-neutral-600">{DEFAULT_PLACEHOLDERS.noQuizzes}</p>
+      </div>
+    );
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -134,8 +184,8 @@ const UserProfile = () => {
         return renderPosts();
       case "quizzes":
         return renderQuizzes();
-      case "library":
-        return renderLibrary();
+      case "comments":
+        return renderComments();
       default:
         return renderOverview();
     }
@@ -148,14 +198,14 @@ const UserProfile = () => {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex flex-col md:flex-row md:items-end gap-6">
             <div className="flex-shrink-0">
-              {imageError ? (
+              {imageError || !(user?.avatar || profile?.avatarUrl) ? (
                 <div className="w-20 h-20 rounded-xl bg-primary-blue text-white flex items-center justify-center text-2xl font-semibold border border-gray-300">
-                  {getInitials(mockUserProfile.name)}
+                  {getInitials(user?.name || user?.username || "User")}
                 </div>
               ) : (
                 <img
-                  src={mockUserProfile.userImage}
-                  alt={mockUserProfile.username}
+                  src={user?.avatar || profile?.avatarUrl}
+                  alt={user?.username || "user-avatar"}
                   className="w-20 h-20 rounded-xl border border-gray-300 object-cover"
                   onError={() => setImageError(true)}
                 />
@@ -163,10 +213,10 @@ const UserProfile = () => {
             </div>
             <div className="flex-1">
               <h1 className="text-lg font-bold text-neutral-900">
-                {mockUserProfile.name}
+                {user?.name || user?.username || "User"}
               </h1>
               <p className="text-base text-primary-blue">
-                u/{mockUserProfile.username}
+                u/{user?.username || "user"}
               </p>
             </div>
             <div className="flex-shrink-0">
