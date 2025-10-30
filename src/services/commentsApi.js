@@ -12,7 +12,7 @@ const PrivateCommentOfBoardPostApi = privateApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMyComments: builder.query({
       query: (queryParams) => ({
-        url: `/comments${toQueryString(queryParams)}`,
+        url: `/comments/my${toQueryString(queryParams)}`,
         method: "GET",
       }),
     }),
