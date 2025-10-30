@@ -19,6 +19,7 @@ import Post from "./pages/user/Post";
 import CreateAction from "./pages/user/CreateAction";
 import ExploreItem from "./pages/user/components/ExploreItem";
 import BoardPage from "./pages/user/BoardPage";
+import MyProfile from "./pages/user/MyProfile";
 
 const App = () => {
   return (
@@ -35,8 +36,9 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route element={<UserPage />}>
-        <Route path="profile" element={<UserProfile />} />
+        <Route path="profile" element={<MyProfile />} />
         <Route path="profile/edit" element={<EditProfile />} />
+        <Route path="user/:username" element={<UserProfile />} />
         <Route path="home" element={<Feeds />} />
         <Route path="board/:board/post/:post" element={<Post />} />
         <Route path="create/:action" element={<CreateAction />} />
