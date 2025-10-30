@@ -1,21 +1,27 @@
-import React from "react";
-import { Routes, Route, Navigate, useNavigate, Outlet } from "react-router-dom";
-import Feeds from "./Feeds";
-import CreateAction from "./CreateAction";
-import ExploreItem from "./components/ExploreItem";
+import React, { useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import UserSidebar from "../../components/UserSidebar";
-import Post from "./Post";
-import UserProfile from "./UserProfile";
-import BoardPage from "./BoardPage";
-import EditProfile from "./EditProfile";
 import { useGetMeQuery } from "../../services/userApi";
+import { useDispatch } from "react-redux";
+import { setProfileData, setProfileError, setProfileLoading } from "../../app/myProfileSlice";
+
 const UserPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {data, isLoading: isGetMeLoading} = useGetMeQuery();
-  if(isGetMeLoading){
-    return <div>Loading...</div>;
-  }
-  console.log(data.data);
+  const { data, error, isLoading, isSuccess } = useGetMeQuery();
+
+  // When query state changes, update Redux slice
+  useEffect(() => {
+    dispatch(setProfileLoading(isLoading));
+
+    if (isSuccess && data) {
+      dispatch(setProfileData(data.data));
+    }
+
+    if (error) {
+      dispatch(setProfileError(error));
+    }
+  }, [isLoading, isSuccess, data, error, dispatch]);
   return (
     <div className="relative min-h-screen grid grid-cols-12">
       {/* Left Sidebar */}
