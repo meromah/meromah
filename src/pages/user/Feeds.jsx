@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect } from "react";
-import PostCard from "./PostCard";
+import PostCard from "./components/PostCard";
 import { FaInbox, FaClock, FaFire, FaLayerGroup } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { mockPosts } from "../../../utils";
+import { mockPosts } from "../../utils";
 
 const Feeds = ({ userBoards = ["Algorithms 101", "Discrete Math"] }) => {
   const [filter, setFilter] = useState(() => {

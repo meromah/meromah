@@ -36,5 +36,3 @@ export const {
   useGetMyProfileQuery,
   useUpdateMyProfileMutation,
 } = PrivateUserSelfApi;
-
-export const userApi = PrivateUserSelfApi;

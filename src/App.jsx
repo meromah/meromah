@@ -14,10 +14,10 @@ import Login from "./pages/main/Login";
 import Register from "./pages/main/Register";
 import UserProfile from "./pages/user/UserProfile";
 import EditProfile from "./pages/user/EditProfile";
-import Feeds from "./pages/user/feeds/Feeds";
+import Feeds from "./pages/user/Feeds";
 import Post from "./pages/user/Post";
-import CreateAction from "./pages/user/feeds/CreateAction";
-import ExploreItem from "./pages/user/feeds/ExploreItem";
+import CreateAction from "./pages/user/CreateAction";
+import ExploreItem from "./pages/user/components/ExploreItem";
 import BoardPage from "./pages/user/BoardPage";
 
 const App = () => {

@@ -8,7 +8,7 @@ import {
   FaQuestionCircle,
 } from "react-icons/fa";
 import { DEFAULT_PLACEHOLDERS } from "../../utils/constants";
-import PostCard from "./feeds/PostCard";
+import PostCard from "./components/PostCard.jsx";
 import {
   // fetch details about me, and my profile
   useGetMeQuery,

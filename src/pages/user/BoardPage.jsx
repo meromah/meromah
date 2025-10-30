@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { mockPosts, boardsData } from "../../utils/constants";
-import PostCard from "./feeds/PostCard";
+import PostCard from "./components/PostCard";
 import BoardHeader from "../../components/BoardHeader";
 
 const BoardPage = () => {

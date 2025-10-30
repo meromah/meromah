@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route, Navigate, useNavigate, Outlet } from "react-router-dom";
-import Feeds from "./feeds/Feeds";
-import CreateAction from "./feeds/CreateAction";
-import ExploreItem from "./feeds/ExploreItem";
+import Feeds from "./Feeds";
+import CreateAction from "./CreateAction";
+import ExploreItem from "./components/ExploreItem";
 import UserSidebar from "../../components/UserSidebar";
 import Post from "./Post";
 import UserProfile from "./UserProfile";

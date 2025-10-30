@@ -47,9 +47,9 @@ const exploreItems = [
 ];
 
 const createActionArr = [
-  { label: "Community", path: "/create/board", icon: Grid },
+  { label: "Community", path: "/create/community", icon: Grid },
   { label: "Post", path: "/create/post", icon: FileText },
-  { label: "Quiz", path: "/create/quiz", icon: Layers },
+  { label: "Test", path: "/create/test", icon: Layers },
 ];
 
 const UserSidebar = () => {

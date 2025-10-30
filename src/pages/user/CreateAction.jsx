@@ -2,16 +2,13 @@ import React, { lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
 
 // Lazy load each action
-const CreatePost = lazy(() => import("./CreatePost"));
-const CreateCommunity = lazy(() => import("./CreateCommunity"));
-const CreateLibrary = lazy(() => import("./CreateLibrary"));
-// const CreateQuiz = lazy(() => import("./CreateQuiz"));
-
+const CreatePost = lazy(() => import("./components/CreatePost"));
+const CreateCommunity = lazy(() => import("./components/CreateCommunity"));
+const CreateTest = lazy(() => import("./components/CreateTest"));
 const actions = {
   post: CreatePost,
-  board: CreateCommunity,
-  library: CreateLibrary,
-  // quiz: CreateQuiz,
+  community: CreateCommunity,
+  test: CreateTest,
 };
 
 const CreateAction = () => {
