@@ -30,7 +30,7 @@ const ExpandableSection = ({
         } overflow-hidden`}
       >
         <div className="space-y-0.5 pl-9">
-          {section.items.map((item) => (
+          {section.items.length >0?(section.items.map((item) => (
             <Link
               key={item.id}
               to={item.to || "#"}
@@ -39,14 +39,14 @@ const ExpandableSection = ({
             >
               {item.title}
             </Link>
-          ))}
+          ))): (<p className="text-neutral-500 text-xs py-1">No {section.id} exists.</p>)}
 
-          <button
+          {section.id !== "recent"&&<button
             onClick={closeMobileMenu}
             className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all"
           >
             View all
-          </button>
+          </button>}
         </div>
       </div>
     </div>
