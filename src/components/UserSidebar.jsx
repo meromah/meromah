@@ -27,7 +27,22 @@ const MenuLink = ({ to, label, icon: Icon, onClick }) => {
     </Link>
   );
 };
-const exploreItems = [
+
+const exploreData = [
+  {
+    id: "boards",
+    title: "Boards",
+    path: "explore/boards",
+    icon: Grid,
+  },
+  {
+    id: "Descs",
+    title: "Descs",
+    path: "explore/descs",
+    icon: Book,
+  },
+];
+const userFollowedItems = [
   {
     id: "boards",
     title: "Boards",
@@ -78,15 +93,18 @@ const UserSidebar = () => {
     (state) => state.myProfile
   );
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const {list: recentList} = useSelector((state)=> state.recentCommunities)
+  const { list: recentList } = useSelector((state) => state.recentCommunities);
 
-  const recentSection = useMemo(() => ({
-    id: "recent",
-    title: "Recent",
-    path: "",
-    icon: false,
-    items: recentList,
-  }), [recentList])
+  const recentSection = useMemo(
+    () => ({
+      id: "recent",
+      title: "Recent",
+      path: "",
+      icon: false,
+      items: recentList,
+    }),
+    [recentList]
+  );
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -209,13 +227,13 @@ const UserSidebar = () => {
         <div className="flex-1 overflow-y-auto px-3 py-4">
           {/* Recent communities */}
           <ExpandableSection
-                  key={"recent"}
-                  section={recentSection}
-                  isExpanded={expandedSections["recent"]}
-                  toggleSection={toggleSection}
-                  closeMobileMenu={closeMobileMenu}
-                />
-          {isAuthenticated && (
+            key={"recent"}
+            section={recentSection}
+            isExpanded={expandedSections["recent"]}
+            toggleSection={toggleSection}
+            closeMobileMenu={closeMobileMenu}
+          />
+          {isAuthenticated ? (
             <div className="space-y-1">
               {/* Create Button */}
               <div className="mb-3">
@@ -265,7 +283,7 @@ const UserSidebar = () => {
               />
 
               {/* Section that displays user-followed boards, descs */}
-              {exploreItems.map((section) => (
+              {userFollowedItems.map((section) => (
                 <ExpandableSection
                   key={section.id}
                   section={section}
@@ -274,6 +292,19 @@ const UserSidebar = () => {
                   closeMobileMenu={closeMobileMenu}
                 />
               ))}
+            </div>
+          ) : (
+            <div>
+              <div className="h-px bg-neutral-200 my-2" />
+              <p className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600  transition-all truncate">Explore</p>
+              
+              {exploreData.map(data=>(<MenuLink
+                icon={data.icon}
+                label={data.title}
+                onClick={toggleMobileMenu}
+                to={data.path}
+                key={data.id}
+              />))}
             </div>
           )}
         </div>
