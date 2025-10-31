@@ -1,6 +1,17 @@
 import { privateApi } from "./private/privateApi";
+import { publicApi } from './public/publicApi';
 
-export const PrivateUserSelfApi = privateApi.injectEndpoints({
+const PublicUserApi = publicApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getUserByUsername: builder.query({
+      query: (username) => ({
+        url: `/user/${username}`,
+      }),
+    }),
+  }),
+});
+
+const PrivateUserSelfApi = privateApi.injectEndpoints({
   endpoints: (builder) => ({
     // main details related e.g. name, email, username
     getMe: builder.query({
@@ -36,3 +47,7 @@ export const {
   useGetMyProfileQuery,
   useUpdateMyProfileMutation,
 } = PrivateUserSelfApi;
+
+export const { 
+  useGetUserByUsernameQuery,
+} = PublicUserApi;
