@@ -34,7 +34,7 @@ const ExpandableSection = ({
             <Link
               key={item.id}
               to={item.to || "#"}
-              onClick={closeMobileMenu}
+              onClick={()=>{closeMobileMenu();toggleSection(section.id)}}
               className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-md transition-all truncate"
             >
               {item.title}
