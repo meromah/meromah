@@ -43,7 +43,7 @@ const App = () => {
         <Route path="board/:board/post/:post" element={<Post />} />
         <Route path="create/:action" element={<CreateAction />} />
         <Route path="explore/:item" element={<ExploreItem />} />
-        <Route path="board/:board" element={<BoardPage />} />
+        <Route path="board/:boardId" element={<BoardPage />} />
       </Route>
       <Route path="/admin/*" element={<AdminPage />} />
     </Routes>
