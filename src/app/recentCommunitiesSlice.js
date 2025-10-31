@@ -1,6 +1,6 @@
 // src/features/recentCommunities/recentCommunitiesSlice.js
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 // Key for localStorage
 const STORAGE_KEY = "recentCommunities";
@@ -33,41 +33,29 @@ const clearStorage = () => {
   }
 };
 
-// --- Thunk to load from localStorage ---
-export const loadRecentCommunities = createAsyncThunk(
-  "recentCommunities/load",
-  async () => {
-    return loadFromStorage();
-  }
-);
-
 // --- Slice ---
 const recentCommunitiesSlice = createSlice({
   name: "recentCommunities",
   initialState: {
-    list: [],
+    list: loadFromStorage(), // Load from localStorage on initialization
   },
   reducers: {
     addRecentCommunity: (state, action) => {
       const newItem = action.payload; // {id, title, to}
-      state.list = state.list.filter((x) => x.id !== newItem.id); // removing existing by id
-      state.list.unshift(newItem); // putting newItem to the first
+      
+      // Validate payload
+      if (!newItem || !newItem.id) {
+        console.error("Invalid community item:", newItem);
+        return;
+      }
 
-      // limit to MAX_ITEMS items
-      state.list = state.list.slice(0, MAX_ITEMS);
-
-      // Save updated list
-      saveToStorage(state.list);
+      // Remove existing item with same id and add new item to front
+      const filtered = state.list.filter((x) => x.id !== newItem.id);
+      state.list = [newItem, ...filtered].slice(0, MAX_ITEMS);
     },
     clearRecentCommunities: (state) => {
       state.list = [];
-      clearStorage();
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(loadRecentCommunities.fulfilled, (state, action) => {
-      state.list = action.payload;
-    });
   },
 });
 
@@ -75,3 +63,21 @@ export const { addRecentCommunity, clearRecentCommunities } =
   recentCommunitiesSlice.actions;
 
 export default recentCommunitiesSlice.reducer;
+
+// --- Middleware to sync with localStorage ---
+export const recentCommunitiesMiddleware = (store) => (next) => (action) => {
+  const result = next(action);
+  
+  // Sync to localStorage after any recentCommunities action
+  if (action.type?.startsWith('recentCommunities/')) {
+    const state = store.getState();
+    
+    if (action.type === 'recentCommunities/clearRecentCommunities') {
+      clearStorage();
+    } else if (action.type === 'recentCommunities/addRecentCommunity') {
+      saveToStorage(state.recentCommunities.list);
+    }
+  }
+  
+  return result;
+};
