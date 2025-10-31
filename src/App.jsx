@@ -17,9 +17,10 @@ import EditProfile from "./pages/user/EditProfile";
 import Feeds from "./pages/user/Feeds";
 import Post from "./pages/user/Post";
 import CreateAction from "./pages/user/CreateAction";
-import ExploreItem from "./pages/user/components/ExploreItem";
 import BoardPage from "./pages/user/BoardPage";
 import MyProfile from "./pages/user/MyProfile";
+import ExploreBoards from "./pages/user/components/ExploreBoards";
+import ExploreDescs from "./pages/user/components/ExploreDescs";
 
 const App = () => {
   return (
@@ -43,7 +44,8 @@ const App = () => {
         <Route path="home" element={<Feeds />} />
         <Route path="board/:board/post/:post" element={<Post />} />
         <Route path="create/:action" element={<CreateAction />} />
-        <Route path="explore/:item" element={<ExploreItem />} />
+        <Route path="explore/boards" element={<ExploreBoards />} />
+        <Route path="explore/descs" element={<ExploreDescs />} />
         <Route path="board/:boardId" element={<BoardPage />} />
       </Route>
       <Route path="/admin/*" element={<AdminPage />} />
