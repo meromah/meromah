@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import {
   FiChevronDown as ChevronDown,
   FiChevronRight as ChevronRight,
@@ -12,6 +12,31 @@ import {
 import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ExpandableSection from "../pages/user/components/ExpandableSection";
+
+const MenuLink = ({ to, label, icon: Icon, onClick }) => {
+  return (
+    <Link
+      to={to}
+      onClick={onClick}
+      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all group"
+    >
+      {Icon && <Icon className="w-4 h-4 text-neutral-400" />}
+      <span className="flex-1 text-left">{label}</span>
+      <ChevronRight className="w-4 h-4 text-neutral-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+    </Link>
+  );
+};
+const recentSection = {
+    id: "recent",
+    title: "Recent",
+    path: "",
+    icon: false,
+    items: [
+      { id: "b1", title: "Algorithms 101" },
+      { id: "b2", title: "Discrete Math" },
+    ],
+  }
 const exploreItems = [
   {
     id: "boards",
@@ -62,7 +87,18 @@ const UserSidebar = () => {
   const { profileData, isProfileDataLoading, profileDataError } = useSelector(
     (state) => state.myProfile
   );
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
+  const recentSection = useMemo(() => ({
+    id: "recent",
+    title: "Recent",
+    path: "",
+    icon: false,
+    items: [
+      { id: "algorithm-101", title: "Algorithms 101" },
+      { id: "discrete-math", title: "Discrete Math" },
+    ],
+  }), [])
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -183,103 +219,75 @@ const UserSidebar = () => {
         </Link>
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto px-3 py-4">
-          <div className="space-y-1">
-            {/* Create Button */}
-            <div className="mb-3">
-              <button
-                onClick={() => setOpen(!open)}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
-              >
-                <span className="flex-1 text-left">Create new</span>
-                <ChevronDown
-                  className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
-                    open ? "rotate-180" : ""
-                  }`}
+          {/* Recent communities */}
+          <ExpandableSection
+                  key={"recent"}
+                  section={recentSection}
+                  isExpanded={expandedSections["recent"]}
+                  toggleSection={toggleSection}
+                  closeMobileMenu={closeMobileMenu}
                 />
-              </button>
-              <div
-                className={`transition-all duration-200 ease-out ${
-                  open ? "max-h-48 opacity-100 mt-1" : "max-h-0 opacity-0"
-                } overflow-hidden`}
-              >
-                <div className="space-y-0.5 pl-2">
-                  {createActionArr.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <Link
-                        to={item.path}
-                        key={item.path}
-                        onClick={closeMobileMenu}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg transition-all"
-                      >
-                        <Icon className="w-4 h-4" />
-                        <span>{item.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-            {/* Divider */}
-            <div className="h-px bg-neutral-200 my-2" />
-            {/* Posts Link */}
-            <Link
-              to="/explore/posts"
-              onClick={closeMobileMenu}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all group"
-            >
-              <FileText className="w-4 h-4 text-neutral-400" />
-              <span className="flex-1 text-left">Posts</span>
-              <ChevronRight className="w-4 h-4 text-neutral-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-            {/* Collapsible Sections */}
-            {exploreItems.map((section) => {
-              const Icon = section.icon;
-              const isExpanded = expandedSections[section.id];
-              return (
-                <div key={section.id}>
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
-                  >
-                    <Icon className="w-4 h-4 text-neutral-400" />
-                    <span className="flex-1 text-left">{section.title}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
-                        isExpanded ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  <div
-                    className={`transition-all duration-200 ease-out ${
-                      isExpanded
-                        ? "max-h-96 opacity-100 mt-0.5"
-                        : "max-h-0 opacity-0"
-                    } overflow-hidden`}
-                  >
-                    <div className="space-y-0.5 pl-9">
-                      {section.items.map((item) => (
+          {isAuthenticated && (
+            <div className="space-y-1">
+              {/* Create Button */}
+              <div className="mb-3">
+                <button
+                  onClick={() => setOpen(!open)}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
+                >
+                  <span className="flex-1 text-left">Create new</span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
+                      open ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`transition-all duration-200 ease-out ${
+                    open ? "max-h-48 opacity-100 mt-1" : "max-h-0 opacity-0"
+                  } overflow-hidden`}
+                >
+                  <div className="space-y-0.5 pl-2">
+                    {createActionArr.map((item) => {
+                      const Icon = item.icon;
+                      return (
                         <Link
-                          // to={""}
+                          to={item.path}
+                          key={item.path}
                           onClick={closeMobileMenu}
-                          key={item.id}
-                          className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-md transition-all truncate"
+                          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg transition-all"
                         >
-                          {item.title}
+                          <Icon className="w-4 h-4" />
+                          <span>{item.label}</span>
                         </Link>
-                      ))}
-                      <button
-                        onClick={closeMobileMenu}
-                        className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all"
-                      >
-                        View all
-                      </button>
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+              {/* Divider */}
+              <div className="h-px bg-neutral-200 my-2" />
+              {/* Posts Link */}
+              <MenuLink
+                to={"/explore/posts"}
+                onClick={closeMobileMenu}
+                icon={FileText}
+                label={"Posts"}
+                key={"Posts"}
+              />
+
+              {/* Collapsible Sections */}
+              {exploreItems.map((section) => (
+                <ExpandableSection
+                  key={section.id}
+                  section={section}
+                  isExpanded={expandedSections[section.id]}
+                  toggleSection={toggleSection}
+                  closeMobileMenu={closeMobileMenu}
+                />
+              ))}
+            </div>
+          )}
         </div>
         {/* User Card at Bottom */}
         <div
