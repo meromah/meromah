@@ -73,22 +73,20 @@ const UserSidebar = () => {
   const userMenuRef = useRef(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-
+  //Getting data from Redux state
   const { profileData, isProfileDataLoading, profileDataError } = useSelector(
     (state) => state.myProfile
   );
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const {list: recentList} = useSelector((state)=> state.recentCommunities)
 
   const recentSection = useMemo(() => ({
     id: "recent",
     title: "Recent",
     path: "",
     icon: false,
-    items: [
-      { id: "algorithm-101", title: "Algorithms 101" },
-      { id: "discrete-math", title: "Discrete Math" },
-    ],
-  }), [])
+    items: recentList,
+  }), [recentList])
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
