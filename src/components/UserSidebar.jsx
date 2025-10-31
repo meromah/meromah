@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   FiChevronDown as ChevronDown,
   FiChevronRight as ChevronRight,
@@ -62,6 +62,7 @@ const UserSidebar = () => {
   const { profileData, isProfileDataLoading, profileDataError } = useSelector(
     (state) => state.myProfile
   );
+
   // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -87,17 +88,17 @@ const UserSidebar = () => {
     };
   }, [isMobileMenuOpen]);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev);
+  }, []);
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(false);
-  };
+  }, []);
 
-  const toggleSection = (id) => {
+  const toggleSection = useCallback((id) => {
     setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -115,18 +116,14 @@ const UserSidebar = () => {
     };
   }, [userMenuOpen]);
 
-  const getInitials = (name) => {
+  const getInitials = useCallback((name) => {
+    if (!name) return "";
     return name
       .split(" ")
       .map((n) => n[0])
       .join("")
       .toUpperCase();
-  };
-
-  const handleNavigate = (path) => {
-    console.log("Navigate to:", path);
-  };
-
+  }, []);
   return (
     <div className="md:flex md:justify-between md:items-center">
       <div className="md:hidden flex sticky top-0 justify-between items-center border-b border-neutral-200 bg-white">
