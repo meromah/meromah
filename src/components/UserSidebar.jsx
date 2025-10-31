@@ -27,16 +27,6 @@ const MenuLink = ({ to, label, icon: Icon, onClick }) => {
     </Link>
   );
 };
-const recentSection = {
-    id: "recent",
-    title: "Recent",
-    path: "",
-    icon: false,
-    items: [
-      { id: "b1", title: "Algorithms 101" },
-      { id: "b2", title: "Discrete Math" },
-    ],
-  }
 const exploreItems = [
   {
     id: "boards",
@@ -276,7 +266,7 @@ const UserSidebar = () => {
                 key={"Posts"}
               />
 
-              {/* Collapsible Sections */}
+              {/* Section that displays user-followed boards, descs */}
               {exploreItems.map((section) => (
                 <ExpandableSection
                   key={section.id}
