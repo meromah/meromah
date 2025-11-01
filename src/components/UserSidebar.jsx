@@ -13,7 +13,7 @@ import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ExpandableSection from "../pages/user/components/ExpandableSection";
-
+import {useLogoutMutation} from "../services/authApi.js"
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -95,6 +95,7 @@ const UserSidebar = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const { list: recentList } = useSelector((state) => state.recentCommunities);
 
+  const [logout] = useLogoutMutation();
   const recentSection = useMemo(
     () => ({
       id: "recent",
@@ -157,7 +158,9 @@ const UserSidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [userMenuOpen]);
-
+  const handleLogout = async ()=>{
+    const res = await logout();
+  }
   const getInitials = useCallback((name) => {
     if (!name) return "";
     return name
@@ -314,7 +317,23 @@ const UserSidebar = () => {
         </div>
 
         {/* User Card at Bottom */}
-        {isAuthenticated ? (
+        {isAuthenticated === undefined || isProfileDataLoading ? (
+          <div className="flex-shrink-0 border-t border-neutral-200 p-2">
+            <div className="w-full flex items-center gap-3 px-2 py-3 rounded-lg">
+              {/* Profile Image Skeleton */}
+              <div className="w-8 h-8 rounded-full bg-neutral-200 animate-pulse flex-shrink-0"></div>
+
+              {/* Text Skeletons */}
+              <div className="flex-1 min-w-0">
+                <div className="h-4 bg-neutral-200 rounded w-1/2 mb-2 animate-pulse"></div>
+                <div className="h-3 bg-neutral-200 rounded w-1/3 animate-pulse"></div>
+              </div>
+
+              {/* Chevron Icon Skeleton */}
+              <div className="w-4 h-4 bg-neutral-200 rounded animate-pulse flex-shrink-0"></div>
+            </div>
+          </div>
+        ) : isAuthenticated === true ? (
           <div
             className="flex-shrink-0 border-t border-neutral-200 p-2 relative"
             ref={userMenuRef}
@@ -326,47 +345,31 @@ const UserSidebar = () => {
               className="w-full flex items-center gap-3 px-2 py-3 hover:bg-neutral-100 rounded-lg transition-all group disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-transparent"
               disabled={isProfileDataLoading}
             >
-              {isProfileDataLoading ? (
-                <>
-                  {/* Loading skeleton for avatar */}
-                  <div className="w-8 h-8 rounded-full bg-neutral-200 animate-pulse flex-shrink-0" />
+              {/* I am going to change this place holder into profile image later. */}
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                <span className="text-white text-xs font-bold">
+                  {getInitials(profileData?.name || "User")}
+                </span>
+              </div>
 
-                  <div className="flex-1 min-w-0 text-left space-y-2">
-                    {/* Loading skeleton for name */}
-                    <div className="h-4 bg-neutral-200 rounded animate-pulse w-24" />
-                    {/* Loading skeleton for username */}
-                    <div className="h-3 bg-neutral-200 rounded animate-pulse w-20" />
-                  </div>
-                </>
-              ) : (
-                <>
-                  {/* I am going to change this place holder into profile image later. */}
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-xs font-bold">
-                      {getInitials(profileData?.name || "User")}
-                    </span>
-                  </div>
+              <div className="flex-1 min-w-0 text-left">
+                <p className="text-sm font-medium text-neutral-900 truncate">
+                  {profileData?.name || "User"}
+                </p>
+                <Link
+                  onClick={(e) => e.stopPropagation()}
+                  to="profile"
+                  className="text-xs text-neutral-500 truncate cursor-pointer hover:underline"
+                >
+                  u/{profileData?.username || "username"}
+                </Link>
+              </div>
 
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm font-medium text-neutral-900 truncate">
-                      {profileData?.name || "User"}
-                    </p>
-                    <Link
-                      onClick={(e) => e.stopPropagation()}
-                      to="profile"
-                      className="text-xs text-neutral-500 truncate cursor-pointer hover:underline"
-                    >
-                      u/{profileData?.username || "username"}
-                    </Link>
-                  </div>
-
-                  <ChevronDown
-                    className={`w-4 h-4 text-neutral-400 flex-shrink-0 transition-transform duration-200 ${
-                      userMenuOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </>
-              )}
+              <ChevronDown
+                className={`w-4 h-4 text-neutral-400 flex-shrink-0 transition-transform duration-200 ${
+                  userMenuOpen ? "rotate-180" : ""
+                }`}
+              />
             </button>
             {/* User Dropdown Menu */}
             {userMenuOpen && (
@@ -388,7 +391,7 @@ const UserSidebar = () => {
                 </div>
                 <div className="h-px bg-neutral-200 mx-1.5" />
                 <div className="p-1.5">
-                  <button className="w-full flex items-center px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all">
+                  <button className="w-full flex items-center px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all" onClick={handleLogout}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Log out
                   </button>
@@ -397,14 +400,14 @@ const UserSidebar = () => {
             )}
           </div>
         ) : (
-            <div className="flex items-center justify-center py-2 px-4">
-              <Link
-                to="/login"
-                className="block w-full py-2 px-4 rounded-lg bg-primary-blue text-white text-base font-medium text-center hover:bg-primary-blue/90 transition-colors"
-              >
-                Login
-              </Link>
-            </div>
+          <div className="flex items-center justify-center py-2 px-4">
+            <Link
+              to="/login"
+              className="block w-full py-2 px-4 rounded-lg bg-primary-blue text-white text-base font-medium text-center hover:bg-primary-blue/90 transition-colors"
+            >
+              Login
+            </Link>
+          </div>
         )}
       </div>
     </div>
