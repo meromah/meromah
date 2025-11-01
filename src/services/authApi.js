@@ -62,6 +62,15 @@ export const authApi = baseApi.injectEndpoints({
         url: '/auth/logout',
         method: 'POST',
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(setIsAuthenticated(false));
+        } catch (err) {
+          dispatch(setIsAuthenticated(true));
+          console.error('Login failed:', err);
+        }
+      },
     }),
 
     // to check if user is logged in or not. But i am thinking to make this private api only
