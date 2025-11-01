@@ -34,8 +34,8 @@ const PrivateBoardApi = baseApi.injectEndpoints({
     }),
     // check if a name available for a new board
     checkBoardNameIsAvailable: builder.query({
-      query: (boardData) => ({
-        url: `/boards/isNameAvailable${toQueryString(boardData)}`,
+      query: (queryData) => ({
+        url: `/boards/isBoardNameAvailable${toQueryString(queryData)}`,
       }),
     }),
   }),
