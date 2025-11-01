@@ -3,7 +3,7 @@ import { useLoginMutation } from "../../services/public/authApi";
 import SuccessModal from "./components/SuccessModal";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../../app/authSlice";
+import { setIsAuthenticated } from "../../app/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,11 +18,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { access_token, refresh_token } = await login({
+      const res= await login({
         email,
         password,
       }).unwrap();
-      dispatch(setCredentials({ access_token, refresh_token }));
+      dispatch(setIsAuthenticated(true))
       setShowSuccessModal(true);
       setEmail("");
       setPassword("");

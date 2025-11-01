@@ -9,7 +9,6 @@ import {
 import Toast from "../../components/Toast";
 import SuccessModal from "./components/SuccessModal";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../../app/authSlice";
 
 // Default form values
 const DEFAULT_FORM_VAL = {
@@ -149,7 +148,6 @@ const Register = () => {
       const { refresh_token, access_token } = await registerUser(
         userData
       ).unwrap();
-      dispatch(setCredentials({ access_token, refresh_token }));
       setShowSuccessModal(true);
     } catch (err) {
       const errorMessage =
