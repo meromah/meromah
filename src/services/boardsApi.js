@@ -33,11 +33,9 @@ const PrivateBoardApi = baseApi.injectEndpoints({
       }),
     }),
     // check if a name available for a new board
-    checkBoardNameAvailable: builder.mutation({
-      query: ({ boardData }) => ({
-        url: '/boards/name',
-        method: "POST",
-        body: boardData,
+    checkBoardNameIsAvailable: builder.query({
+      query: (queryData) => ({
+        url: `/boards/isBoardNameAvailable${toQueryString(queryData)}`,
       }),
     }),
   }),
@@ -59,7 +57,7 @@ export const {
   useUpdateBoardMutation,
   useCreateBoardMutation,
   useDeleteBoardMutation,
-  useCheckBoardNameAvailableMutation,
+  useCheckBoardNameIsAvailableQuery,
 } = PrivateBoardApi;
 
 export const {

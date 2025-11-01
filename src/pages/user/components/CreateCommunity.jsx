@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 import { FiArrowLeft, FiSend } from "react-icons/fi";
+
+import { useCheckDescNameIsAvailableQuery, useCreateDescMutation } from '../../../services/descsApi.js';
+import { useCheckBoardNameIsAvailableQuery, useCreateBoardMutation } from '../../../services/boardsApi.js';
+
 const communityTypes = {
-  board: { name: "Board", path: "b" },
-  desc: { name: "Desc", path: "d" },
+  board: { name: "Board", path: "b"},
+  desc: { name: "Desc", path: "d"},
 };
+
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState("");
   const [communityDescription, setCommunityDescription] = useState("");
   const [communityType, setCommunityType] = useState("board");
   const [hasSpecialChar, setHasSpecialChar] = useState(false);
-  
 
-  const isCreateDisabled = !communityName.trim();
+  const [createBoard] = useCreateBoardMutation();
+  const [createDesc] = useCreateDescMutation();
+
+  const boardCheck = useCheckBoardNameIsAvailableQuery({name: communityName});
+  const descCheck = useCheckDescNameIsAvailableQuery({name: communityName});
+
+  const nameIsAvailable = communityType === "board" ? boardCheck.available : descCheck.available;
+
+  const isCreateDisabled = !communityName.trim() && nameIsAvailable;
   const handleCommunityNameChange = (e) => {
     if (e.target.value.length === 0) {
       setHasSpecialChar(false);
@@ -26,6 +38,20 @@ const CreateCommunity = () => {
     }
     setHasSpecialChar(false);
     setCommunityName(e.target.value.replace(/\s+/g, "-"));
+  };
+
+  const finalSubmission = async () => {
+    const createFn = communityType === "board" ? createBoard : createDesc;
+    try {
+      const result = await createFn({
+        name: communityName,
+        description: communityDescription
+      });
+      console.log(result);
+    }
+    catch (err) {
+      console.log(`Error: ${err}`);
+    }
   };
 
   return (
@@ -156,6 +182,7 @@ const CreateCommunity = () => {
 
           <button
             disabled={isCreateDisabled}
+            onClick={finalSubmission}
             className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 disabled:from-slate-300 disabled:to-slate-300 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/25 disabled:shadow-none font-medium"
           >
             <FiSend className="text-base" />
