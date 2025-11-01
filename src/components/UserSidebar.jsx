@@ -13,7 +13,9 @@ import { HiMenuAlt3, HiX } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ExpandableSection from "../pages/user/components/ExpandableSection";
-import {useLogoutMutation} from "../services/authApi.js"
+import { useLogoutMutation } from "../services/authApi.js";
+import { useGetMyDescSubscriptionsQuery } from "../services/descSubscriptionsApi.js";
+import { useGetMyBoardSubscriptionsQuery } from "../services/boardSubscriptionsApi.js";
 const MenuLink = ({ to, label, icon: Icon, onClick }) => {
   return (
     <Link
@@ -42,38 +44,6 @@ const exploreData = [
     icon: Book,
   },
 ];
-const userFollowedItems = [
-  {
-    id: "boards",
-    title: "Boards",
-    path: "explore/boards",
-    icon: Grid,
-    items: [
-      { id: "b1", title: "Algorithms 101" },
-      { id: "b2", title: "Discrete Math" },
-    ],
-  },
-  {
-    id: "libraries",
-    title: "Libraries",
-    path: "explore/libraries",
-    icon: Book,
-    items: [
-      { id: "l1", title: "Sorting Cheat Sheet.pdf" },
-      { id: "l2", title: "Graph Notes.md" },
-    ],
-  },
-  {
-    id: "quizzes",
-    title: "Quizzes",
-    path: "explore/quizzes",
-    icon: Layers,
-    items: [
-      { id: "q1", title: "DP Basics" },
-      { id: "q2", title: "Trees & Graphs" },
-    ],
-  },
-];
 
 const createActionArr = [
   { label: "Community", path: "/create/community", icon: Grid },
@@ -96,6 +66,8 @@ const UserSidebar = () => {
   const { list: recentList } = useSelector((state) => state.recentCommunities);
 
   const [logout] = useLogoutMutation();
+  const { data: myDescSubscriptions } = useGetMyDescSubscriptionsQuery();
+  const { data: myBoardSubscriptions } = useGetMyBoardSubscriptionsQuery();
   const recentSection = useMemo(
     () => ({
       id: "recent",
@@ -105,6 +77,28 @@ const UserSidebar = () => {
       items: recentList,
     }),
     [recentList]
+  );
+  const subscribedBoards = useMemo(
+    () => ({
+      id: "boards",
+      title: "Boards",
+      path: "/boards",
+      icon: Grid,
+      // NOTE: I might change items based on what myBoardSubscriptions gets from the db
+      items: myBoardSubscriptions ? myBoardSubscriptions.data : [],
+    }),
+    [myBoardSubscriptions]
+  );
+  const subscribedDescs = useMemo(
+    () => ({
+      id: "descs",
+      title: "Descs",
+      path: "/descs",
+      icon: Book,
+      // NOTE: I might change items based on what myDescSubscriptions gets from the db
+      items: myDescSubscriptions ? myDescSubscriptions.data : [],
+    }),
+    [myDescSubscriptions]
   );
   // Close mobile menu on route change
   useEffect(() => {
@@ -158,9 +152,9 @@ const UserSidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [userMenuOpen]);
-  const handleLogout = async ()=>{
+  const handleLogout = async () => {
     const res = await logout();
-  }
+  };
   const getInitials = useCallback((name) => {
     if (!name) return "";
     return name
@@ -278,15 +272,20 @@ const UserSidebar = () => {
               />
 
               {/* Section that displays user-followed boards, descs */}
-              {userFollowedItems.map((section) => (
-                <ExpandableSection
-                  key={section.id}
-                  section={section}
-                  isExpanded={expandedSections[section.id]}
-                  toggleSection={toggleSection}
-                  closeMobileMenu={closeMobileMenu}
-                />
-              ))}
+              <ExpandableSection
+                key={subscribedBoards.id}
+                section={subscribedBoards}
+                isExpanded={expandedSections[subscribedBoards.id]}
+                toggleSection={toggleSection}
+                closeMobileMenu={closeMobileMenu}
+              />
+              <ExpandableSection
+                key={subscribedDescs.id}
+                section={subscribedDescs}
+                isExpanded={expandedSections[subscribedDescs.id]}
+                toggleSection={toggleSection}
+                closeMobileMenu={closeMobileMenu}
+              />
               <div className="h-px bg-neutral-200" />
             </div>
           )}
@@ -391,7 +390,10 @@ const UserSidebar = () => {
                 </div>
                 <div className="h-px bg-neutral-200 mx-1.5" />
                 <div className="p-1.5">
-                  <button className="w-full flex items-center px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all" onClick={handleLogout}>
+                  <button
+                    className="w-full flex items-center px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all"
+                    onClick={handleLogout}
+                  >
                     <LogOut className="w-4 h-4 mr-2" />
                     Log out
                   </button>
