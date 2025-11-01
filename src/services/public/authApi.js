@@ -55,6 +55,13 @@ export const authApi = publicApi.injectEndpoints({
       },
     }),
 
+    logout: builder.mutation({
+      query: () => ({
+        url: '/auth/logout',
+        method: 'POST',
+      }),
+    }),
+
     // to check if user is logged in or not. But i am thinking to make this private api only
     amILoggedIn: builder.query({
       query: () => ({
@@ -69,5 +76,6 @@ export const {
   useOtpVerificationMutation,
   useRegisterUserMutation,
   useLoginMutation,
+  useLogoutMutation,
   useAmILoggedInQuery,
 } = authApi;
