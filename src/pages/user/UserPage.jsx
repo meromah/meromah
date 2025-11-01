@@ -2,17 +2,23 @@ import React, { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import UserSidebar from "../../components/UserSidebar";
 import { useGetMeQuery } from "../../services/userApi";
-import { useDispatch } from "react-redux";
+import { useAmILoggedInQuery } from "../../services/authApi.js";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setProfileData,
   setProfileError,
   setProfileLoading,
-} from "../../app/myProfileSlice";
+} from "../../app/myProfileSlice.js";
+import { setIsAuthenticated } from "../../app/authSlice.js";
 
 const UserPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data, error, isLoading } = useGetMeQuery();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { data: loginStatus } = useAmILoggedInQuery();
+  const { data, error, isLoading } = useGetMeQuery(undefined, {
+    skip: isAuthenticated !== true,
+  });
 
   // When query state changes, update Redux slice
   useEffect(() => {
@@ -25,6 +31,12 @@ const UserPage = () => {
       dispatch(setProfileError(error));
     }
   }, [isLoading, data, error, dispatch]);
+
+  useEffect(() => {
+    if (loginStatus === undefined) return;
+    dispatch(setIsAuthenticated(loginStatus.isAuthenticated));
+  }, [loginStatus, dispatch]);
+
   return (
     <div className="relative min-h-screen grid grid-cols-12">
       {/* Left Sidebar */}
