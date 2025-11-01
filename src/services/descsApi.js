@@ -6,7 +6,7 @@ const toQueryString = (params) => {
 };
 
 // Auth-required endpoints
-const PrivateDescsApi = baseApi.injectEndpoints({
+const DescsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // POST /descs
     createDesc: builder.mutation({
@@ -41,13 +41,7 @@ const PrivateDescsApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
-  }),
-  overrideExisting: true,
-});
 
-// Public endpoints (no auth)
-const PublicDescsApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
     // GET /descs (paginated)
     getDescs: builder.query({
       query: (queryParams) => `/descs${toQueryString(queryParams)}`,
@@ -62,6 +56,14 @@ const PublicDescsApi = baseApi.injectEndpoints({
     getDescLikes: builder.query({
       query: (desc) => `/descs/${desc}/likes`,
     }),
+
+    // GET reqeust -> check if a name is available for a new desc
+    checkDescNameIsAvailable: builder.query({
+      query: (queryParams) => ({
+        url: `/descs/isNameAvailable${toQueryString(queryParams)}`,
+      })
+    }),
+
   }),
   overrideExisting: true,
 });
@@ -71,12 +73,8 @@ export const {
   useUpdateDescMutation,
   useDeleteDescMutation,
   useToggleDescLikeMutation,
-} = PrivateDescsApi;
-
-export const {
   useGetDescsQuery,
   useGetDescQuery,
   useGetDescLikesQuery,
-} = PublicDescsApi;
-
-
+  useCheckDescNameIsAvailable
+} = DescsApi;
