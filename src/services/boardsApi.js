@@ -1,5 +1,4 @@
-import { privateApi } from "./private/privateApi";
-import { publicApi } from "./public/publicApi";
+import { baseApi } from "./baseApi";
 
 /*
 This api is not complete yet. It will contain all board related endpoints,
@@ -11,7 +10,7 @@ const toQueryString = (params) => {
   return `?${new URLSearchParams(params).toString()}`;
 };
 
-const PrivateBoardApi = privateApi.injectEndpoints({
+const PrivateBoardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createBoard: builder.mutation({
       query: (boardData) => ({
@@ -43,7 +42,7 @@ const PrivateBoardApi = privateApi.injectEndpoints({
     }),
   }),
 });
-const PublicBoardApi = publicApi.injectEndpoints({
+const PublicBoardApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // get all boards
     getBoards: builder.query({

@@ -1,11 +1,11 @@
-import { privateApi } from "./private/privateApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
     if (!params || Object.keys(params).length === 0) return "";
     return `?${new URLSearchParams(params).toString()}`;
 };
 
-const PrivateLoginLogsApiPrivileged = privateApi.injectEndpoints({
+const PrivateLoginLogsApiPrivileged = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // GET /login-log - Get all login logs with filtering (Auth Required)
         getAllLoginLogsPrivileged: builder.query({

@@ -5,7 +5,7 @@ import {
   useEmailVerificationMutation,
   useOtpVerificationMutation,
   useRegisterUserMutation,
-} from "../../services/public/authApi";
+} from "../../services/authApi";
 import Toast from "../../components/Toast";
 import SuccessModal from "./components/SuccessModal";
 import { useDispatch } from "react-redux";

@@ -1,4 +1,4 @@
-import { privateApi } from './private/privateApi';
+import { baseApi } from './baseApi';
 
 // This API service handles role-user assignments management for privileged users
 // All endpoints require authentication and elevated permissions for managing user role assignments
@@ -11,7 +11,7 @@ const toQueryString = (params) => {
   return `?${new URLSearchParams(params).toString()}`;
 };
 
-const roleUsersPrivilegedApi = privateApi.injectEndpoints({
+const roleUsersPrivilegedApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get paginated role-user assignments with optional filtering (Privileged access required)
     getRoleUsersPrivilegedApi: builder.query({

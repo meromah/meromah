@@ -1,11 +1,11 @@
-import { privateApi } from "./private/privateApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
   if (!params || Object.keys(params).length === 0) return "";
   return `?${new URLSearchParams(params).toString()}`;
 };
 
-const PrivateDescSubscriptionsApi = privateApi.injectEndpoints({
+const PrivateDescSubscriptionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // POST /desc/{desc}/subscribe - Subscribe to a desc
     subscribeToDesc: builder.mutation({

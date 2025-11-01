@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLoginMutation } from "../../services/public/authApi";
+import { useLoginMutation } from "../../services/authApi";
 import SuccessModal from "./components/SuccessModal";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useDispatch } from "react-redux";

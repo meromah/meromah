@@ -1,11 +1,10 @@
-import { publicApi } from './public/publicApi';
-import { privateApi } from './private/privateApi';
+import { baseApi } from './baseApi';
 
 // This API service handles solution checking for various question types, code execution, and open-ended questions
 // Private endpoints require authentication, public endpoints are accessible without authentication
 // Supports: DSA questions, MCQ questions/tests, Python playground, and open-ended question management
 
-const privateSolutionsApi = privateApi.injectEndpoints({
+const privateSolutionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Check solution for old DSA questions
     checkOldDsaQuestionApi: builder.mutation({
@@ -68,7 +67,7 @@ const privateSolutionsApi = privateApi.injectEndpoints({
   }),
 });
 
-const publicSolutionsApi = publicApi.injectEndpoints({
+const publicSolutionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Execute Python code in playground environment
     playPythonApi: builder.mutation({

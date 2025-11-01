@@ -1,11 +1,11 @@
-import { privateApi } from "./private/privateApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
     if (!params || Object.keys(params).length === 0) return "";
     return `?${new URLSearchParams(params).toString()}`;
 };
 
-const PrivateRolePermissionsApiPrivileged = privateApi.injectEndpoints({
+const PrivateRolePermissionsApiPrivileged = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // GET /role-permissions - Paginated list with filters (Auth Required)
         getAllRolePermissionsPrivileged: builder.query({

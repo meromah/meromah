@@ -1,6 +1,6 @@
-import { privateApi } from "./private/privateApi";
+import { baseApi } from "./baseApi";
 
-const PrivateQuestionOptionsApi = privateApi.injectEndpoints({
+const PrivateQuestionOptionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET /tests/{test}/questions/{question}/options
     getOptionsForQuestion: builder.query({

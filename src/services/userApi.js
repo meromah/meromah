@@ -1,7 +1,6 @@
-import { privateApi } from "./private/privateApi";
-import { publicApi } from './public/publicApi';
+import { baseApi } from "./baseApi";
 
-const PublicUserApi = publicApi.injectEndpoints({
+const PublicUserApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUserByUsername: builder.query({
       query: (username) => ({
@@ -11,7 +10,7 @@ const PublicUserApi = publicApi.injectEndpoints({
   }),
 });
 
-const PrivateUserSelfApi = privateApi.injectEndpoints({
+const PrivateUserSelfApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // main details related e.g. name, email, username
     getMe: builder.query({

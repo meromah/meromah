@@ -1,5 +1,4 @@
-import { privateApi } from "./private/privateApi";
-import { publicApi } from "./public/publicApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
   if (!params || Object.keys(params).length === 0) return "";
@@ -7,7 +6,7 @@ const toQueryString = (params) => {
 };
 
 // Auth-required endpoints
-const PrivateDescsApi = privateApi.injectEndpoints({
+const PrivateDescsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // POST /descs
     createDesc: builder.mutation({
@@ -47,7 +46,7 @@ const PrivateDescsApi = privateApi.injectEndpoints({
 });
 
 // Public endpoints (no auth)
-const PublicDescsApi = publicApi.injectEndpoints({
+const PublicDescsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET /descs (paginated)
     getDescs: builder.query({

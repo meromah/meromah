@@ -1,11 +1,11 @@
-import { privateApi } from "./private/privateApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
   if (!params || Object.keys(params).length === 0) return "";
   return `?${new URLSearchParams(params).toString()}`;
 };
 
-const PrivateQuestionsApi = privateApi.injectEndpoints({
+const PrivateQuestionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET /tests/{test}/questions (paginated)
     getQuestionsForTest: builder.query({

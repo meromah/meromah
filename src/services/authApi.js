@@ -1,7 +1,7 @@
-import { setIsAuthenticated } from '../../app/authSlice';
-import { publicApi } from './publicApi';
+import { setIsAuthenticated } from '../app/authSlice';
+import { baseApi } from './baseApi';
 
-export const authApi = publicApi.injectEndpoints({
+export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     emailVerification: builder.mutation({
       query: (email) => ({

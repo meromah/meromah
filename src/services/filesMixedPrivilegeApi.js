@@ -1,5 +1,4 @@
-import { privateApi } from "./private/privateApi";
-import { publicApi } from "./public/publicApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
     if (!params || Object.keys(params).length === 0) return "";
@@ -7,7 +6,7 @@ const toQueryString = (params) => {
 };
 
 // Private API for authenticated file operations (high privilege)
-const PrivateFileHashesApiPrivileged = privateApi.injectEndpoints({
+const PrivateFileHashesApiPrivileged = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // GET /files - Get all files with filtering (Auth Required)
         getAllFilesPrivileged: builder.query({
@@ -19,7 +18,7 @@ const PrivateFileHashesApiPrivileged = privateApi.injectEndpoints({
 });
 
 // Public API for file download (no authentication needed)
-const PublicFilesApi = publicApi.injectEndpoints({
+const PublicFilesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // GET /files/{hash} - Download file by hash (no auth required)
         downloadFile: builder.query({

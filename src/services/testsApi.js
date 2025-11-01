@@ -1,5 +1,4 @@
-import { privateApi } from "./private/privateApi";
-import { publicApi } from "./public/publicApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
   if (!params || Object.keys(params).length === 0) return "";
@@ -7,7 +6,7 @@ const toQueryString = (params) => {
 };
 
 // Auth-required endpoints
-const PrivateTestsApi = privateApi.injectEndpoints({
+const PrivateTestsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET /descs/{desc}/tests (paginated)
     getTestsForDesc: builder.query({
@@ -63,7 +62,7 @@ const PrivateTestsApi = privateApi.injectEndpoints({
 });
 
 // Public endpoint for like count
-const PublicTestsApi = publicApi.injectEndpoints({
+const PublicTestsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET /descs/{desc}/tests/{test}/likes (like count)
     getTestLikes: builder.query({

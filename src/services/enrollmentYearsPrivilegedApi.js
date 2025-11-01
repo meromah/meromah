@@ -1,11 +1,11 @@
-import { privateApi } from "./private/privateApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
     if (!params || Object.keys(params).length === 0) return "";
     return `?${new URLSearchParams(params).toString()}`;
 };
 
-const PrivateEnrollmentYearsApiPrivileged = privateApi.injectEndpoints({
+const PrivateEnrollmentYearsApiPrivileged = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // GET /enrollment-year - Get all enrollment years
         getAllEnrollmentYearsPrivileged: builder.query({

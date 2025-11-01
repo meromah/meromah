@@ -1,5 +1,4 @@
-import { privateApi } from "./private/privateApi";
-import { publicApi } from "./public/publicApi";
+import { baseApi } from "./baseApi";
 
 const toQueryString = (params) => {
     if (!params || Object.keys(params).length === 0) return "";
@@ -7,7 +6,7 @@ const toQueryString = (params) => {
 };
 
 
-const PublicUserApi = publicApi.injectEndpoints({
+const PublicUserApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // get any user profile and display it.
         // route: /users/:username
@@ -20,7 +19,7 @@ const PublicUserApi = publicApi.injectEndpoints({
 });
 
 
-const PrivateUserApiPrivileged = privateApi.injectEndpoints({
+const PrivateUserApiPrivileged = baseApi.injectEndpoints({
     endpoints: (builder) => ({
       getAllUsersPrivileged: builder.query({
         query: ({ queryParams }) => ({

@@ -6,13 +6,14 @@ const API_BASE_URL = import.meta.env.DEV
   ? '/api' 
   : (import.meta.env.VITE_API_BASE_URL || '/api');
 
-// --- Public baseQuery (no token needed, but includes credentials for cookie-based auth)
-const publicBaseQuery = fetchBaseQuery({
+// base api - uses HTTP-only cookies for authentication
+const baseBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
-  credentials: 'include', // Include credentials to send/receive HTTP-only cookies
+  credentials: 'include', // Include cookies (HTTP-only) in every request
 });
-export const publicApi = createApi({
-  reducerPath: 'publicApi',
-  baseQuery: publicBaseQuery,
+
+export const baseApi = createApi({
+  reducerPath: 'baseApi',
+  baseQuery: baseBaseQuery,
   endpoints: () => ({}),
 });

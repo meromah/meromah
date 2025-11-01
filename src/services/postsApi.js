@@ -1,5 +1,4 @@
-import { privateApi } from "./private/privateApi";
-import { publicApi } from "./public/publicApi";
+import { baseApi } from "./baseApi";
 
 /*
 This api is not complete yet. It will contain all post related endpoints,
@@ -12,7 +11,7 @@ const toQueryString = (params) => {
 };
 
 
-const PrivatePostApi = privateApi.injectEndpoints({
+const PrivatePostApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMyPosts: builder.query({
       query: ( queryParams ) => ({
@@ -49,7 +48,7 @@ const PrivatePostApi = privateApi.injectEndpoints({
   overrideExisting: true,
 });
 
-const PublicPostApi = publicApi.injectEndpoints({
+const PublicPostApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPostsForBoard: builder.query({
       query: ({ board, queryParams }) =>

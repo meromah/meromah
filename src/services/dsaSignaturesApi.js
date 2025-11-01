@@ -1,6 +1,6 @@
-import { privateApi } from "./private/privateApi";
+import { baseApi } from "./baseApi";
 
-const PrivateDsaSignaturesApi = privateApi.injectEndpoints({
+const PrivateDsaSignaturesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // GET /tests/{test}/questions/{question}/signatures
     getSignaturesForQuestion: builder.query({

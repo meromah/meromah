@@ -1,5 +1,4 @@
-import { publicApi } from './public/publicApi';
-import { privateApi } from './private/privateApi';
+import { baseApi } from './baseApi';
 
 const toQueryString = ( params ) => {
   if (!params || Object.keys(params).length === 0 ) {
@@ -8,7 +7,7 @@ const toQueryString = ( params ) => {
   return `?${new URLSearchParams(params).toString()}`;
 };
 
-const PrivateCommentOfBoardPostApi = privateApi.injectEndpoints({
+const PrivateCommentOfBoardPostApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMyComments: builder.query({
       query: (queryParams) => ({
@@ -19,7 +18,7 @@ const PrivateCommentOfBoardPostApi = privateApi.injectEndpoints({
   }),
 });
 
-const PublicCommentOfBoardPostApi = publicApi.injectEndpoints({
+const PublicCommentOfBoardPostApi = baseApi.injectEndpoints({
   endpoints: ( builder ) => ({
     getCommentsByBoardPost: builder.query({
       query:  ({ board, post, queryParams }) => ({
