@@ -15,7 +15,7 @@ const ExpandableSection = ({
         onClick={() => toggleSection(section.id)}
         className="w-full flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg transition-all cursor-pointer"
       >
-        {Icon&&<Icon className="w-4 h-4 text-neutral-400" />}
+        {Icon && <Icon className="w-4 h-4 text-neutral-400" />}
         <span className="flex-1 text-left">{section.title}</span>
         <FiChevronDown
           className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${
@@ -30,23 +30,34 @@ const ExpandableSection = ({
         } overflow-hidden`}
       >
         <div className="space-y-0.5 pl-9">
-          {section.items.length >0?(section.items.map((item) => (
-            <Link
-              key={item.id}
-              to={item.to || "#"}
-              onClick={()=>{closeMobileMenu();toggleSection(section.id)}}
-              className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-md transition-all truncate"
-            >
-              {item.title}
-            </Link>
-          ))): (<p className="text-neutral-500 text-xs py-1">No {section.id} exists.</p>)}
+          {section.items.length > 0 ? (
+            section.items.map((item) => (
+              <Link
+                key={item.id}
+                to={item.to || "#"}
+                onClick={() => {
+                  closeMobileMenu();
+                  toggleSection(section.id);
+                }}
+                className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-md transition-all truncate"
+              >
+                {item.title}
+              </Link>
+            ))
+          ) : (
+            <p className="text-neutral-500 text-xs py-1">
+              No {section.id} exists.
+            </p>
+          )}
 
-          {section.id !== "recent"&&<button
-            onClick={closeMobileMenu}
-            className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all"
-          >
-            View all
-          </button>}
+          {section.id !== "recent" && section.items.length > 5 && (
+            <button
+              onClick={closeMobileMenu}
+              className="w-full text-left px-3 py-1.5 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-all"
+            >
+              View all
+            </button>
+          )}
         </div>
       </div>
     </div>
