@@ -1,4 +1,4 @@
-import { setCredentials } from '../../app/authSlice';
+import { setIsAuthenticated } from '../../app/authSlice';
 import { publicApi } from './publicApi';
 
 export const authApi = publicApi.injectEndpoints({
@@ -30,8 +30,9 @@ export const authApi = publicApi.injectEndpoints({
           await queryFulfilled;
           // Server sets HTTP-only cookies - no tokens needed
           // Dispatch empty credentials to mark as authenticated
-          dispatch(setCredentials({}));
+          dispatch(setIsAuthenticated(true));
         } catch (err) {
+          dispatch(setIsAuthenticated(false));
           console.error('Registration failed:', err);
         }
       },
@@ -48,8 +49,9 @@ export const authApi = publicApi.injectEndpoints({
           await queryFulfilled;
           // Server sets HTTP-only cookies - no tokens needed
           // Dispatch empty credentials to mark as authenticated
-          dispatch(setCredentials({}));
+          dispatch(setIsAuthenticated(true));
         } catch (err) {
+          dispatch(setIsAuthenticated(false));
           console.error('Login failed:', err);
         }
       },
