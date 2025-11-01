@@ -27,8 +27,10 @@ export const authApi = publicApi.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          dispatch(setCredentials(data));
+          await queryFulfilled;
+          // Server sets HTTP-only cookies - no tokens needed
+          // Dispatch empty credentials to mark as authenticated
+          dispatch(setCredentials({}));
         } catch (err) {
           console.error('Registration failed:', err);
         }
@@ -43,8 +45,10 @@ export const authApi = publicApi.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          dispatch(setCredentials(data));
+          await queryFulfilled;
+          // Server sets HTTP-only cookies - no tokens needed
+          // Dispatch empty credentials to mark as authenticated
+          dispatch(setCredentials({}));
         } catch (err) {
           console.error('Login failed:', err);
         }
