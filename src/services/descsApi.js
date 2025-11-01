@@ -76,5 +76,5 @@ export const {
   useGetDescsQuery,
   useGetDescQuery,
   useGetDescLikesQuery,
-  useCheckDescNameIsAvailable
+  useCheckDescNameIsAvailableQuery
 } = DescsApi;
