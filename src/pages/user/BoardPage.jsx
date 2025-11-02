@@ -1,39 +1,56 @@
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { mockPosts, boardsData } from "../../utils/constants";
 import PostCard from "./components/PostCard";
 import BoardHeader from "../../components/BoardHeader";
 import { useDispatch } from "react-redux";
 import { addRecentCommunity } from "../../app/recentCommunitiesSlice";
+import { skipToken } from '@reduxjs/toolkit/query/react';
+
+import { useGetBoardQuery } from '../../services/boardsApi.js';
+import { useGetPostsForBoardQuery } from '../../services/postsApi.js';
 
 const BoardPage = () => {
-  const { boardId } = useParams();
+
+  const { boardName } = useParams();
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-  // Find the board data - this is just a mock data. i have to implement an api call for this to retrieve respective board data.
-  const board = boardsData.find((b) => b.id === boardId);
+  const location = useLocation();
 
-  // Filter posts for this board
-  const boardPosts = mockPosts.filter((post) => post.board === boardId);
+  const { data: boardResponse, isLoading: boardIsLoading, error: boardError } = useGetBoardQuery(boardName || skipToken);
+  const board = boardResponse?.data;
+  const { data: postsResponse, isLoading: postsIsLoading, error: postsError } = useGetPostsForBoardQuery(board?.name ? {name: board?.name, queryParams: location.search} : skipToken);
+  const posts = Array.isArray(postsResponse?.data) 
+    ? postsResponse.data 
+    : (Array.isArray(postsResponse) ? postsResponse : undefined);
+  if (board) {
+    console.log(board);
+  }
+  if (postsResponse) {
+    console.log(postsResponse);
+  }
+
+
+  // did not test the code below
   useEffect(() => {
-    if (!boardId || !pathname || !board) return;
+    if (!board?.id || !pathname || !board) return;
     dispatch(
       addRecentCommunity({
-        id: `b/${boardId}`,
-        title: `b/${boardId}`,
+        id: `b/${board?.id}`,
+        title: `b/${board?.name}`,
         to: pathname,
       })
     );
-  }, [boardId, pathname]);
+  }, [board?.id, board?.name, pathname, dispatch]);
+
   return (
-    <div className="min-h-screen bg-primary-bg">
+    <div classname="min-h-screen bg-primary-bg">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Board Header */}
         <BoardHeader board={board} />
 
         {/* Posts Feed */}
         <div className="bg-white rounded-lg shadow-sm">
-          {boardPosts.length === 0 ? (
+          {posts?.length === 0 || !posts ? (
             <div className="flex flex-col items-center justify-center py-16 px-4">
               <div className="bg-neutral-100 rounded-full p-6 mb-4">
                 <svg
@@ -59,15 +76,16 @@ const BoardPage = () => {
             </div>
           ) : (
             <div>
-              {boardPosts.map((post, i) => {
-                const isFirst = i === 0;
-                const isLast = i === boardPosts.length - 1;
+              {posts?.map((post) => {
                 return (
                   <PostCard
                     key={post.id}
                     post={post}
-                    isFirst={isFirst}
-                    isLast={isLast}
+                    author={post.author.username}
+                    board_id={post.board_id}
+                    likes_count={post.likes_count}
+                    title={post.title}
+                    body={post.body}
                   />
                 );
               })}

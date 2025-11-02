@@ -51,8 +51,8 @@ const PrivatePostApi = baseApi.injectEndpoints({
 const PublicPostApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPostsForBoard: builder.query({
-      query: ({ board, queryParams }) =>
-        `/boards/${board}/posts${toQueryString(queryParams)}`,
+      query: ({ name, queryParams }) =>
+        `/boards/${name}/posts${toQueryString(queryParams)}`,
     }),
     getPostFromBoardByPostId: builder.query({
       query: ({ board, post }) => `/boards/${board}/posts/${post}`,

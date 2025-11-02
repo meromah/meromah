@@ -46,7 +46,8 @@ const App = () => {
         <Route path="create/:action" element={<CreateAction />} />
         <Route path="explore/boards" element={<ExploreBoards />} />
         <Route path="explore/descs" element={<ExploreDescs />} />
-        <Route path="board/:boardId" element={<BoardPage />} />
+        <Route path="board/:boardName" element={<BoardPage />} />
+      {/* <Route path="desc/:descName" element={<BoardPage />} /> */ }
       </Route>
       <Route path="/admin/*" element={<AdminPage />} />
     </Routes>
