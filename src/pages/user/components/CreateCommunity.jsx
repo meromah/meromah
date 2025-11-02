@@ -1,58 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FiArrowLeft, FiSend } from "react-icons/fi";
 
-import { useCheckDescNameIsAvailableQuery, useCreateDescMutation } from '../../../services/descsApi.js';
-import { useCheckBoardNameIsAvailableQuery, useCreateBoardMutation } from '../../../services/boardsApi.js';
+import {
+  useCheckDescNameIsAvailableQuery,
+  useCreateDescMutation,
+} from "../../../services/descsApi.js";
+import {
+  useCheckBoardNameIsAvailableQuery,
+  useCreateBoardMutation,
+} from "../../../services/boardsApi.js";
 
 const communityTypes = {
-  board: { name: "Board", path: "b"},
-  desc: { name: "Desc", path: "d"},
+  board: { name: "Board", path: "b" },
+  desc: { name: "Desc", path: "d" },
 };
-
+let n = 0;
 const CreateCommunity = () => {
   const [communityName, setCommunityName] = useState("");
-  const [communityDescription, setCommunityDescription] = useState("");
-  const [communityType, setCommunityType] = useState("board");
-  const [hasSpecialChar, setHasSpecialChar] = useState(false);
+const [communityDescription, setCommunityDescription] = useState("");
+const [communityType, setCommunityType] = useState("board");
+const [hasSpecialChar, setHasSpecialChar] = useState(false);
+const [createBoard, { isLoading: isBoardLoading }] = useCreateBoardMutation();
+const [createDesc, { isLoading: isDescLoading }] = useCreateDescMutation();
 
-  const [createBoard] = useCreateBoardMutation();
-  const [createDesc] = useCreateDescMutation();
+const { data: isBoardNameAvailable, isFetching: isFetchingBoard } = useCheckBoardNameIsAvailableQuery(
+  { name: communityName },
+  { skip: !communityName.trim() || communityType !== "board" }
+);
+const { data: isDescNameAvailable, isFetching: isFetchingDesc } = useCheckDescNameIsAvailableQuery(
+  { name: communityName },
+  { skip: !communityName.trim() || communityType !== "desc" }
+);
 
-  const boardCheck = useCheckBoardNameIsAvailableQuery({name: communityName});
-  const descCheck = useCheckDescNameIsAvailableQuery({name: communityName});
+const isNameAvailable = useMemo(() => {
+  if (!communityName.trim()) return true;
+  
+  if (communityType === "board") {
+    return isBoardNameAvailable?.isAvailable ?? false; // Default to false while loading
+  }
+  return isDescNameAvailable?.isAvailable ?? false;
+}, [communityName, communityType, isBoardNameAvailable, isDescNameAvailable]);
 
-  const nameIsAvailable = communityType === "board" ? boardCheck.available : descCheck.available;
+const isChecking = communityType === "board" ? isFetchingBoard : isFetchingDesc;
+const isCreateDisabled = !communityName.trim() || !isNameAvailable || isChecking || isBoardLoading || isDescLoading;
 
-  const isCreateDisabled = !communityName.trim() && nameIsAvailable;
-  const handleCommunityNameChange = (e) => {
-    if (e.target.value.length === 0) {
-      setHasSpecialChar(false);
-      setCommunityName("");
-      return;
-    }
-    const isValid = /^[A-Za-z0-9 _-]+$/.test(e.target.value);
-
-    if (!isValid) {
-      setHasSpecialChar(true);
-      return;
-    }
+const handleCommunityNameChange = (e) => {
+  const value = e.target.value;
+  
+  if (value.length === 0) {
     setHasSpecialChar(false);
-    setCommunityName(e.target.value.replace(/\s+/g, "-"));
-  };
+    setCommunityName("");
+    return;
+  }
+  
+  const isValid = /^[A-Za-z0-9 _-]+$/.test(value);
+  setHasSpecialChar(!isValid);
+  
+  if (isValid) {
+    setCommunityName(value.replace(/\s+/g, "-"));
+  }
+};
 
-  const finalSubmission = async () => {
-    const createFn = communityType === "board" ? createBoard : createDesc;
-    try {
-      const result = await createFn({
-        name: communityName,
-        description: communityDescription
-      });
-      console.log(result);
-    }
-    catch (err) {
-      console.log(`Error: ${err}`);
-    }
-  };
+const finalSubmission = async () => {
+  if (isCreateDisabled) return; // Guard clause
+  
+  const createFn = communityType === "board" ? createBoard : createDesc;
+  try {
+    const result = await createFn({
+      name: communityName,
+      description: communityDescription,
+    }).unwrap();
+    
+    console.log("Success:", result);
+    // TODO: Handle success (e.g., redirect, show success message)
+  } catch (err) {
+    console.error("Error creating community:", err);
+    // TODO: Show error message to user
+  }
+};
 
   return (
     <div className="relative min-h-screen bg-primary/50">
@@ -90,7 +115,6 @@ const CreateCommunity = () => {
             Organize posts and ideas or tests under a shared theme
           </p>
         </div>
-        
 
         <div className="bg-white rounded-lg border border-slate-200">
           <div className="flex gap-4 p-4 border-b border-slate-100">
@@ -147,26 +171,39 @@ const CreateCommunity = () => {
                     value={communityName}
                     onChange={handleCommunityNameChange}
                     placeholder="e.g., Study-Resources, Design-Inspirations"
-                    className="input w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400"
+                    className={`input w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 ${
+                      isNameAvailable
+                        ? "border-slate-200 focus:ring-blue-500/30 focus:border-blue-500"
+                        : "border-red-500 focus:ring-red-500/30 focus:border-red-500 text-red-500"
+                    } placeholder-slate-400`}
                   />
                 </label>
                 <p
-                  className={`text-xs text-slate-500 transition-all duration-300 ease-out
+                  className={`text-xs transition-all duration-300 ease-out
                  ${
                    communityName
                      ? "mt-1 max-h-10 opacity-100"
                      : "mt-0 max-h-0 opacity-0 overflow-hidden"
-                 }`}
+                 }
+                 ${isNameAvailable ? "text-slate-500" : "text-red-500"}
+                 `}
                 >
                   {communityTypes[communityType].path}/{communityName}
+                  {!isNameAvailable && (
+                    <span className="pl-0.5">
+                      this username is taken, choose another one
+                    </span>
+                  )}
                 </p>
               </div>
               <label className="flex flex-col gap-2">
-                <span className="font-medium text-neutral-800">Description</span>
+                <span className="font-medium text-neutral-800">
+                  Description
+                </span>
                 <textarea
                   value={communityDescription}
                   onChange={(e) => setCommunityDescription(e.target.value)}
-                  placeholder={`What is this ${communityTypes[communityType].names} about? Who is it for?`}
+                  placeholder={`What is this ${communityTypes[communityType].name} about? Who is it for?`}
                   className="w-full min-h-[120px] px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 placeholder-slate-400 resize-y"
                 />
               </label>
