@@ -14,7 +14,7 @@ const toQueryString = (params) => {
 const PrivatePostApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllMyPosts: builder.query({
-      query: ( queryParams ) => ({
+      query: ( {queryParams} ) => ({
         url: `/posts/my${toQueryString(queryParams)}`,
       }),
     }),
