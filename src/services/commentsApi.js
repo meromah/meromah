@@ -20,6 +20,12 @@ const PrivateCommentOfBoardPostApi = baseApi.injectEndpoints({
 
 const PublicCommentOfBoardPostApi = baseApi.injectEndpoints({
   endpoints: ( builder ) => ({
+    getUserComment: builder.query({
+      query:  ({username}) => ({
+        url: `/users/${username}/comments`,
+        method: 'GET'
+      }),
+    }),
     getCommentsByBoardPost: builder.query({
       query:  ({ board, post, queryParams }) => ({
         url: `/boards/${board}/posts/${post}${toQueryString(queryParams)}`,
@@ -72,6 +78,7 @@ export const {
   useCreateCommentByBoardPostMutation,
   useUpdateCommentByBoardPostMutation,
   useDeleteCommentByBoardPostMutation,
+  useGetUserCommentQuery,
   useGetCommentLikesByCommentIdMutation,
   useToggleCommentLikesByCommentIdMutation,
 } = PublicCommentOfBoardPostApi;
