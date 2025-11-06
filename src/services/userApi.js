@@ -4,7 +4,7 @@ const PublicUserApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUserByUsername: builder.query({
       query: (username) => ({
-        url: `/user/${username}`,
+        url: `/users/${username}`,
       }),
     }),
   }),
