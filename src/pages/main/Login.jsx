@@ -22,7 +22,6 @@ const Login = () => {
         email,
         password,
       }).unwrap();
-      dispatch(setIsAuthenticated(true))
       setShowSuccessModal(true);
       setEmail("");
       setPassword("");
