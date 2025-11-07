@@ -27,8 +27,8 @@ const PublicCommentOfBoardPostApi = baseApi.injectEndpoints({
       }),
     }),
     getCommentsByBoardPost: builder.query({
-      query:  ({ board, post, queryParams }) => ({
-        url: `/boards/${board}/posts/${post}${toQueryString(queryParams)}`,
+      query:  ({ board, postId, queryParams }) => ({
+        url: `/boards/${board}/posts/${postId}/comments${toQueryString(queryParams)}`,
         method: 'GET'
       }),
     }),
