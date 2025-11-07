@@ -39,7 +39,7 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
 
   return (
     <Link
-      to={`/post/${post.id}`}
+      to={`/board/${post.board.name}/post/${post.id}`}
       className={`block bg-white border-x border-b border-gray-200 p-4 hover:bg-primary-bg transition-colors duration-200 ${
         isFirst && "rounded-t-lg border-t"
       } ${isLast && "rounded-b-lg"}`}
