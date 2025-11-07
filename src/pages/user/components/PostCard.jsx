@@ -12,11 +12,10 @@ const getType = {
   quiz: ["d", "desc"],
   library: ["b", "board"],
 };
-const PostCard = ({ post, isFirst, isLast }) => {
+const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const likeCount = post.likes + (liked ? 1 : 0);
   const handleAuthorClick = (e, path) => {
     preventNavigation(e);
     //later i will implement the logic to determine if the path is for UserProfile or MyProfile.
@@ -47,39 +46,45 @@ const PostCard = ({ post, isFirst, isLast }) => {
     >
       {/* Author */}
       <div className="flex items-center gap-3 mb-3">
-        {imageError ? (
+        {/* For now I am not going to display avatar
+        {author.avatar ? (
+          <img
+            src={post.author.avatar}
+            alt={`${post.author.username}'s profile picture`}
+            className="w-8 h-8 rounded-full shadow shadow-neutral-200"
+            onClick={(e) =>
+              handleAuthorClick(e, `/user/${post.author.username}`)
+            }
+          />
+        ) : (
           <div
             className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-semibold shadow shadow-neutral-200"
             onClick={(e) =>
               handleAuthorClick(e, `/user/${post.author.username}`)
             }
           >
-            {getInitials(post.author.name)}
+            {getInitials(post.author.username)}
           </div>
-        ) : (
-          <img
-            src={post.author.avatar}
-            alt={post.author.username}
-            className="w-8 h-8 rounded-full shadow shadow-neutral-200"
-            onError={() => setImageError(true)}
-            onClick={(e) =>
-              handleAuthorClick(e, `/user/${post.author.username}`)
-            }
-          />
-        )}
+        )} */}
+        <div
+          className="rounded-full bg-blue-500 text-white text-xs font-semibold shadow shadow-neutral-200"
+          onClick={(e) => handleAuthorClick(e, `/user/${post.author.username}`)}
+        >
+          <p className="w-10 h-10 flex items-center justify-center">{getInitials(post.author.username)}</p>
+        </div>
         <div>
           <p
-            className="text-primary-blue text-base cursor-pointer hover:underline"
+            className="max-w-3/4 w-full text-primary-blue text-base cursor-pointer hover:underline truncate"
             onClick={(e) =>
-              handleBoardClick(e, `/${getType[post.type][1]}/${post.board}`)
+              handleBoardClick(e, `/${getType[postType][1]}/${post.board.name}`)
             }
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === "Enter" && handleBoardClick()}
           >
-            {getType[post.type][0]}/{post.board}
+            {getType[postType][0]}/{post.board.name}
           </p>
-          <p className="text-xs md:text-sm flex items-center gap-1">
+          <p className="text-[12px] flex items-center gap-1">
             <span
               onClick={(e) =>
                 handleAuthorClick(e, `/user/${post.author.username}`)
@@ -96,11 +101,11 @@ const PostCard = ({ post, isFirst, isLast }) => {
       </div>
 
       {/* Content */}
-      {post.type === "quiz" ? (
+      {postType === "quiz" ? (
         <div className="group mb-3 flex justify-between items-center border-l-4 border-blue-500 bg-blue-50 p-3 px-4 rounded hover:bg-blue-100 transition-colors duration-200">
           <div>
-            <p className="mb-1 font-medium">{post.text}</p>
-            <p className="text-sm text-neutral-600">{post.description}</p>
+            <p className="mb-1 font-medium">{post.title}</p>
+            <p className="text-sm text-neutral-600">{post.body}</p>
           </div>
           <button
             className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
@@ -109,24 +114,24 @@ const PostCard = ({ post, isFirst, isLast }) => {
             Start
           </button>
         </div>
-      ) : post.type === "library" ? (
+      ) : postType === "library" ? (
         <div className="flex flex-col gap-3 mb-3">
-          <p>{post.text}</p>
+          <p>{post.title}</p>
           <div className="flex items-center gap-3 border-l-4 border-green-500 bg-green-50 p-3 rounded hover:bg-green-100 transition-colors duration-200 cursor-pointer">
             <div className="bg-blue-500 text-white rounded-full p-3 text-xl flex-shrink-0">
               <FaArrowDown />
             </div>
             <div className="flex flex-col text-xs gap-0.5 text-neutral-500">
               <p className="text-neutral-900 text-sm font-medium">
-                {post.file?.name}
+                post.file?.name
               </p>
-              <p>{post.file?.size || "3.5mb"}</p>
+              <p>{/*post.files?.size */ "3.5mb"}</p>
             </div>
           </div>
         </div>
       ) : (
         <div className="mb-3">
-          <p className="mb-1">{post.text}</p>
+          <p className="mb-1">{post.title}</p>
         </div>
       )}
 
@@ -142,7 +147,7 @@ const PostCard = ({ post, isFirst, isLast }) => {
         <button
           className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
           title={liked ? "Unlike" : "Like"}
-          aria-label={`${likeCount} likes. ${
+          aria-label={`${post.likes_count} likes. ${
             liked ? "Unlike" : "Like"
           } this post`}
           onClick={preventNavigation}
@@ -163,16 +168,14 @@ const PostCard = ({ post, isFirst, isLast }) => {
               }}
             />
           )}
-          {likeCount}
+          {post.likes_count}
         </button>
         <button
           className="flex items-center gap-2 text-slate-600"
           title="Share"
-          aria-label={`${post.shares} shares`}
           onClick={preventNavigation}
         >
-          <FiShare2 className="hover:text-green-500 transition-colors duration-200 cursor-pointer" />{" "}
-          {post.shares}
+          <FiShare2 className="hover:text-green-500 transition-colors duration-200 cursor-pointer" />
         </button>
       </div>
     </Link>
