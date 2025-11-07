@@ -1,63 +1,85 @@
-import React, { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PostCard from "./components/PostCard";
-import { FaInbox, FaClock, FaFire, FaLayerGroup } from "react-icons/fa";
+import { FaInbox, FaClock, FaFire } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { mockPosts } from "../../utils";
-
-const Feeds = ({ userBoards = ["Algorithms 101", "Discrete Math"] }) => {
-  const [filter, setFilter] = useState(() => {
-    return localStorage.getItem("feedFilter") || "Latest";
+import { useGlobalPostSearchQuery } from "../../services/postsApi.js";
+import Loading from "../../components/Loading.jsx";
+import ErrorDisplay from "../../components/ErrorDisplay.jsx";
+const filters = [
+  { value: "latest", icon: FaClock, label: "Latest" },
+  { value: "popular", icon: FaFire, label: "Popular" },
+  // { value: "following", icon: FaLayerGroup, label: "Following" }, //Later when the api that query the user followed boards, descs provided, i will work on that
+];
+const Feeds = () => {
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState({
+    hasError: false,
+    status: undefined,
+    message: undefined,
   });
+  const [filter, setFilter] = useState("latest");
   const [searchQuery, setSearchQuery] = useState("");
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const {
+    data: latestPosts,
+    isLoading: isLatestPostsLoading,
+    error: latestPostsError,
+    isError: isLatestPostsError,
+  } = useGlobalPostSearchQuery(
+    { queryParams: "latest=1" },
+    { skip: filter !== "latest" }
+  );
+  const {
+    data: popularPosts,
+    isLoading: isPopularPostsLoading,
+    error: popularPostsError,
+    isError: isPopularPostsError,
+  } = useGlobalPostSearchQuery(
+    { queryParams: "popular=1" },
+    { skip: filter !== "popular" }
+  );
+
+  // const {data: followingPosts}= (undefined, {skip: filter !== "following"}) //Later when the api that query the user followed boards, descs provided, i will work on that
+  const isLoading =
+    filter === "latest" ? isLatestPostsLoading : isPopularPostsLoading;
   useEffect(() => {
-    localStorage.setItem("feedFilter", filter);
-  }, [filter]);
+    // Determine active data source
+    const activeData = filter === "latest" ? latestPosts : popularPosts;
+    const activeError =
+      filter === "latest" ? latestPostsError : popularPostsError;
+    const activeIsError =
+      filter === "latest" ? isLatestPostsError : isPopularPostsError;
 
-  const filtered = useMemo(() => {
-    let posts = mockPosts;
-
-    // Apply filter
-    switch (filter) {
-      case "Popular":
-        posts = [...posts].sort((a, b) => b.likes - a.likes);
-        break;
-      case "My Boards":
-        posts = posts.filter((p) => userBoards.includes(p.board));
-        break;
-      default:
-        posts = [...posts];
+    // Update posts
+    if (activeData?.data) {
+      setPosts(activeData.data);
     }
 
-    // Apply search
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      posts = posts.filter(
-        (p) =>
-          p.text.toLowerCase().includes(query) ||
-          p.board.toLowerCase().includes(query) ||
-          p.author.name.toLowerCase().includes(query) ||
-          p.author.username.toLowerCase().includes(query) ||
-          (p.description && p.description.toLowerCase().includes(query))
-      );
+    // Update error state
+    if (activeIsError && activeError) {
+      setError({
+        hasError: true,
+        status: activeError.status,
+        message: activeError.data?.message,
+      });
+    } else if (activeIsError === false) {
+      setError({ hasError: false, status: undefined, message: undefined });
     }
-
-    return posts;
-  }, [filter, searchQuery, userBoards]);
-
+  }, [
+    filter,
+    latestPosts,
+    popularPosts,
+    latestPostsError,
+    popularPostsError,
+    isLatestPostsError,
+    isPopularPostsError,
+  ]);
   const handleFilterChange = (newFilter) => {
     setIsTransitioning(true);
     setFilter(newFilter);
     setTimeout(() => setIsTransitioning(false), 150);
   };
-
-  const filters = [
-    { value: "Latest", icon: FaClock, label: "Latest" },
-    { value: "Popular", icon: FaFire, label: "Popular" },
-    { value: "My Boards", icon: FaLayerGroup, label: "My Boards" },
-  ];
-
   return (
     <div className="p-4 md:p-6">
       {/* Search bar */}
@@ -73,7 +95,7 @@ const Feeds = ({ userBoards = ["Algorithms 101", "Discrete Math"] }) => {
         />
       </div>
 
-      {/* Reddit-style filter bar */}
+      {/* Filter bar */}
       <div className="bg-white border border-neutral-200 rounded-lg mb-4 p-2 flex items-center gap-1">
         {filters.map(({ value, icon: Icon, label }) => (
           <button
@@ -98,41 +120,50 @@ const Feeds = ({ userBoards = ["Algorithms 101", "Discrete Math"] }) => {
       </div>
 
       {/* Content */}
-      <div
-        className={`transition-opacity duration-150 ${
-          isTransitioning ? "opacity-40" : "opacity-100"
-        }`}
-        role="region"
-        aria-live="polite"
-        aria-label="Feed posts"
-      >
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 px-4">
-            <div className="bg-neutral-100 rounded-full p-6 mb-4">
-              <FaInbox className="text-4xl text-neutral-400" />
+      {isLoading ? (
+        <Loading />
+      ) : error.hasError ? (
+        <ErrorDisplay error={error.status} title={error.message} />
+      ) : (
+        <div
+          className={`transition-opacity duration-150 ${
+            isTransitioning ? "opacity-40" : "opacity-100"
+          }`}
+          role="region"
+          aria-live="polite"
+          aria-label="Feed posts"
+        >
+          {posts.length > 0 ? (
+            <div className="">
+              {posts.map((post, index) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  isFirst={index === 0}
+                  isLast={index === posts.length - 1}
+                  postType={post.files.length > 0 ? "library" : "post"}
+                />
+              ))}
             </div>
-            <h3 className="text-lg font-medium text-neutral-900 mb-2">
-              No posts yet
-            </h3>
-            <p className="text-neutral-600 text-sm text-center max-w-sm">
-              {searchQuery.trim()
-                ? `No results found for "${searchQuery}"`
-                : filter === "My Boards"
-                ? "No posts from your boards. Check other filters."
-                : "Be the first to post something!"}
-            </p>
-          </div>
-        ) : (
-          <div className="">
-            {filtered.map((post, i) => {
-              const isFirst = i === 0;
-              const isLast = i === filtered.length - 1;
-              return (
-              <PostCard key={post.id} post={post} isFirst={isFirst} isLast={isLast} />
-            )})}
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-16 px-4">
+              <div className="bg-neutral-100 rounded-full p-6 mb-4">
+                <FaInbox className="text-4xl text-neutral-400" />
+              </div>
+              <h3 className="text-lg font-medium text-neutral-900 mb-2">
+                No posts yet. Be a first one to post
+              </h3>
+              <p className="text-neutral-600 text-sm text-center max-w-sm">
+                {searchQuery.trim()
+                  ? `No results found for "${searchQuery}"`
+                  : filter === "following"
+                  ? "No posts from your boards. Check other filters."
+                  : "Be the first to post something!"}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
