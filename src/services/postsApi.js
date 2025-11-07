@@ -55,7 +55,7 @@ const PublicPostApi = baseApi.injectEndpoints({
         `/boards/${board}/posts${toQueryString(queryParams)}`,
     }),
     getPostFromBoardByPostId: builder.query({
-      query: ({ board, post }) => `/boards/${board}/posts/${post}`,
+      query: ({ board, postId }) => `/boards/${board}/posts/${postId}`,
     }),
     globalPostSearch: builder.query({
       query: ({ queryParams }) => `/posts${toQueryString(queryParams)}`,
