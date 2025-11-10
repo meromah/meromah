@@ -1,24 +1,7 @@
+import { toQueryString } from '../utils/helpers';
 import { baseApi } from './baseApi';
 
-const toQueryString = ( params ) => {
-  if (!params || Object.keys(params).length === 0 ) {
-    return '';
-  }
-  return `?${new URLSearchParams(params).toString()}`;
-};
-
-const PrivateCommentOfBoardPostApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
-    getAllMyComments: builder.query({
-      query: (queryParams) => ({
-        url: `/comments/my${toQueryString(queryParams)}`,
-        method: "GET",
-      }),
-    }),
-  }),
-});
-
-const PublicCommentOfBoardPostApi = baseApi.injectEndpoints({
+const commentsApi = baseApi.injectEndpoints({
   endpoints: ( builder ) => ({
     getUserComment: builder.query({
       query:  ({username}) => ({
@@ -26,6 +9,14 @@ const PublicCommentOfBoardPostApi = baseApi.injectEndpoints({
         method: 'GET'
       }),
     }),
+    endpoints: (builder) => ({
+    getAllMyComments: builder.query({
+      query: (queryParams) => ({
+        url: `/comments/my${toQueryString(queryParams)}`,
+        method: "GET",
+      }),
+    }),
+  }),
     getCommentsByBoardPost: builder.query({
       query:  ({ board, postId, queryParams }) => ({
         url: `/boards/${board}/posts/${postId}/comments${toQueryString(queryParams)}`,
@@ -81,8 +72,5 @@ export const {
   useGetUserCommentQuery,
   useGetCommentLikesByCommentIdMutation,
   useToggleCommentLikesByCommentIdMutation,
-} = PublicCommentOfBoardPostApi;
-
-export const {
   useGetAllMyCommentsQuery,
-} = PrivateCommentOfBoardPostApi;
+} = commentsApi;
