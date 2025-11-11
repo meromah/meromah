@@ -1,66 +1,46 @@
-import { setIsAuthenticated } from '../app/authSlice';
-import { baseApi } from './baseApi';
+import { setIsAuthenticated } from "../app/authSlice";
+import { baseApi } from "./baseApi";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     emailVerification: builder.mutation({
       query: (email) => ({
-        url: '/auth/email-verification',
-        method: 'POST',
+        url: "/auth/email-verification",
+        method: "POST",
         body: { email },
       }),
     }),
 
     otpVerification: builder.mutation({
       query: ({ otp, email }) => ({
-        url: '/auth/otp-verification',
-        method: 'POST',
+        url: "/auth/otp-verification",
+        method: "POST",
         body: { otp, email },
       }),
     }),
 
     registerUser: builder.mutation({
       query: (userData) => ({
-        url: '/auth/register',
-        method: 'POST',
+        url: "/auth/register",
+        method: "POST",
         body: userData,
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          // Server sets HTTP-only cookies - no tokens needed
-          // Dispatch empty credentials to mark as authenticated
-          dispatch(setIsAuthenticated(true));
-        } catch (err) {
-          dispatch(setIsAuthenticated(false));
-          console.error('Registration failed:', err);
-        }
-      },
+      invalidatesTags: [{ type: "isAuthenticated", id: "amILoggedIn" }],
     }),
 
     login: builder.mutation({
       query: ({ email, password }) => ({
-        url: '/auth/login',
-        method: 'POST',
+        url: "/auth/login",
+        method: "POST",
         body: { email, password },
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          // Server sets HTTP-only cookies - no tokens needed
-          // Dispatch empty credentials to mark as authenticated
-          dispatch(setIsAuthenticated(true));
-        } catch (err) {
-          dispatch(setIsAuthenticated(false));
-          console.error('Login failed:', err);
-        }
-      },
+      invalidatesTags: [{ type: "isAuthenticated", id: "amILoggedIn" }],
     }),
 
     logout: builder.mutation({
       query: () => ({
-        url: '/auth/logout',
-        method: 'POST',
+        url: "/auth/logout",
+        method: "POST",
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
@@ -68,7 +48,7 @@ export const authApi = baseApi.injectEndpoints({
           dispatch(setIsAuthenticated(false));
         } catch (err) {
           dispatch(setIsAuthenticated(true));
-          console.error('Login failed:', err);
+          console.error("Login failed:", err);
         }
       },
     }),
@@ -76,8 +56,9 @@ export const authApi = baseApi.injectEndpoints({
     // to check if user is logged in or not. But i am thinking to make this private api only
     amILoggedIn: builder.query({
       query: () => ({
-        url: '/auth/amILoggedIn',
+        url: "/auth/amILoggedIn",
       }),
+      providesTags: [{ type: "isAuthenticated", id: "amILoggedIn" }],
     }),
   }),
   overrideExisting: false,
