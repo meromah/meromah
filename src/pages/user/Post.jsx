@@ -8,16 +8,19 @@ import {
   FiChevronLeft,
 } from "react-icons/fi";
 import { FaArrowDown, FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
-import { useGetPostFromBoardByPostIdQuery, useTogglePostLikeMutation } from "../../services/postsApi";
+import {
+  useGetPostFromBoardByPostIdQuery,
+  useTogglePostLikeMutation,
+} from "../../services/postsApi";
 import {
   useCreateCommentByBoardPostMutation,
   useGetCommentsByBoardPostQuery,
   useToggleCommentLikeByCommentIdMutation,
-
 } from "../../services/commentsApi";
 import Loading from "../../components/Loading";
 import NotFound from "../../components/NotFound";
 import ErrorDisplay from "../../components/ErrorDisplay";
+import { useSelector } from "react-redux";
 
 const getType = {
   post: ["b", "board"],
@@ -33,11 +36,12 @@ const Comment = ({
   setActiveReplyId,
   handleReplySubmit,
 }) => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [replyText, setReplyText] = useState("");
   const [isRepliesShown, setIsRepliesShown] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const commentLikeCountRef = useRef(null)
-  const [toggleCommentLike ] =useToggleCommentLikeByCommentIdMutation();
+  const commentLikeCountRef = useRef(null);
+  const [toggleCommentLike] = useToggleCommentLikeByCommentIdMutation();
   const isReplying = activeReplyId === comment.id;
 
   const handleReplyClick = () => {
@@ -58,13 +62,13 @@ const Comment = ({
       setActiveReplyId(null);
     }
   };
-const onToggleCommentLike = async () => {
-    const res = await toggleCommentLike({ comment: comment.id}).unwrap();
-    setIsLiked(res.toggle)
+  const onToggleCommentLike = async () => {
+    const res = await toggleCommentLike({ comment: comment.id }).unwrap();
+    setIsLiked(res.toggle);
     if (res.toggle) {
       commentLikeCountRef.current.textContent =
         Number(commentLikeCountRef.current.textContent) + 1;
-    } else{
+    } else {
       commentLikeCountRef.current.textContent =
         Number(commentLikeCountRef.current.textContent) - 1;
     }
@@ -112,7 +116,10 @@ const onToggleCommentLike = async () => {
                 ) : (
                   <FaRegHeart />
                 )}
-                <span ref={commentLikeCountRef} className={isLiked ? "text-red-500" : ""}>
+                <span
+                  ref={commentLikeCountRef}
+                  className={isLiked ? "text-red-500" : ""}
+                >
                   {comment.likes_count}
                 </span>
               </button>
@@ -126,7 +133,7 @@ const onToggleCommentLike = async () => {
           </div>
 
           {/* Reply Input */}
-          {isReplying && (
+          {isAuthenticated && isReplying && (
             <div className="flex gap-2">
               <input
                 type="text"
@@ -202,6 +209,7 @@ const onToggleCommentLike = async () => {
 const Post = ({ postType }) => {
   const { board, postId } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [newComment, setNewComment] = useState("");
   const [activeReplyId, setActiveReplyId] = useState(null);
   const [isPostLiked, setIsPostLiked] = useState(false);
@@ -209,7 +217,8 @@ const Post = ({ postType }) => {
   const postLikesCountRef = useRef(null);
   const [postComment, { error, isLoading, isError }] =
     useCreateCommentByBoardPostMutation();
-  const [togglePostLike, { error: togglePostLikeError,  }] = useTogglePostLikeMutation();
+  const [togglePostLike, { error: togglePostLikeError }] =
+    useTogglePostLikeMutation();
   const {
     data: postData,
     isLoading: isPostLoading,
@@ -263,11 +272,11 @@ const Post = ({ postType }) => {
   };
   const onTogglePostLike = async () => {
     const res = await togglePostLike({ board, post: postId }).unwrap();
-    setIsPostLiked(res.toggle)
+    setIsPostLiked(res.toggle);
     if (res.toggle) {
       postLikesCountRef.current.textContent =
         Number(postLikesCountRef.current.textContent) + 1;
-    } else{
+    } else {
       postLikesCountRef.current.textContent =
         Number(postLikesCountRef.current.textContent) - 1;
     }
@@ -410,7 +419,10 @@ const Post = ({ postType }) => {
                 ) : (
                   <FaRegHeart />
                 )}
-                <span ref={postLikesCountRef} className={isPostLiked ? "text-red-500" : ""}>
+                <span
+                  ref={postLikesCountRef}
+                  className={isPostLiked ? "text-red-500" : ""}
+                >
                   {postData.data.likes_count}
                 </span>
               </button>
@@ -426,7 +438,7 @@ const Post = ({ postType }) => {
           {/* Comments Section */}
           <div className="border-t border-gray-200 p-6 flex flex-col gap-6">
             {/* Add Comment Form */}
-            <div className="flex gap-3">
+            {isAuthenticated && (<div className="flex gap-3">
               <div className="flex-shrink-0">
                 <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold">
                   U
@@ -456,7 +468,7 @@ const Post = ({ postType }) => {
                   <FiSend />
                 </button>
               </div>
-            </div>
+            </div>)}
 
             <h4 className="font-semibold text-neutral-900 flex items-center gap-2 text-base">
               <FaRegComment className="text-neutral-600" />
