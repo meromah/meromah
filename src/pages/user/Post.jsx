@@ -260,7 +260,7 @@ const Post = ({ postType }) => {
         </button>
 
         {/* Main Post Card */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           {/* Post Header */}
           <div className="p-4 border-b border-gray-200">
             {/* Author */}
@@ -383,49 +383,12 @@ const Post = ({ postType }) => {
           </div>
 
           {/* Comments Section */}
-          <div className="p-4">
-            <h4 className="font-semibold text-neutral-900 mb-6 flex items-center text-base">
-              <FaRegComment className="text-neutral-600" />
-              Comments (
-              <span ref={commentCountRef}>
-                {postData?.data.comments_count || 0}
-              </span>
-              )
-            </h4>
-
-            {/* Render all root comments */}
-            {isCommentsLoading ? (
-              <Loading />
-            ) : (
-              <div className="space-y-4 mb-6">
-                {commentsData?.data && commentsData.data.length > 0 ? (
-                  commentsData.data.map((comment) => (
-                    <Comment
-                      key={comment.id}
-                      comment={comment}
-                      getInitials={getInitials}
-                      depth={0}
-                      activeReplyId={activeReplyId}
-                      setActiveReplyId={setActiveReplyId}
-                      handleReplySubmit={handleCommentSubmit}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-neutral-500">
-                    <FaRegComment className="mx-auto text-3xl mb-2 opacity-50" />
-                    <p className="text-sm">
-                      No comments yet. Be the first to comment!
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-
+          <div className="p-4 flex flex-col gap-6">
             {/* Add Comment Form */}
-            <div className="pt-4 border-t border-gray-200">
+            <div className="border-gray-200">
               <div className="flex gap-3">
-                <div className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow flex-shrink-0 ring-2 ring-white">
-                  <p className="w-9 h-9 flex items-center justify-center rounded-full">
+                <div className="flex-shrink-0">
+                  <p className="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold">
                     U
                   </p>
                 </div>
@@ -455,6 +418,42 @@ const Post = ({ postType }) => {
                 </div>
               </div>
             </div>
+            <h4 className="font-semibold text-neutral-900 flex items-center text-base">
+              <FaRegComment className="text-neutral-600" />
+              Comments (
+              <span ref={commentCountRef}>
+                {postData?.data.comments_count || 0}
+              </span>
+              )
+            </h4>
+
+            {/* Render all root comments */}
+            {isCommentsLoading ? (
+              <Loading />
+            ) : (
+              <div className="space-y-4">
+                {commentsData?.data && commentsData.data.length > 0 ? (
+                  commentsData.data.map((comment) => (
+                    <Comment
+                      key={comment.id}
+                      comment={comment}
+                      getInitials={getInitials}
+                      depth={0}
+                      activeReplyId={activeReplyId}
+                      setActiveReplyId={setActiveReplyId}
+                      handleReplySubmit={handleCommentSubmit}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-neutral-500">
+                    <FaRegComment className="mx-auto text-3xl mb-2 opacity-50" />
+                    <p className="text-sm">
+                      No comments yet. Be the first to comment!
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
