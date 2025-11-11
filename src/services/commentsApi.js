@@ -1,27 +1,32 @@
-import { toQueryString } from '../utils/helpers';
-import { baseApi } from './baseApi';
+import { toQueryString } from "../utils/helpers";
+import { baseApi } from "./baseApi";
 
 const commentsApi = baseApi.injectEndpoints({
-  endpoints: ( builder ) => ({
+  endpoints: (builder) => ({
     getUserComment: builder.query({
-      query:  ({username}) => ({
+      query: ({ username }) => ({
         url: `/users/${username}/comments`,
-        method: 'GET'
-      }),
-    }),
-    endpoints: (builder) => ({
-    getAllMyComments: builder.query({
-      query: (queryParams) => ({
-        url: `/comments/my${toQueryString(queryParams)}`,
         method: "GET",
       }),
     }),
-  }),
-    getCommentsByBoardPost: builder.query({
-      query:  ({ board, postId, queryParams }) => ({
-        url: `/boards/${board}/posts/${postId}/comments${toQueryString(queryParams)}`,
-        method: 'GET'
+    endpoints: (builder) => ({
+      getAllMyComments: builder.query({
+        query: (queryParams) => ({
+          url: `/comments/my${toQueryString(queryParams)}`,
+          method: "GET",
+        }),
       }),
+    }),
+    getCommentsByBoardPost: builder.query({
+      query: ({ board, postId, queryParams }) => ({
+        url: `/boards/${board}/posts/${postId}/comments${toQueryString(
+          queryParams
+        )}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, { board, postId }) => [
+        { type: "Comments", id: `${board}-${postId}` },
+      ],
     }),
     getCommentByBoardPostCommentId: builder.query({
       query: ({ board, post, comment }) => ({
@@ -35,6 +40,9 @@ const commentsApi = baseApi.injectEndpoints({
         method: "POST",
         body: bodyData,
       }),
+      invalidatesTags: (result, error, { board, post }) => [
+        { type: "Comments", id: `${board}-${post}` },
+      ],
     }),
     updateCommentByBoardPost: builder.mutation({
       query: ({ board, post, comment, bodyData }) => ({
@@ -46,7 +54,7 @@ const commentsApi = baseApi.injectEndpoints({
     deleteCommentByBoardPost: builder.mutation({
       query: ({ board, post, comment }) => ({
         url: `/boards/${board}/posts/${post}/comments/${comment}`,
-        method: "DELETE"
+        method: "DELETE",
       }),
     }),
     getCommentLikesByCommentId: builder.query({
