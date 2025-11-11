@@ -1,8 +1,14 @@
 import { useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FiShare2, FiSend, FiPlus, FiMinus, FiChevronLeft } from "react-icons/fi";
+import {
+  FiShare2,
+  FiSend,
+  FiPlus,
+  FiMinus,
+  FiChevronLeft,
+} from "react-icons/fi";
 import { FaArrowDown, FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
-import { useGetPostFromBoardByPostIdQuery } from "../../services/postsApi";
+import { useGetPostFromBoardByPostIdQuery, useTogglePostLikeMutation } from "../../services/postsApi";
 import {
   useCreateCommentByBoardPostMutation,
   useGetCommentsByBoardPostQuery,
@@ -165,7 +171,9 @@ const Comment = ({
                   <p className="flex items-center gap-1 text-xs text-blue-600 font-bold cursor-pointer hover:underline">
                     <span>{comment.direct_children_count}</span>
                     <span>
-                      {comment.direct_children_count === 1 ? "reply" : "replies"}
+                      {comment.direct_children_count === 1
+                        ? "reply"
+                        : "replies"}
                     </span>
                   </p>
                 )}
@@ -184,9 +192,10 @@ const Post = ({ postType }) => {
   const [activeReplyId, setActiveReplyId] = useState(null);
   const [isPostLiked, setIsPostLiked] = useState(false);
   const commentCountRef = useRef(null);
+  const postLikesCountRef = useRef(null);
   const [postComment, { error, isLoading, isError }] =
     useCreateCommentByBoardPostMutation();
-
+  const [togglePostLike, { error: togglePostLikeError,  }] = useTogglePostLikeMutation();
   const {
     data: postData,
     isLoading: isPostLoading,
@@ -238,7 +247,17 @@ const Post = ({ postType }) => {
     e.stopPropagation();
     navigate(path);
   };
-
+  const onTogglePostLike = async () => {
+    const res = await togglePostLike({ board, post: postId }).unwrap();
+    setIsPostLiked(res.toggle)
+    if (res.toggle) {
+      postLikesCountRef.current.textContent =
+        Number(postLikesCountRef.current.textContent) + 1;
+    } else{
+      postLikesCountRef.current.textContent =
+        Number(postLikesCountRef.current.textContent) - 1;
+    }
+  };
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -349,15 +368,15 @@ const Post = ({ postType }) => {
                       <p className="text-neutral-900 text-sm font-medium">
                         {postData.data.file?.name}
                       </p>
-                      <p className="text-xs">{postData.data.file?.size || "3.5mb"}</p>
+                      <p className="text-xs">
+                        {postData.data.file?.size || "3.5mb"}
+                      </p>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <h1 className="font-bold text-2xl">
-                    {postData.data.title}
-                  </h1>
+                  <h1 className="font-bold text-2xl">{postData.data.title}</h1>
                   <p className="text-gray-700">{postData.data.body}</p>
                 </div>
               )}
@@ -367,7 +386,7 @@ const Post = ({ postType }) => {
           <div className="px-4 py-3 border-t border-gray-200">
             <div className="flex items-center gap-4 text-neutral-600 text-sm">
               <button
-                onClick={() => setIsPostLiked(!isPostLiked)}
+                onClick={onTogglePostLike}
                 className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
                 title={isPostLiked ? "Unlike" : "Like"}
                 aria-label={`${postData.data.likes_count} likes`}
@@ -377,8 +396,8 @@ const Post = ({ postType }) => {
                 ) : (
                   <FaRegHeart />
                 )}
-                <span className={isPostLiked ? "text-red-500" : ""}>
-                  {postData.data.likes_count + (isPostLiked ? 1 : 0)}
+                <span ref={postLikesCountRef} className={isPostLiked ? "text-red-500" : ""}>
+                  {postData.data.likes_count}
                 </span>
               </button>
               <button
@@ -389,7 +408,6 @@ const Post = ({ postType }) => {
               </button>
             </div>
           </div>
-
 
           {/* Comments Section */}
           <div className="border-t border-gray-200 p-6 flex flex-col gap-6">
@@ -428,7 +446,13 @@ const Post = ({ postType }) => {
 
             <h4 className="font-semibold text-neutral-900 flex items-center gap-2 text-base">
               <FaRegComment className="text-neutral-600" />
-              <span>Comments (<span ref={commentCountRef}>{postData?.data.comments_count || 0}</span>)</span>
+              <span>
+                Comments (
+                <span ref={commentCountRef}>
+                  {postData?.data.comments_count || 0}
+                </span>
+                )
+              </span>
             </h4>
 
             {/* Render all root comments */}
