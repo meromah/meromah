@@ -142,7 +142,7 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
           title="Comments"
           aria-label={`${post.comments} comments`}
         >
-          <FaRegComment /> {post.comments}
+          <FaRegComment /> {post.comments_count}
         </button>
         <button
           className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none cursor-pointer"
