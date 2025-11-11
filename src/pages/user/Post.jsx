@@ -12,6 +12,8 @@ import { useGetPostFromBoardByPostIdQuery, useTogglePostLikeMutation } from "../
 import {
   useCreateCommentByBoardPostMutation,
   useGetCommentsByBoardPostQuery,
+  useToggleCommentLikeByCommentIdMutation,
+
 } from "../../services/commentsApi";
 import Loading from "../../components/Loading";
 import NotFound from "../../components/NotFound";
@@ -34,6 +36,8 @@ const Comment = ({
   const [replyText, setReplyText] = useState("");
   const [isRepliesShown, setIsRepliesShown] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const commentLikeCountRef = useRef(null)
+  const [toggleCommentLike ] =useToggleCommentLikeByCommentIdMutation();
   const isReplying = activeReplyId === comment.id;
 
   const handleReplyClick = () => {
@@ -54,7 +58,17 @@ const Comment = ({
       setActiveReplyId(null);
     }
   };
-
+const onToggleCommentLike = async () => {
+    const res = await toggleCommentLike({ comment: comment.id}).unwrap();
+    setIsLiked(res.toggle)
+    if (res.toggle) {
+      commentLikeCountRef.current.textContent =
+        Number(commentLikeCountRef.current.textContent) + 1;
+    } else{
+      commentLikeCountRef.current.textContent =
+        Number(commentLikeCountRef.current.textContent) - 1;
+    }
+  };
   return (
     <div>
       <div className="flex gap-3">
@@ -90,7 +104,7 @@ const Comment = ({
             {/* Action buttons */}
             <div className="flex items-center gap-3 text-xs font-bold text-gray-500">
               <button
-                onClick={() => setIsLiked(!isLiked)}
+                onClick={onToggleCommentLike}
                 className="flex items-center gap-1 hover:bg-gray-100 px-1 py-0.5 rounded transition-colors"
               >
                 {isLiked ? (
@@ -98,8 +112,8 @@ const Comment = ({
                 ) : (
                   <FaRegHeart />
                 )}
-                <span className={isLiked ? "text-red-500" : ""}>
-                  {comment.likes_count + (isLiked ? 1 : 0)}
+                <span ref={commentLikeCountRef} className={isLiked ? "text-red-500" : ""}>
+                  {comment.likes_count}
                 </span>
               </button>
               <button
