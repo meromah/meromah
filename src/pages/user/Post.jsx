@@ -51,25 +51,25 @@ const Comment = ({
 
   return (
     <div>
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         {/* Avatar and Thread Line Column */}
-        <div className="flex flex-col items-center pt-1">
+        <div className="flex flex-col items-center gap-2">
           {/* Avatar */}
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold mb-2 flex-shrink-0">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
             {getInitials(comment.author.username)}
           </div>
 
           {/* Vertical Line for nested comments */}
           {comment.direct_children_count > 0 && (
-            <div className="w-0.5 bg-gray-300 flex-1 min-h-[20px] box-border mb-1" />
+            <div className="w-0.5 bg-gray-300 flex-1 min-h-[20px]" />
           )}
         </div>
 
         {/* Content Column */}
-        <div className="w-full">
-          <div className="flex-1 flex flex-col gap-1">
+        <div className="w-full flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             {/* Username and metadata */}
-            <div className="flex items-center gap-2 pt-3">
+            <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-gray-900 hover:underline cursor-pointer">
                 u/{comment.author.username}
               </span>
@@ -103,41 +103,40 @@ const Comment = ({
                 {isReplying ? "✕ Cancel" : "Reply"}
               </button>
             </div>
-            {/* Reply Input */}
-            {isReplying && (
-              <div className="mt-3">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={replyText}
-                    onChange={(e) => setReplyText(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        onReplySubmit(e);
-                      }
-                    }}
-                    placeholder={`Reply to u/${comment.author.username}...`}
-                    autoFocus
-                    className="flex-1 w-full px-3 py-2 text-sm rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <button
-                    onClick={onReplySubmit}
-                    disabled={!replyText.trim()}
-                    className="px-4 py-2 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm"
-                  >
-                    <FiSend />
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
+
+          {/* Reply Input */}
+          {isReplying && (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    onReplySubmit(e);
+                  }
+                }}
+                placeholder={`Reply to u/${comment.author.username}...`}
+                autoFocus
+                className="flex-1 w-full px-3 py-2 text-sm rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <button
+                onClick={onReplySubmit}
+                disabled={!replyText.trim()}
+                className="px-4 py-2 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm"
+              >
+                <FiSend />
+              </button>
+            </div>
+          )}
 
           {/* Render nested comments */}
           {isRepliesShown &&
             comment.direct_children &&
             comment.direct_children.length > 0 && (
-              <div className="mt-2">
+              <div className="space-y-4">
                 {comment.direct_children.map((child) => (
                   <Comment
                     key={child.id}
@@ -151,28 +150,29 @@ const Comment = ({
                 ))}
               </div>
             )}
+
+          {/* Show more replies indicator */}
+          {comment.direct_children_count > 0 &&
+            comment.direct_children.length > 0 && (
+              <div className="flex items-center gap-2">
+                <div
+                  className="border rounded-full p-0.5 text-xs cursor-pointer hover:text-neutral-600"
+                  onClick={() => setIsRepliesShown((prev) => !prev)}
+                >
+                  {isRepliesShown ? <FiMinus /> : <FiPlus />}
+                </div>
+                {!isRepliesShown && (
+                  <p className="flex items-center gap-1 text-xs text-blue-600 font-bold cursor-pointer hover:underline">
+                    <span>{comment.direct_children_count}</span>
+                    <span>
+                      {comment.direct_children_count === 1 ? "reply" : "replies"}
+                    </span>
+                  </p>
+                )}
+              </div>
+            )}
         </div>
       </div>
-      {/* Show more replies indicator */}
-      {comment.direct_children_count > 0 &&
-        comment.direct_children.length > 0 && (
-          <div className="flex items-center gap-2 ml-2 -mt-1">
-            <div
-              className="border rounded-full p-0.5 text-xs my-1 cursor-pointer hover:text-neutral-600"
-              onClick={() => setIsRepliesShown((prev) => !prev)}
-            >
-              {isRepliesShown ? <FiMinus /> : <FiPlus />}
-            </div>
-            {!isRepliesShown && (
-              <p className="flex items-center gap-1 text-xs text-blue-600 font-bold cursor-pointer hover:underline py-1.5">
-                <span>{comment.direct_children_count}</span>
-                <span>
-                  {comment.direct_children_count === 1 ? "reply" : "replies"}
-                </span>
-              </p>
-            )}
-          </div>
-        )}
     </div>
   );
 };
@@ -182,6 +182,7 @@ const Post = ({ postType }) => {
   const navigate = useNavigate();
   const [newComment, setNewComment] = useState("");
   const [activeReplyId, setActiveReplyId] = useState(null);
+  const [isPostLiked, setIsPostLiked] = useState(false);
   const commentCountRef = useRef(null);
   const [postComment, { error, isLoading, isError }] =
     useCreateCommentByBoardPostMutation();
@@ -321,59 +322,64 @@ const Post = ({ postType }) => {
             </div>
 
             {/* Content based on post type */}
-            {postType === "test" ? (
-              <div className="group mb-3 flex justify-between items-center border-l-4 border-blue-500 bg-blue-50 p-3 px-4 rounded hover:bg-blue-100 transition-colors duration-200">
-                <div>
-                  <p className="mb-1 font-medium">{postData.data.title}</p>
-                  <p className="text-sm text-neutral-600">
-                    {postData.data.body}
-                  </p>
-                </div>
-                <button
-                  className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Start
-                </button>
-              </div>
-            ) : "postData.data.type" === "library" ? (
-              <div className="flex flex-col gap-3 mb-3">
-                <p>{postData.data.title}</p>
-                <div className="flex items-center gap-3 border-l-4 border-green-500 bg-green-50 p-3 rounded hover:bg-green-100 transition-colors duration-200 cursor-pointer">
-                  <div className="bg-blue-500 text-white rounded-full p-3 text-xl flex-shrink-0">
-                    <FaArrowDown />
-                  </div>
-                  <div className="flex flex-col text-xs gap-0.5 text-neutral-500">
-                    <p className="text-neutral-900 text-sm font-medium">
-                      {postData.data.file?.name}
+            <div className="pb-4">
+              {postType === "test" ? (
+                <div className="group flex justify-between items-center border-l-4 border-blue-500 bg-blue-50 p-4 rounded hover:bg-blue-100 transition-colors duration-200">
+                  <div className="flex flex-col gap-2">
+                    <p className="font-medium">{postData.data.title}</p>
+                    <p className="text-sm text-neutral-600">
+                      {postData.data.body}
                     </p>
-                    <p>{postData.data.file?.size || "3.5mb"}</p>
+                  </div>
+                  <button
+                    className="ml-auto px-4 py-2 rounded bg-primary-blue text-white text-sm hover:bg-primary-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Start
+                  </button>
+                </div>
+              ) : postData.data.type === "library" ? (
+                <div className="flex flex-col gap-3">
+                  <p className="font-bold text-2xl">{postData.data.title}</p>
+                  <div className="flex items-center gap-3 border-l-4 border-green-500 bg-green-50 p-4 rounded hover:bg-green-100 transition-colors duration-200 cursor-pointer">
+                    <div className="bg-blue-500 text-white rounded-full p-3 text-xl flex-shrink-0">
+                      <FaArrowDown />
+                    </div>
+                    <div className="flex flex-col gap-1 text-neutral-500">
+                      <p className="text-neutral-900 text-sm font-medium">
+                        {postData.data.file?.name}
+                      </p>
+                      <p className="text-xs">{postData.data.file?.size || "3.5mb"}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="mb-3">
-                <h1 className="mb-1 font-bold text-2xl">
-                  {postData.data.title}
-                </h1>
-                <p className="mb-1">{postData.data.body}</p>
-              </div>
-            )}
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <h1 className="font-bold text-2xl">
+                    {postData.data.title}
+                  </h1>
+                  <p className="text-gray-700">{postData.data.body}</p>
+                </div>
+              )}
+            </div>
           </div>
           {/* Post Actions */}
-          <div className="px-4 py-3 border-gray-200">
+          <div className="px-4 py-3 border-t border-gray-200">
             <div className="flex items-center gap-4 text-neutral-600 text-sm">
               <button
+                onClick={() => setIsPostLiked(!isPostLiked)}
                 className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
-                title={"liked" ? "Unlike" : "Like"}
-                aria-label={`${postData.data.likes} likes`}
+                title={isPostLiked ? "Unlike" : "Like"}
+                aria-label={`${postData.data.likes_count} likes`}
               >
-                {"liked" ? (
+                {isPostLiked ? (
                   <FaHeart className="text-red-500" />
                 ) : (
                   <FaRegHeart />
                 )}
-                <span>{postData.data.likes_count}</span>
+                <span className={isPostLiked ? "text-red-500" : ""}>
+                  {postData.data.likes_count + (isPostLiked ? 1 : 0)}
+                </span>
               </button>
               <button
                 className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors duration-200 cursor-pointer"
@@ -386,48 +392,43 @@ const Post = ({ postType }) => {
 
 
           {/* Comments Section */}
-          <div className="p-4 flex flex-col gap-6">
+          <div className="border-t border-gray-200 p-6 flex flex-col gap-6">
             {/* Add Comment Form */}
-            <div className="border-gray-200">
-              <div className="flex gap-3">
-                <div className="flex-shrink-0">
-                  <p className="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold">
-                    U
-                  </p>
-                </div>
-                <div className="flex-1 flex gap-2">
-                  <input
-                    type="text"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleCommentSubmit(e, null, newComment, setNewComment);
-                      }
-                    }}
-                    placeholder="Add a comment..."
-                    className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue placeholder-neutral-400"
-                  />
-                  <button
-                    onClick={(e) =>
-                      handleCommentSubmit(e, null, newComment, setNewComment)
-                    }
-                    disabled={!newComment.trim()}
-                    className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center gap-1 text-sm font-medium"
-                  >
-                    <FiSend className="text-sm" />
-                  </button>
+            <div className="flex gap-3">
+              <div className="flex-shrink-0">
+                <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold">
+                  U
                 </div>
               </div>
+              <div className="flex-1 flex gap-2">
+                <input
+                  type="text"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleCommentSubmit(e, null, newComment, setNewComment);
+                    }
+                  }}
+                  placeholder="Add a comment..."
+                  className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue placeholder-neutral-400"
+                />
+                <button
+                  onClick={(e) =>
+                    handleCommentSubmit(e, null, newComment, setNewComment)
+                  }
+                  disabled={!newComment.trim()}
+                  className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center text-sm font-medium"
+                >
+                  <FiSend />
+                </button>
+              </div>
             </div>
-            <h4 className="font-semibold text-neutral-900 flex items-center text-base">
+
+            <h4 className="font-semibold text-neutral-900 flex items-center gap-2 text-base">
               <FaRegComment className="text-neutral-600" />
-              Comments (
-              <span ref={commentCountRef}>
-                {postData?.data.comments_count || 0}
-              </span>
-              )
+              <span>Comments (<span ref={commentCountRef}>{postData?.data.comments_count || 0}</span>)</span>
             </h4>
 
             {/* Render all root comments */}
@@ -448,8 +449,8 @@ const Post = ({ postType }) => {
                     />
                   ))
                 ) : (
-                  <div className="text-center py-8 text-neutral-500">
-                    <FaRegComment className="mx-auto text-3xl mb-2 opacity-50" />
+                  <div className="flex flex-col items-center gap-3 py-8 text-neutral-500">
+                    <FaRegComment className="text-3xl opacity-50" />
                     <p className="text-sm">
                       No comments yet. Be the first to comment!
                     </p>
