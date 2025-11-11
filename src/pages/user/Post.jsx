@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FiShare2, FiArrowLeft, FiSend, FiPlus, FiMinus } from "react-icons/fi";
+import { FiShare2, FiSend, FiPlus, FiMinus, FiChevronLeft } from "react-icons/fi";
 import { FaArrowDown, FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { useGetPostFromBoardByPostIdQuery } from "../../services/postsApi";
 import {
@@ -250,70 +250,73 @@ const Post = ({ postType }) => {
   return (
     <div className="min-h-screen bg-primary-bg">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Back button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6 transition-colors font-medium"
-        >
-          <FiArrowLeft className="text-lg" />
-          Back to feeds
-        </button>
-
         {/* Main Post Card */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           {/* Post Header */}
-          <div className="p-4 border-b border-gray-200">
-            {/* Author */}
-            <div className="flex items-center gap-3 mb-3">
-              <div
-                className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white"
-                onClick={(e) =>
-                  handleAuthorClick(e, `/user/${postData.data.author.username}`)
-                }
+          <div className="px-4 border-b border-gray-200">
+            <div className="flex items-center gap-2 py-4">
+              {/* Back button */}
+              <button
+                onClick={() => navigate(-1)}
+                className="flex items-center text-neutral-600 hover:text-neutral-900 transition-colors font-medium cursor-pointer"
               >
-                <p className="w-11 h-11 flex items-center justify-center rounded-full">
-                  {getInitials(postData.data.author.username)}
-                </p>
-              </div>
-              <div>
-                <p
-                  className="max-w-5/6 w-full text-primary-blue text-base cursor-pointer hover:underline truncate font-medium"
-                  role="button"
-                  tabIndex={0}
+                <FiChevronLeft className="text-2xl" />
+              </button>
+              {/* Author */}
+              <div className="flex items-center gap-3">
+                <div
+                  className="rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold shadow-md hover:shadow-lg transition-shadow cursor-pointer ring-2 ring-white"
                   onClick={(e) =>
-                    handleBoardClick(
+                    handleAuthorClick(
                       e,
-                      `/${getType[postType][0]}/${postData.data.board.name}`
-                    )
-                  }
-                  onKeyDown={(e) =>
-                    e.key === "Enter" &&
-                    handleBoardClick(
-                      e,
-                      `/${getType[postType][0]}/${postData.data.board.name}`
+                      `/user/${postData.data.author.username}`
                     )
                   }
                 >
-                  {getType[postType][0]}/{postData.data.board.name}
-                </p>
-                <p className="text-[12px] flex items-center gap-1">
-                  <span
+                  <p className="w-11 h-11 flex items-center justify-center rounded-full">
+                    {getInitials(postData.data.author.username)}
+                  </p>
+                </div>
+                <div>
+                  <p
+                    className="max-w-5/6 w-full text-primary-blue text-base cursor-pointer hover:underline truncate font-medium"
+                    role="button"
+                    tabIndex={0}
                     onClick={(e) =>
-                      handleAuthorClick(
+                      handleBoardClick(
                         e,
-                        `/user/${postData.data.author.username}`
+                        `/${getType[postType][0]}/${postData.data.board.name}`
                       )
                     }
-                    className="cursor-pointer hover:underline"
-                    role="link"
-                    tabIndex={0}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" &&
+                      handleBoardClick(
+                        e,
+                        `/${getType[postType][0]}/${postData.data.board.name}`
+                      )
+                    }
                   >
-                    u/{postData.data.author.username}
-                  </span>
-                  <span className="text-neutral-500 font-normal">
-                    {postData.data.created_at}
-                  </span>
-                </p>
+                    {getType[postType][0]}/{postData.data.board.name}
+                  </p>
+                  <p className="text-[12px] flex items-center gap-1">
+                    <span
+                      onClick={(e) =>
+                        handleAuthorClick(
+                          e,
+                          `/user/${postData.data.author.username}`
+                        )
+                      }
+                      className="cursor-pointer hover:underline"
+                      role="link"
+                      tabIndex={0}
+                    >
+                      u/{postData.data.author.username}
+                    </span>
+                    <span className="text-neutral-500 font-normal">
+                      {postData.data.created_at}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -357,9 +360,8 @@ const Post = ({ postType }) => {
               </div>
             )}
           </div>
-
           {/* Post Actions */}
-          <div className="px-4 py-3 border-b border-gray-200">
+          <div className="px-4 py-3 border-gray-200">
             <div className="flex items-center gap-4 text-neutral-600 text-sm">
               <button
                 className="flex items-center gap-2 hover:text-neutral-900 p-2 -m-2 rounded transition-colors duration-200 focus:outline-none"
@@ -381,6 +383,7 @@ const Post = ({ postType }) => {
               </button>
             </div>
           </div>
+
 
           {/* Comments Section */}
           <div className="p-4 flex flex-col gap-6">
