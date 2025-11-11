@@ -1,12 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  FiShare2,
-  FiArrowLeft,
-  FiSend,
-  FiPlus,
-  FiMinus,
-} from "react-icons/fi";
+import { FiShare2, FiArrowLeft, FiSend, FiPlus, FiMinus } from "react-icons/fi";
 import { FaArrowDown, FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { useGetPostFromBoardByPostIdQuery } from "../../services/postsApi";
 import {
@@ -188,6 +182,7 @@ const Post = ({ postType }) => {
   const navigate = useNavigate();
   const [newComment, setNewComment] = useState("");
   const [activeReplyId, setActiveReplyId] = useState(null);
+  const commentCountRef = useRef(null);
   const [postComment, { error, isLoading, isError }] =
     useCreateCommentByBoardPostMutation();
 
@@ -225,6 +220,9 @@ const Post = ({ postType }) => {
         post: postId,
         bodyData: { parent_id, body },
       });
+      //It gets the textContent of the comment count and adds 1 when the comment submission is OK
+      commentCountRef.current.textContent =
+        Number(commentCountRef.current.textContent) + 1;
       setEmpty("");
       setActiveReplyId(null);
     }
@@ -386,9 +384,13 @@ const Post = ({ postType }) => {
 
           {/* Comments Section */}
           <div className="p-4">
-            <h4 className="font-semibold text-neutral-900 mb-6 flex items-center gap-2 text-base">
+            <h4 className="font-semibold text-neutral-900 mb-6 flex items-center text-base">
               <FaRegComment className="text-neutral-600" />
-              Comments ({commentsData?.data.length || 0})
+              Comments (
+              <span ref={commentCountRef}>
+                {postData?.data.comments_count || 0}
+              </span>
+              )
             </h4>
 
             {/* Render all root comments */}
