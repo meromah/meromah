@@ -21,6 +21,7 @@ import Loading from "../../components/Loading";
 import NotFound from "../../components/NotFound";
 import ErrorDisplay from "../../components/ErrorDisplay";
 import { useSelector } from "react-redux";
+import RelativeTime from "../../components/RelativeTime";
 
 const getType = {
   post: ["b", "board"],
@@ -102,9 +103,7 @@ const Comment = ({
               <span className="text-xs font-bold text-gray-900 hover:underline cursor-pointer">
                 u/{comment.author.username}
               </span>
-              <span className="text-xs text-gray-500">
-                • {comment.created_at || "2h ago"}
-              </span>
+              <RelativeTime date={comment.created_at} className="flex items-center text-[12px] text-gray-600"/>
             </div>
             {/* Comment body */}
             <div className="text-sm text-gray-900 leading-relaxed">
@@ -364,9 +363,7 @@ const Post = ({ postType }) => {
                     >
                       u/{postData.data.author.username}
                     </span>
-                    <span className="text-neutral-500 font-normal">
-                      {postData.data.created_at}
-                    </span>
+                    <RelativeTime date={postData.data.created_at} className="flex items-center text-gray-700 ml-1 "/>
                   </p>
                 </div>
               </div>
