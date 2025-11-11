@@ -37,6 +37,7 @@ const Comment = ({
   handleReplySubmit,
 }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   const [replyText, setReplyText] = useState("");
   const [isRepliesShown, setIsRepliesShown] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -63,6 +64,10 @@ const Comment = ({
     }
   };
   const onToggleCommentLike = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     const res = await toggleCommentLike({ comment: comment.id }).unwrap();
     setIsLiked(res.toggle);
     if (res.toggle) {
@@ -271,6 +276,10 @@ const Post = ({ postType }) => {
     navigate(path);
   };
   const onTogglePostLike = async () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     const res = await togglePostLike({ board, post: postId }).unwrap();
     setIsPostLiked(res.toggle);
     if (res.toggle) {
@@ -438,37 +447,39 @@ const Post = ({ postType }) => {
           {/* Comments Section */}
           <div className="border-t border-gray-200 p-6 flex flex-col gap-6">
             {/* Add Comment Form */}
-            {isAuthenticated && (<div className="flex gap-3">
-              <div className="flex-shrink-0">
-                <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold">
-                  U
+            {isAuthenticated && (
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white text-xs font-semibold">
+                    U
+                  </div>
+                </div>
+                <div className="flex-1 flex gap-2">
+                  <input
+                    type="text"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleCommentSubmit(e, null, newComment, setNewComment);
+                      }
+                    }}
+                    placeholder="Add a comment..."
+                    className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue placeholder-neutral-400"
+                  />
+                  <button
+                    onClick={(e) =>
+                      handleCommentSubmit(e, null, newComment, setNewComment)
+                    }
+                    disabled={!newComment.trim()}
+                    className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center text-sm font-medium"
+                  >
+                    <FiSend />
+                  </button>
                 </div>
               </div>
-              <div className="flex-1 flex gap-2">
-                <input
-                  type="text"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleCommentSubmit(e, null, newComment, setNewComment);
-                    }
-                  }}
-                  placeholder="Add a comment..."
-                  className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue placeholder-neutral-400"
-                />
-                <button
-                  onClick={(e) =>
-                    handleCommentSubmit(e, null, newComment, setNewComment)
-                  }
-                  disabled={!newComment.trim()}
-                  className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center text-sm font-medium"
-                >
-                  <FiSend />
-                </button>
-              </div>
-            </div>)}
+            )}
 
             <h4 className="font-semibold text-neutral-900 flex items-center gap-2 text-base">
               <FaRegComment className="text-neutral-600" />
