@@ -79,6 +79,6 @@ export const {
   useDeleteCommentByBoardPostMutation,
   useGetUserCommentQuery,
   useGetCommentLikesByCommentIdMutation,
-  useToggleCommentLikesByCommentIdMutation,
+  useToggleCommentLikeByCommentIdMutation,
   useGetAllMyCommentsQuery,
 } = commentsApi;
