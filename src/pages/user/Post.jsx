@@ -141,8 +141,8 @@ const Comment = ({
 
           {/* Reply Input */}
           {isAuthenticated && isReplying && (
-            <div className="flex gap-2">
-              <input
+            <div className="flex items-start gap-2">
+              <textarea
                 type="text"
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
@@ -154,12 +154,12 @@ const Comment = ({
                 }}
                 placeholder={`Reply to u/${comment.author.username}...`}
                 autoFocus
-                className="flex-1 w-full px-3 py-2 text-sm rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className="flex-1 w-full px-3 py-2 min-h-10 text-sm rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
               />
               <button
                 onClick={onReplySubmit}
                 disabled={!replyText.trim()}
-                className="px-4 py-2 bg-blue-500 text-white rounded font-bold hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm"
+                className="px-4 py-2 bg-blue-500 text-white min-h-9 rounded-lg font-bold hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm"
               >
                 <FiSend />
               </button>
@@ -461,8 +461,8 @@ const Post = ({ postType }) => {
                     U
                   </div>
                 </div>
-                <div className="flex-1 flex gap-2">
-                  <input
+                <div className="flex-1 flex items-start gap-2">
+                  <textarea
                     type="text"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
@@ -473,14 +473,14 @@ const Post = ({ postType }) => {
                       }
                     }}
                     placeholder="Add a comment..."
-                    className="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue placeholder-neutral-400"
+                    className="flex-1 px-4 py-2 min-h-10 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-blue/30 focus:border-primary-blue placeholder-neutral-400"
                   />
                   <button
                     onClick={(e) =>
                       handleCommentSubmit(e, null, newComment, setNewComment)
                     }
                     disabled={!newComment.trim()}
-                    className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center text-sm font-medium"
+                    className="px-4 py-2 bg-primary-blue text-white min-h-9 rounded-lg hover:bg-primary-blue/90 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors flex items-center text-sm font-medium"
                   >
                     <FiSend />
                   </button>
