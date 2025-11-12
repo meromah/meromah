@@ -88,7 +88,7 @@ const ExploreBoards = () => {
       </div>
       {/* List */}
       <div className="space-y-3">
-        {result.data.map((element) => (
+        {result?.data?.data?.map((element) => (
           <Link
             to={`/board/${element.name}`}
             key={element.id}

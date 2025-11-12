@@ -89,7 +89,7 @@ const ExploreDescs = () => {
 
       {/* List */}
       <div className="space-y-3">
-        {result.data.map((element) => (
+        {result?.data?.data?.map((element) => (
           <Link
             to={`/desc/${element.name}`}
             key={element.id}
