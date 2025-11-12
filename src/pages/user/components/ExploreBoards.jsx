@@ -87,58 +87,49 @@ const ExploreBoards = () => {
           {result.data.length} communities
         </p>
       </div>
+
       {/* List */}
-      <div className="space-y-3">
-        {result?.data?.data?.map((element) => (
-          <Link
-            to={`/board/${element.name}`}
-            key={element.id}
-            className="block bg-white border border-neutral-300 hover:border-neutral-400 rounded transition-colors group"
-          >
-            <div className="p-4">
-              <div className="flex items-center justify-between gap-4">
-                {/* Left side */}
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  {/* Icon */}
-                  <div className="w-12 h-12 bg-linear-65 from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                    {element.name.charAt(0).toUpperCase()}
-                  </div>
-
-                  {/* Info */}
-                  <div className=" min-w-0">
-                    <h3 className="font-medium text-neutral-900 text-base mb-0.5 hover:underline">
-                      {`b/${element.name}`}
-                    </h3>
-                    <p className="text-neutral-600 text-sm line-clamp-1">
-                      {element.description || "No description"}
-                    </p>
-                    <p className="text-neutral-600 text-sm line-clamp-1">
-                      author: u/{element.author.username || "Unknown author"}
-                    </p>
-                    <p className="text-neutral-600 text-sm line-clamp-1">
-                      posts: {element.posts_count}
-                    </p>
-                    <p className="text-neutral-600 text-sm line-clamp-1">
-                      subscribers: {element.subscribers_count}
-                    </p>
-                    <p className="text-neutral-600 text-sm line-clamp-1">
-                      created_at: <RelativeTime date={element.created_at} />
-                    </p>
-
-                  </div>
+      <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
+        <div className="space-y-3">
+          {result?.data?.data?.map((element) => (
+            <div
+              key={element.id}
+              className="flex items-start justify-between gap-3 p-2 hover:bg-neutral-50 rounded-lg transition-colors"
+            >
+              <Link
+                to={`/board/${element.name}`}
+                className="flex items-center gap-3 flex-1 min-w-0"
+              >
+                {/* Icon */}
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                  {element.name.charAt(0).toUpperCase()}
                 </div>
 
-                {/* Join Button */}
-                <button
-                  onClick={(e) => handleJoin(e, element.name)}
-                  className="bg-white text-primary-blue px-6 py-1.5 rounded-full text-sm font-bold hover:bg-primary-blue/10 flex-shrink-0 border transition-colors cursor-pointer"
-                >
-                  Join
-                </button>
-              </div>
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-medium text-neutral-900 mb-0.5">
+                    {`b/${element.name}`}
+                  </h3>
+                  <p className="text-xs text-neutral-600 line-clamp-1">
+                    {element.description || "No description"}
+                  </p>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    {element.subscribers_count} members • {element.posts_count}{" "}
+                    posts
+                  </p>
+                </div>
+              </Link>
+
+              {/* Join Button */}
+              <button
+                onClick={(e) => handleJoin(e, element.name)}
+                className="bg-white text-primary-blue px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-blue/10 border border-primary-blue transition-colors cursor-pointer flex-shrink-0"
+              >
+                Join
+              </button>
             </div>
-          </Link>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
