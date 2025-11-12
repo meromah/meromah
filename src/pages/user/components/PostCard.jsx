@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FaRegComment, FaRegHeart, FaHeart, FaArrowDown } from "react-icons/fa";
 import { FiShare2 } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
+import { useTogglePostLikeMutation } from "../../../services/postsApi";
+import { useSelector } from "react-redux";
 
 const preventNavigation = (e) => {
   e.preventDefault();
@@ -14,8 +16,13 @@ const getType = {
 };
 const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [liked, setLiked] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const postLikesCountRef = useRef(null);
+  const [togglePostLike, { error: togglePostLikeError }] =
+    useTogglePostLikeMutation();
+
   const handleAuthorClick = (e, path) => {
     preventNavigation(e);
     //later i will implement the logic to determine if the path is for UserProfile or MyProfile.
@@ -36,7 +43,24 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
       .toUpperCase()
       .slice(0, 2);
   };
-
+  const onTogglePostLike = async (e) => {
+    preventNavigation(e);
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    const board = post.board.name;
+    const postId = post.id;
+    const res = await togglePostLike({ board, post: postId }).unwrap();
+    setLiked(res.toggle);
+    if (res.toggle) {
+      postLikesCountRef.current.textContent =
+        Number(postLikesCountRef.current.textContent) + 1;
+    } else {
+      postLikesCountRef.current.textContent =
+        Number(postLikesCountRef.current.textContent) - 1;
+    }
+  };
   return (
     <Link
       to={`/board/${post.board.name}/post/${post.id}`}
@@ -70,11 +94,13 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
           className="rounded-full bg-blue-500 text-white text-xs font-semibold shadow shadow-neutral-200"
           onClick={(e) => handleAuthorClick(e, `/user/${post.author.username}`)}
         >
-          <p className="w-10 h-10 flex items-center justify-center">{getInitials(post.author.username)}</p>
+          <p className="w-10 h-10 flex items-center justify-center">
+            {getInitials(post.author.username)}
+          </p>
         </div>
         <div>
           <p
-            className="max-w-3/4 w-full text-primary-blue text-base cursor-pointer hover:underline truncate"
+            className="w-fit text-primary-blue text-base cursor-pointer hover:underline truncate"
             onClick={(e) =>
               handleBoardClick(e, `/${getType[postType][1]}/${post.board.name}`)
             }
@@ -150,25 +176,12 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
           aria-label={`${post.likes_count} likes. ${
             liked ? "Unlike" : "Like"
           } this post`}
-          onClick={preventNavigation}
+          onClick={onTogglePostLike}
         >
-          {liked ? (
-            <FaHeart
-              className="text-red-500"
-              onClick={(e) => {
-                setLiked((v) => !v);
-                preventNavigation(e);
-              }}
-            />
-          ) : (
-            <FaRegHeart
-              onClick={(e) => {
-                setLiked((v) => !v);
-                preventNavigation(e);
-              }}
-            />
-          )}
-          {post.likes_count}
+          {liked ? <FaHeart className="text-red-500" /> : <FaRegHeart />}
+          <span ref={postLikesCountRef} className={liked ? "text-red-500" : ""}>
+            {post.likes_count}
+          </span>
         </button>
         <button
           className="flex items-center gap-2 text-slate-600"
