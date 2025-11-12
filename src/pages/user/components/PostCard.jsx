@@ -4,7 +4,7 @@ import { FiShare2 } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useTogglePostLikeMutation } from "../../../services/postsApi";
 import { useSelector } from "react-redux";
-
+import RelativeTime from '../../../components/RelativeTime'
 const preventNavigation = (e) => {
   e.preventDefault();
   e.stopPropagation();
@@ -121,7 +121,7 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
             >
               u/{post.author.username}
             </span>
-            <span className="text-neutral-500 font-normal">{post.date}</span>
+            <RelativeTime date={post.created_at} className="text-neutral-500"/>
           </p>
         </div>
       </div>
