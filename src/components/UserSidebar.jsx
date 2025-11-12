@@ -82,7 +82,7 @@ const UserSidebar = () => {
     () => ({
       id: "boards",
       title: "Boards",
-      path: "/boards",
+      path: "/board",
       icon: Grid,
       // NOTE: I might change items based on what myBoardSubscriptions gets from the db
       items: myBoardSubscriptions ? myBoardSubscriptions.data : [],
@@ -93,7 +93,7 @@ const UserSidebar = () => {
     () => ({
       id: "descs",
       title: "Descs",
-      path: "/descs",
+      path: "/desc",
       icon: Book,
       // NOTE: I might change items based on what myDescSubscriptions gets from the db
       items: myDescSubscriptions ? myDescSubscriptions.data : [],

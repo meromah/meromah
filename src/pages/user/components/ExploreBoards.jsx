@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useGetBoardsQuery } from "../../../services/boardsApi";
+import RelativeTime from "../../../components/RelativeTime";
 
 const ExploreBoards = () => {
   const { data: result, isLoading, error } = useGetBoardsQuery();
@@ -88,7 +89,7 @@ const ExploreBoards = () => {
       </div>
       {/* List */}
       <div className="space-y-3">
-        {result.data.map((element) => (
+        {result?.data?.data?.map((element) => (
           <Link
             to={`/board/${element.name}`}
             key={element.id}
@@ -111,6 +112,19 @@ const ExploreBoards = () => {
                     <p className="text-neutral-600 text-sm line-clamp-1">
                       {element.description || "No description"}
                     </p>
+                    <p className="text-neutral-600 text-sm line-clamp-1">
+                      author: u/{element.author.username || "Unknown author"}
+                    </p>
+                    <p className="text-neutral-600 text-sm line-clamp-1">
+                      posts: {element.posts_count}
+                    </p>
+                    <p className="text-neutral-600 text-sm line-clamp-1">
+                      subscribers: {element.subscribers_count}
+                    </p>
+                    <p className="text-neutral-600 text-sm line-clamp-1">
+                      created_at: <RelativeTime date={element.created_at} />
+                    </p>
+
                   </div>
                 </div>
 
