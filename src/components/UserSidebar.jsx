@@ -262,14 +262,6 @@ const UserSidebar = () => {
               </div>
               {/* Divider */}
               <div className="h-px bg-neutral-200 my-2" />
-              {/* Posts Link */}
-              <MenuLink
-                to={"/explore/posts"}
-                onClick={closeMobileMenu}
-                icon={FileText}
-                label={"Posts"}
-                key={"Posts"}
-              />
 
               {/* Section that displays user-followed boards, descs */}
               <ExpandableSection
