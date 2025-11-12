@@ -41,7 +41,7 @@ const Comment = ({
   const navigate = useNavigate();
   const [replyText, setReplyText] = useState("");
   const [isRepliesShown, setIsRepliesShown] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(comment.youLiked);
   const commentLikeCountRef = useRef(null);
   const [toggleCommentLike] = useToggleCommentLikeByCommentIdMutation();
   const isReplying = activeReplyId === comment.id;
