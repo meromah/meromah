@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   FiShare2,
@@ -103,7 +103,10 @@ const Comment = ({
               <span className="text-xs font-bold text-gray-900 hover:underline cursor-pointer">
                 u/{comment.author.username}
               </span>
-              <RelativeTime date={comment.created_at} className="flex items-center text-[12px] text-gray-600"/>
+              <RelativeTime
+                date={comment.created_at}
+                className="flex items-center text-[12px] text-gray-600"
+              />
             </div>
             {/* Comment body */}
             <div className="text-sm text-gray-900 leading-relaxed">
@@ -242,13 +245,17 @@ const Post = ({ postType }) => {
     postId,
     queryParams: undefined,
   });
+  useEffect(() => {
+    if (postData === undefined) return;
+    if (isPostError) return;
+    setIsPostLiked(postData.data.youLiked);
+  }, [postData]);
   //Handling the Post status for: isLoading, isError
   if (isPostLoading) return <Loading />;
   if (isPostError) {
     if (postError.status === 404) return <NotFound />;
     return <ErrorDisplay />;
   }
-
   const handleCommentSubmit = async (e, parent_id, body = "", setEmpty) => {
     e.preventDefault();
     if (body.trim()) {
@@ -363,7 +370,10 @@ const Post = ({ postType }) => {
                     >
                       u/{postData.data.author.username}
                     </span>
-                    <RelativeTime date={postData.data.created_at} className="flex items-center text-gray-700 ml-1 "/>
+                    <RelativeTime
+                      date={postData.data.created_at}
+                      className="flex items-center text-gray-700 ml-1 "
+                    />
                   </p>
                 </div>
               </div>

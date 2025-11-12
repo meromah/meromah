@@ -17,7 +17,7 @@ const getType = {
 const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(post.youLiked);
   const [imageError, setImageError] = useState(false);
   const postLikesCountRef = useRef(null);
   const [togglePostLike, { error: togglePostLikeError }] =
@@ -61,6 +61,7 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
         Number(postLikesCountRef.current.textContent) - 1;
     }
   };
+  console.log(post)
   return (
     <Link
       to={`/board/${post.board.name}/post/${post.id}`}
