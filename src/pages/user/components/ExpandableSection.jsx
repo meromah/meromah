@@ -30,18 +30,18 @@ const ExpandableSection = ({
         } overflow-hidden`}
       >
         <div className="space-y-0.5 pl-9">
-          {section.items.length > 0 ? (
-            section.items.map((item) => (
+          {section.items?.length > 0 ? (
+            section.items?.map((item) => (
               <Link
                 key={item.id}
-                to={item.to || "#"}
+                to={section.path + "/" + item.name || "#"} 
                 onClick={() => {
                   closeMobileMenu();
                   toggleSection(section.id);
                 }}
                 className="w-full flex text-left px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-md transition-all truncate"
               >
-                {item.title}
+                {item.name}
               </Link>
             ))
           ) : (
