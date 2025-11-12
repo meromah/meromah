@@ -157,7 +157,10 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
         </div>
       ) : (
         <div className="mb-3">
-          <p className="mb-1">{post.title}</p>
+          <div>
+            <p className="mb-1 font-medium">{post.title}</p>
+            <p className="text-sm text-neutral-600">{post.body}</p>
+          </div>
         </div>
       )}
 
