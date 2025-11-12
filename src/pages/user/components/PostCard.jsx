@@ -61,7 +61,6 @@ const PostCard = ({ post, isFirst, isLast, postType = "post" }) => {
         Number(postLikesCountRef.current.textContent) - 1;
     }
   };
-  console.log(post)
   return (
     <Link
       to={`/board/${post.board.name}/post/${post.id}`}
