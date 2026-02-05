@@ -19,8 +19,6 @@
 
 ### 🧑‍🤝‍🧑 𝚂𝚘𝚌𝚒𝚊𝚕:
 ![](https://komarev.com/ghpvc/?username=meromah&style=for-the-badge&color=cc231c)
-<a href="https://www.linkedin.com/in/meroj/">
-  <img align="left" alt="Meromah Linkedin" width="33px" src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg" />
-</a>
+
 
 ### Founder @ <img src="https://unime.space/logo.svg" height='30' width='30' title="UnimeSpace" alt="UnimeSpace" /> [UnimeSpace](https://unime.space)
